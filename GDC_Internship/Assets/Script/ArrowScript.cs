@@ -4,29 +4,18 @@ using UnityEngine;
 
 public class ArrowScript : MonoBehaviour
 {
-    private Rigidbody2D rb2d;
     private Collider2D collider;
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
+
     void Awake()
     {
         collider = GetComponent<Collider2D>();
+        Destroy(this.gameObject, 10f);
     }
-    // Update is called once per frame
-
-    void FixedUpdate()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collider.isActiveAndEnabled)
+        if (collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "Ground")
         {
-            Debug.Log("Arrow Hit");
             Destroy(this.gameObject);
         }
-        Destroy(this.gameObject, 3f);
-    }
-    void OnDestroy()
-    {
-        
     }
 }
