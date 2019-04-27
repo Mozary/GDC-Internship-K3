@@ -23106,7 +23106,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 1
-  m_Offset: {x: 0, y: -1.64}
+  m_Offset: {x: 0, y: -0.3}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -23117,7 +23117,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 96, y: 6.16}
+  m_Size: {x: 96, y: 7.88}
   m_EdgeRadius: 0
 --- !u!50 &1990442038
 Rigidbody2D:
@@ -23169,12 +23169,12 @@ PrefabInstance:
     - target: {fileID: 6283254183085931084, guid: dcde394c99bc34f45a416bec44ea3a50,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 84.41
+      value: 45.51
       objectReference: {fileID: 0}
     - target: {fileID: 6283254183085931084, guid: dcde394c99bc34f45a416bec44ea3a50,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.48
+      value: 2.95
       objectReference: {fileID: 0}
     - target: {fileID: 6283254183085931084, guid: dcde394c99bc34f45a416bec44ea3a50,
         type: 3}
@@ -23250,19 +23250,19 @@ CompositeCollider2D:
   - m_Collider: {fileID: 1990442037}
     m_ColliderPaths:
     - - X: 480000000
-        Y: 14399999
+        Y: 36400000
       - X: -480000000
-        Y: 14399999
+        Y: 36400000
       - X: -480000000
-        Y: -47199996
+        Y: -42400004
       - X: 480000000
-        Y: -47199996
+        Y: -42400004
   m_CompositePaths:
     m_Paths:
-    - - {x: 48, y: 1.4399999}
-      - {x: -48, y: 1.4399999}
-      - {x: -48, y: -4.72}
-      - {x: 48, y: -4.72}
+    - - {x: 48, y: 3.64}
+      - {x: -48, y: 3.64}
+      - {x: -48, y: -4.2400002}
+      - {x: 48, y: -4.2400002}
   m_VertexDistance: 0.0005
 --- !u!4 &1719492674529030660
 Transform:
@@ -23272,7 +23272,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1719492674529030663}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.28999949, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1719492674681574268}
@@ -23531,7 +23531,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1719492675850538282}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.000000029802322, z: 0.0000009536743}
+  m_LocalPosition: {x: -38.900005, y: 3.1400006, z: 0.0000009536743}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1719492674529030660}
