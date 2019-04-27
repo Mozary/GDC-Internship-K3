@@ -10,10 +10,12 @@ public class EnemyController : MonoBehaviour
     private Transform selfTransform;
     private Vector3 m_Velocity = Vector3.zero;
 
-    public float SmoothMovement;
+    
     public float maxSpeed;
     public float hitRange;
     public float health;
+
+    private float SmoothMovement = 0.05f;
     private bool hadap_kanan = true;
     private bool onGround = true;
     private float direction = 1f;
