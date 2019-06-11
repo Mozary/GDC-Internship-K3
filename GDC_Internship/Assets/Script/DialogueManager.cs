@@ -6,8 +6,8 @@ using UnityEngine.UI;
 public class DialogueManager : MonoBehaviour
 {
 
-    public Text nameUI;
-    public Text dialogueUI;
+    private Text nameUI;
+    private Text dialogueUI;
 
     private Queue<string> ListDialogues;
     // Start is called before the first frame update
@@ -17,7 +17,7 @@ public class DialogueManager : MonoBehaviour
 
     }
 
-    public void InteractOnButton(Dialogue dialogue)
+    public void DisplayAfterInteract(Dialogue dialogue)
     {
         ListDialogues.Clear();
         nameUI.text = dialogue.name;
