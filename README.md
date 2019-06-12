@@ -6,6 +6,9 @@ GDC Internship Project for Kelompok 3 <Insert Title Here>
 - Gameplay (Ideas):
   - Story     : 100%
   - Mechanics : 80%
+- Sounds
+  - BGM       : 0%
+  - SFX       : 0%
 - Main menu
   - Title : -
   - Chapters  : 100%
