@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class DialogueManager : MonoBehaviour
 {
 
-    private Text nameUI;
-    private Text dialogueUI;
+    public TextMeshProUGUI nameUI;
+    public TextMeshProUGUI dialogueUI;
 
     private Queue<string> ListDialogues;
     // Start is called before the first frame update
@@ -21,10 +22,13 @@ public class DialogueManager : MonoBehaviour
     {
         ListDialogues.Clear();
         nameUI.text = dialogue.name;
+        Debug.Log("display after interact terpanggil");
 
         foreach (string sentence in dialogue.ListSentence)
         {
             ListDialogues.Enqueue(sentence);
+            Debug.Log(sentence + " ____disiapkan");
+
         }
 
         DisplayNextSentence();
@@ -32,19 +36,41 @@ public class DialogueManager : MonoBehaviour
 
     public void DisplayNextSentence()
     {
+        Debug.Log("display next sentence terpanggil");
+
         if (ListDialogues.Count == 0)
         {
+            Debug.Log("list dialogue habis");
             EndDialogue();
             return;
         }
 
-        string sentence = ListDialogues.Dequeue();
-        dialogueUI.text = sentence;
+        //foreach (string sentence in ListDialogues)
+        //if(Input.GetKeyDown("e") &&  )
+        {
+            string sentence = ListDialogues.Dequeue();
+            Debug.Log(sentence + " _____terpanggil");
+            dialogueUI.text = sentence;
+            
+            //if(sentence == ListDialogues)
+            {
+
+            }
+        }
+        
     }
 
-    void EndDialogue()
+    public void EndDialogue()
     {
-        Debug.Log("testii selesai");
+        GameObject checkCanvas = GameObject.FindGameObjectWithTag("Canvas");
+        Debug.Log(checkCanvas.activeSelf);
+
+        Debug.Log("testii dihapus harusnya ulang semua");
+        ListDialogues.Clear();
+        GameObject.FindGameObjectWithTag("Canvas").SetActive(false);
+
+        
+        Debug.Log(checkCanvas.activeSelf);
     }
 }
 
