@@ -21,7 +21,7 @@ public class InteractOnTrigger2D : MonoBehaviour
         if (!enabled)                                                //coba jangan dipake dulu, kayak, bukannya udah pasti terjadi?
             return;
 
-        if (layers.Contains(other.gameObject))                       //Contains di sini perlu gamekit2D, entah karena apa
+        if (layers.Contains(other.gameObject))                       //Contains di sini dicover di LayerMaskExtension
         {
             ExecuteOnEnter(other);                                   //other kayaknya input kita sendiri dari menu di unity
         }
@@ -36,9 +36,6 @@ public class InteractOnTrigger2D : MonoBehaviour
         {
             ExecuteOnExit(other);
         }
-
-        //        [Initialized]
-        //        if (layers.)
     }
 
     protected virtual void ExecuteOnEnter(Collider2D other)         //virtual itu buat anak class, tapi emang punya anak?

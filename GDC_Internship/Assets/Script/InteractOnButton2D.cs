@@ -1,64 +1,67 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Events;
 
 public class InteractOnButton2D : InteractOnTrigger2D
 {
     public UnityEvent OnButtonPress;
-
     bool m_CanExecuteButtons;
+
+    GameObject parentCanvas;
+    GameObject dialogueBox;
+    [HideInInspector]                     //dijadikan public karena SceneLoader ########################################
+    public PlayerController i_player;
+
+    //bool untuk SceneLoader
+    [HideInInspector]
+    public bool inCollider;
 
     protected override void ExecuteOnEnter(Collider2D other)
     {
         m_CanExecuteButtons = true;
+        inCollider = true;
         OnEnter.Invoke();
     }
 
     protected override void ExecuteOnExit(Collider2D other)
     {
         m_CanExecuteButtons = false;
+        inCollider = false;
         OnExit.Invoke();
     }
 
+    void Start()
+    {
+        parentCanvas = GameObject.FindGameObjectWithTag("Canvas");
+        dialogueBox = parentCanvas.transform.GetChild(0).gameObject;
+        
+        i_player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+
+        inCollider = false;
+    }
     void Update()
     {
-        GameObject checkCanvas = GameObject.FindGameObjectWithTag("Canvas");
-
-        if (!m_CanExecuteButtons && Input.GetKeyDown("e") && checkCanvas.activeSelf) 
+        if (!m_CanExecuteButtons && Input.GetKeyDown("e") && dialogueBox.activeSelf)
         {
-            Debug.Log("kondisi terpenuhii untuk manggil display next sentence");
             FindObjectOfType<DialogueManager>().DisplayNextSentence();
         }
-        else 
-        {
-            //Debug.Log("kondisi tidak terpenuhii");
-        }
-
-        if (m_CanExecuteButtons) 
+        if (m_CanExecuteButtons /* && detect player sedang idle */)      //belum rangkum ##################
         {
             if (Input.GetKeyDown("e"))
             {
-                Debug.Log("invoke di update terjadih");
                 m_CanExecuteButtons = false;
                 OnButtonPress.Invoke();
             }
         }
 
-        if (!checkCanvas.activeSelf && GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().enabled == false)
+        if (!dialogueBox.activeSelf && !i_player.enabled)
         {
-            Debug.Log("bisa gerak lagee");
-            GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().enabled = true;
+            i_player.enabled = true;
         }
-        else
-        {
-            Debug.Log(GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>().enabled);
-            Debug.Log(" 3");
+    }
+    void branchEvent()
+    {
+        //make a special event with code here
 
-            Debug.Log("masih gak bisa geraaakkkk");
 
-            Debug.Log(checkCanvas.activeSelf);
-            Debug.Log(" 2");
-        }
     }
 }
