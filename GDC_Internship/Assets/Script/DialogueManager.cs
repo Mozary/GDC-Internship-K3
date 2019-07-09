@@ -11,13 +11,13 @@ public class DialogueManager : MonoBehaviour
 
     private Queue<string> ListDialogues;
 
-    GameObject parentCanvas;
-    GameObject dialogueBox;
+    private GameObject parentCanvas;
+    private GameObject dialogueBox;
 
     [HideInInspector]
-    public bool moveScene = false;
+    public bool dialogueEnded = false;
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         ListDialogues = new Queue<string>();
 
@@ -30,17 +30,17 @@ public class DialogueManager : MonoBehaviour
         ListDialogues.Clear();
         nameUI.text = dialogue.name;
         //bool for SceneLoader
-        moveScene = false;
-        Debug.Log("dari displayafteronteract ___" + moveScene);
+        dialogueEnded = false;
+        Debug.Log("dialogueEnded dari displayafteronteract ___" + dialogueEnded);
 
         foreach (string sentence in dialogue.ListSentence)
         {
             ListDialogues.Enqueue(sentence);
+            Debug.Log(sentence);
         }
 
         DisplayNextSentence();
     }
-
     public void DisplayNextSentence()
     {
         if (ListDialogues.Count == 0)
@@ -51,16 +51,16 @@ public class DialogueManager : MonoBehaviour
 
         string sentence = ListDialogues.Dequeue();
         dialogueUI.text = sentence;
+        Debug.Log(sentence + "dari nextsentence");
     }
-
     public void EndDialogue()
     {
         ListDialogues.Clear();
         dialogueBox.SetActive(false);
 
-        //bool for SceneLoader
-        moveScene = true;
-        Debug.Log("dari end dialogue ___" + moveScene);
+        //bool for Interactable_Dialogue and SceneLoader
+        dialogueEnded = true;
+        Debug.Log("dialogueEnded dari end dialogue ___" + dialogueEnded);
     }
 }
 

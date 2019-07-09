@@ -8,6 +8,8 @@ TagManager:
   - Ground
   - Canvas
   - Dialogue Manager
+  - Torch
+  - PathToSubscene
   layers:
   - Default
   - TransparentFX

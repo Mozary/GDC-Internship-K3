@@ -57,7 +57,7 @@ public class SceneLoader : MonoBehaviour
     private void Update()
     {
         inCollider = interactOnButton2D.inCollider;
-        moveScene = dialogueManager.moveScene;
+        moveScene = dialogueManager.dialogueEnded;
 
         //instruction on holding key is displayed in other script
         if (Input.GetKey("e") && inCollider && doMoveScene)
@@ -91,25 +91,28 @@ public class SceneLoader : MonoBehaviour
             holdActivate = false;
         }
 
-        if (inCollider && moveScene /* && detect player sedang idle */)      //belum rangkum ##################
+        if (inCollider /* && detect player sedang idle */)      //belum rangkum ##################
         {
-            Debug.Log("masuk ke moveScene  ___if");
-            doMoveScene = true;
-            
-            if (!hintofInstruction.activeSelf)
+            if(moveScene)
             {
-                hintofInstruction.SetActive(true);
-            }
-            else
-            {
-                holdInstruction += Time.deltaTime;
-                Debug.Log("ini holdInstruction ___" + holdInstruction);
-            }
+                Debug.Log("masuk ke moveScene  ___if");
+                doMoveScene = true;
 
-            if(holdInstruction > 3f)
-            {
-                hintofInstruction.SetActive(false);
-                holdInstruction = -10f;
+                if (!hintofInstruction.activeSelf)
+                {
+                    hintofInstruction.SetActive(true);
+                }
+                else
+                {
+                    holdInstruction += Time.deltaTime;
+                    Debug.Log("ini holdInstruction ___" + holdInstruction);
+                }
+
+                if (holdInstruction > 3f)
+                {
+                    hintofInstruction.SetActive(false);
+                    holdInstruction = -10f;
+                }
             }
         }
         else
