@@ -1,10 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ArrowScript : MonoBehaviour
 {
-    private Collider2D collider;
+    private new Collider2D collider;
 
     void Awake()
     {
@@ -13,6 +11,7 @@ public class ArrowScript : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        
         if (collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "Ground")
         {
             Destroy(this.gameObject);

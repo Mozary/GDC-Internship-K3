@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
@@ -10,7 +9,6 @@ public class EnemyController : MonoBehaviour
     private Transform selfTransform;
     private Vector3 m_Velocity = Vector3.zero;
 
-    
     public float maxSpeed;
     public float hitRange;
     public float health;
@@ -75,5 +73,18 @@ public class EnemyController : MonoBehaviour
         }
         AttackCheck = false;
         animator.SetBool("attack", false);
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Attack")
+        {
+            Debug.Log("HIT!");
+            this.health = this.health - 1;
+
+            if (this.health <= 0f)
+            {
+                Destroy(this.gameObject);
+            }
+        }
     }
 }

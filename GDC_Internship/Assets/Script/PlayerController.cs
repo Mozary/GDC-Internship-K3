@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     bool jump = false;
     bool onGround = true;
     public float runSpeed = 20f;
+    public float health = 10f;
     float movement = 0f;
     private bool AttackCheck = false;
     private bool RangedMode = false;
@@ -139,6 +140,18 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("attack3", false);
             animator.SetBool("attack2", false);
             animator.SetBool("attack1", false);
+        }
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Attack")
+        {
+            Debug.Log("HIT!");
+            this.health = this.health - 1;
+            if (this.health <= 0f)
+            {
+                Destroy(this.gameObject);
+            }
         }
     }
 }
