@@ -7,6 +7,10 @@ TagManager:
   - Enemy
   - Ground
   - Attack
+  - Canvas
+  - Dialogue Manager
+  - Torch
+  - PathToSubscene
   layers:
   - Default
   - TransparentFX
