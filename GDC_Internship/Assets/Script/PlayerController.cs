@@ -144,7 +144,7 @@ public class PlayerController : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Attack")
+        if (collision.gameObject.tag == "EnemyAttack")
         {
             Debug.Log("HIT!");
             this.health = this.health - 1;
