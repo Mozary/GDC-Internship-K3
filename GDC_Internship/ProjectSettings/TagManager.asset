@@ -11,6 +11,7 @@ TagManager:
   - Dialogue Manager
   - Torch
   - PathToSubscene
+  - EnemyAttack
   layers:
   - Default
   - TransparentFX

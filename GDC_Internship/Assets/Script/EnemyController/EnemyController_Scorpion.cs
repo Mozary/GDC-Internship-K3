@@ -13,19 +13,26 @@ public class EnemyController_Scorpion : MonoBehaviour
     private Transform targetPlayer;
     public BoxCollider2D patrolArea;
 
-    public float maxSpeed = 30f;
-    public float health = 2f;
-    public float hitRange = 0.4f;
-    public float waitTime = 0f;
+    [SerializeField] private float maxSpeed;
+    [SerializeField] private float health;
+    [SerializeField] private float hitRange;
+    [SerializeField] private float waitTime;
+
+    private float constSpeed;
+    private float constWait;
 
     private float SmoothMovement = 0.05f;
     private string state = "idle";
     private float faceDirection = 1f;
 
+    private Coroutine ActiveCoroutine = null;
     private bool faceRight = true;
     // Start is called before the first frame update
     void Start()
     {
+        constSpeed = maxSpeed;
+        constWait = waitTime;
+
         bodyCollider = GetComponent<CapsuleCollider2D>();
         targetPlayer = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         animator = GetComponent<Animator>();
@@ -50,14 +57,14 @@ public class EnemyController_Scorpion : MonoBehaviour
         //Check if patrol position is reached
         if (state == "patrol")
         {
-            if (Vector2.Distance(transform.localPosition, target) <= 0.4f)
+            if (Mathf.Abs(transform.localPosition.x - target.x) <= 0.4f)
             {
                 //Telling the object to wait
                 if (waitTime <= 0)
                 {
                     Patrol();
-                    waitTime = 3f;
-                    maxSpeed = 30f;
+                    waitTime = constWait;
+                    maxSpeed = constSpeed;
                 }
                 else
                 {
@@ -70,7 +77,7 @@ public class EnemyController_Scorpion : MonoBehaviour
     }
     void FixedUpdate()
     {
-        if(state == "patrol")
+        if(state == "patrol" && rb2d.isKinematic == false)
         {
             if (rb2d != null && target != null)
             {
@@ -79,7 +86,7 @@ public class EnemyController_Scorpion : MonoBehaviour
                 else if (target.x < transform.localPosition.x && faceRight) Flip();
             }
         }
-        else if (state == "follow")
+        else if (state == "follow" && rb2d.isKinematic == false)
         {
             if (rb2d != null && targetPlayer != null)
             {
@@ -95,7 +102,6 @@ public class EnemyController_Scorpion : MonoBehaviour
         float new_patrolPoint = Random.Range(-patrolBounds.extents.x, patrolBounds.extents.x);
         new_patrolPoint = new_patrolPoint + patrolBounds.center.x;
         target =  new Vector2(new_patrolPoint, transform.localPosition.y);
-        Debug.Log(target);
     }
     void Move()
     {
@@ -110,5 +116,75 @@ public class EnemyController_Scorpion : MonoBehaviour
         theScale.x *= -1;
         transform.localScale = theScale;
         faceDirection *= -1;
+    }
+    IEnumerator Death()
+    {
+        foreach (Transform child in transform)
+        {
+            Destroy(child.gameObject);
+        }
+        rb2d.isKinematic = true;
+        this.GetComponent<Collider2D>().enabled = false;
+        float transformChange = 0f;
+        while (transformChange < 180)
+        {
+            transform.Rotate(Vector3.forward *10);
+            
+            transformChange += 10;
+            yield return null;
+        }
+        Color mycolour = GetComponent<SpriteRenderer>().color;
+        float colourfade = 1;
+        yield return new WaitForSeconds(2f);
+
+        while (colourfade > 0)
+        {
+            colourfade -= 0.03f;
+            mycolour.a = colourfade;
+            GetComponent<SpriteRenderer>().color = mycolour;
+            yield return null;
+        }
+        Destroy(this.gameObject);
+    }
+    IEnumerator Hurt()
+    {
+        Debug.Log("Is Hurt");
+        float flashTime = 0.05f;
+        Color mycolour = GetComponent<SpriteRenderer>().color;
+        mycolour.g = 0f;
+        mycolour.b = 0f;
+        GetComponent<SpriteRenderer>().color = mycolour;
+        while (flashTime > 0)
+        {
+            yield return new WaitForSeconds(flashTime);
+            flashTime = 0;
+        }
+        GetComponent<SpriteRenderer>().color = Color.white;
+
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Attack")
+        {
+            this.health = this.health - 1;
+            if (health <= 0)
+            {
+                if (ActiveCoroutine != null)
+                {
+                    StopCoroutine(ActiveCoroutine);
+                    GetComponent<SpriteRenderer>().color = Color.white;
+                }
+                ActiveCoroutine = StartCoroutine(Death());
+            }
+            else
+            {
+                if (ActiveCoroutine != null)
+                {
+                    StopCoroutine(ActiveCoroutine);
+                    GetComponent<SpriteRenderer>().color = Color.white;
+                }
+                ActiveCoroutine = StartCoroutine(Hurt());
+            }
+        }
     }
 }

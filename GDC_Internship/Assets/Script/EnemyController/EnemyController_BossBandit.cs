@@ -13,11 +13,16 @@ public class EnemyController_BossBandit : MonoBehaviour
     public float hitRange;
     public float health;
 
+    [SerializeField] private Transform SlashPoint;
+    [SerializeField] private GameObject Slash;
+
     private float SmoothMovement = 0.05f;
     private bool hadap_kanan = true;
     private bool onGround = true;
     private float direction = 1f;
     private bool AttackCheck = false;
+    private bool StunCheck = false;
+    private Coroutine StunTimer = null;
     private float targetDistance;
 
     // Start is called before the first frame update
@@ -31,23 +36,26 @@ public class EnemyController_BossBandit : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        targetDistance = Vector2.Distance(selfTransform.position, target.position);
-        if (targetDistance <= hitRange && !AttackCheck && animator.GetFloat("speed") == 0f)
+        if (target != null)
         {
-            animator.SetBool("attack", true);
-            StartCoroutine("Attacking");
+            targetDistance = Vector2.Distance(selfTransform.position, target.position);
+            if (targetDistance <= hitRange && !StunCheck && !AttackCheck && animator.GetFloat("speed") == 0f)
+            {
+                animator.SetBool("attack", true);
+                StartCoroutine("Attacking");
+            }
         }
     }
     void FixedUpdate()
     {   
-        if (rb2d != null && !AttackCheck)
+        if (rb2d != null && !AttackCheck && !StunCheck && target != null)
         {
-            closeDistance();
+            CloseDistance();
             if (target.position.x > selfTransform.position.x && !hadap_kanan) Flip();
             else if (target.position.x < selfTransform.position.x && hadap_kanan) Flip();
         }
     }
-    void closeDistance()
+    void CloseDistance()
     {
         if (onGround && (targetDistance > hitRange))
         {
@@ -67,6 +75,20 @@ public class EnemyController_BossBandit : MonoBehaviour
     IEnumerator Attacking()
     {
         AttackCheck = true;
+
+        while (!animator.GetCurrentAnimatorStateInfo(0).IsName("EnemyAttack"))
+        {
+            yield return null;
+        }
+        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.5f)
+        {
+            yield return null;
+        }
+        Vector3 SlashDirection = new Vector3(transform.localScale.x, 0, 0).normalized;
+        GameObject clone = Instantiate(Slash, SlashPoint.position, Slash.transform.rotation);
+        clone.transform.localScale *= SlashDirection.x;
+        clone.GetComponent<Rigidbody2D>().velocity = SlashDirection * 1f;
+
         while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
         {
             yield return null;
@@ -74,17 +96,58 @@ public class EnemyController_BossBandit : MonoBehaviour
         AttackCheck = false;
         animator.SetBool("attack", false);
     }
+    IEnumerator Stunned()
+    {
+        animator.SetTrigger("isHurt");
+        animator.SetBool("stunned", true);
+        StunCheck = true;
+        float counter = 0.5f;
+        while (counter > 0)
+        {
+            yield return new WaitForSeconds(0.5f);
+            counter = counter - 0.5f;
+        }
+        if (health <= 0)
+        {
+            animator.SetTrigger("isDying");
+            rb2d.isKinematic = true;
+            this.GetComponent<Collider2D>().enabled = false;
+            while (!animator.GetCurrentAnimatorStateInfo(0).IsName("EnemyDie"))
+            {
+                yield return null;
+            }
+            while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
+            {
+                yield return null;
+            }
+            Color mycolour = GetComponent<SpriteRenderer>().color;
+            float colourfade = 1;
+            yield return new WaitForSeconds(2f);
+            while (colourfade > 0)
+            {
+                colourfade -= 0.03f;
+                mycolour.a = colourfade;
+                GetComponent<SpriteRenderer>().color = mycolour;
+                yield return null;
+            }
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            StunCheck = false;
+            animator.SetBool("stunned", false);
+        }
+    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Attack")
         {
-            Debug.Log("HIT!");
-            this.health = this.health - 1;
-
-            if (this.health <= 0f)
+            if (StunTimer != null)
             {
-                Destroy(this.gameObject);
+                StopCoroutine(StunTimer);
             }
+            this.health = this.health - 1;
+            StunTimer = StartCoroutine(Stunned());
         }
     }
 }

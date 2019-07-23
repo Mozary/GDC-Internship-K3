@@ -10,28 +10,40 @@ public class PlayerController : MonoBehaviour
     public Animator animator;
     public CharacterController2D controller;
     [SerializeField] private Transform FirePoint;
+    [SerializeField] private Transform SlashPoint;
     [SerializeField] private GameObject Arrow;
+    [SerializeField] private GameObject Slash;
+    [SerializeField] private float runSpeed;
+    [SerializeField] private float health;
+    [SerializeField] private float dodgeCooldown;
 
+    float movement = 0f;
     bool jump = false;
     bool onGround = true;
-    public float runSpeed = 20f;
-    public float health = 10f;
-    float movement = 0f;
-    private bool AttackCheck = false;
-    private bool RangedMode = false;
-    private bool Immovable = false;
+    bool Immovable = false;
+    bool RangedMode = false;
+    bool canDodge = true;
+    Coroutine ActiveCoroutine = null;
     // Start is called before the first frame update
     void Start()
     {
+        rb2d = this.GetComponent<Rigidbody2D>();
     }
     // Update is called once per frame
     void Update()
     {
-        movement = Input.GetAxisRaw("Horizontal") * runSpeed;
+        if (!Immovable)
+        {
+            movement = Input.GetAxisRaw("Horizontal") * runSpeed;
+        }
+        else
+        {
+            movement = 0;
+        }
         animator.SetFloat("Speed", Mathf.Abs(movement));
         if (Input.GetButtonDown("Jump"))
         {
-            if (!AttackCheck)
+            if (!Immovable)
             {
                 jump = true;
                 animator.SetTrigger("jumping");
@@ -39,18 +51,26 @@ public class PlayerController : MonoBehaviour
             }
         }
         if (Input.GetButtonDown ("Attack")) {
-            attack();
+            Attack();
         }
-        if (Input.GetButtonDown("Switch") && !checkPendingAttack())
+        if (Input.GetButtonDown("Switch") && !CheckPendingAttack())
         {
             RangedMode = !RangedMode;
             animator.SetBool("RangedMode", RangedMode);
         }
         if (animator.GetBool("attack1") || animator.GetBool("attack2") || animator.GetBool("attack3") ||animator.GetBool("Firing"))
         {
-            if (!AttackCheck)
+            if (!Immovable)
             {
                 StartCoroutine("OnCompleteAttackAnimation");
+            }
+        }
+        if (Input.GetButtonDown("Dodge"))
+        {
+            if(!Immovable && canDodge && !jump)
+            {
+                animator.SetTrigger("isDodging");
+                StartCoroutine("Dodge");
             }
         }
     }
@@ -63,18 +83,19 @@ public class PlayerController : MonoBehaviour
         controller.Move(movement * Time.fixedDeltaTime, false, jump);
         jump = false;
     }
-    public void onLand() //Bug Fix buat CharacterController
+    public void OnLand()
     {
-        if (!onGround)
+        if (!onGround && animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerJump"))
         {
             animator.SetBool("isJumping", false);
             onGround = true;
         }
     }
-    public void attack()
+    public void Attack()
     {
         if (movement == 0 && !animator.GetBool("isJumping") && !RangedMode)
         {
+            
             if (animator.GetBool("attack2") == true)
             {
                 animator.SetBool("attack3", true);
@@ -93,7 +114,7 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("Firing", true);
         }
     }
-    public void rangedAttack()
+    public void RangedAttack()
     {
         if (movement == 0 && !animator.GetBool("isJumping") && RangedMode)
         {
@@ -101,7 +122,7 @@ public class PlayerController : MonoBehaviour
         }
 
     }
-    public bool checkPendingAttack()
+    public bool CheckPendingAttack()
     {
         if (animator.GetBool("attack1") || animator.GetBool("attack2") || animator.GetBool("attack3") || animator.GetBool("Firing"))
         {
@@ -109,15 +130,40 @@ public class PlayerController : MonoBehaviour
         }
         else return false;
     }
+    IEnumerator Dodge()
+    {
+        while (!animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerDodge"))
+        {
+            yield return null;
+        }
+        Immovable = true;
+        canDodge = false;
+        float direction =Mathf.Abs(transform.localScale.x)/transform.localScale.x;
+        rb2d.AddForce(new Vector2(direction*-125, -5f));
+        while (animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerDodge"))
+        {
+            yield return null;
+        }
+        Immovable = false;
+        yield return new WaitForSeconds(dodgeCooldown);
+        canDodge = true;
+    }
     IEnumerator OnCompleteAttackAnimation()
     {
-        AttackCheck = true;
+        Immovable = true;
+        if (!animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerFireBow"))
+        {
+            Vector3 SlashDirection = new Vector3(transform.localScale.x, 0, 0).normalized;
+            GameObject clone = Instantiate(Slash, SlashPoint.position, Slash.transform.rotation);
+            clone.transform.localScale *= SlashDirection.x;
+            clone.GetComponent<Rigidbody2D>().velocity = SlashDirection * 5f;
+        }
         while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
         {
             movement = 0f;
             yield return null;
         }
-        AttackCheck = false;
+        Immovable = false;
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerFireBow"))
         {
             Vector3 FireDirection = new Vector3(transform.localScale.x, 0,0).normalized;
@@ -142,16 +188,70 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("attack1", false);
         }
     }
+    IEnumerator Stunned()
+    {
+        animator.SetTrigger("isHurt");
+        animator.SetBool("stunned",true);
+        while (!animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerHurt"))
+        {
+            yield return null;
+        }
+        Immovable = true;
+        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
+        {
+            yield return null;
+        }
+        if (health <= 0)
+        {
+            animator.SetTrigger("isDying");
+            rb2d.isKinematic = true;
+            Collider2D[]cols = this.GetComponents<Collider2D>();
+            foreach (Collider2D element in cols)
+            {
+                element.enabled = false;
+            }
+            while (!animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerDie"))
+            {
+                yield return null;
+            }
+            while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
+            {
+                yield return null;
+            }
+            Color mycolour = GetComponent<SpriteRenderer>().color;
+            float colourfade = 1;
+            yield return new WaitForSeconds(2f);
+            while (colourfade > 0)
+            {
+                colourfade -= 0.03f;
+                mycolour.a = colourfade;
+                GetComponent<SpriteRenderer>().color = mycolour;
+                yield return null;
+            }
+            Destroy(this.gameObject);
+            Debug.Log("GAME OVER");
+        }
+        else
+        {
+            animator.SetBool("stunned", false);
+            Immovable = false;
+        }
+    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "EnemyAttack")
+        if (collision.gameObject.tag == "EnemyAttack" && !animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerDodge"))
         {
-            Debug.Log("HIT!");
-            this.health = this.health - 1;
-            if (this.health <= 0f)
+
+            if (ActiveCoroutine != null)
             {
-                Destroy(this.gameObject);
+                StopCoroutine(ActiveCoroutine);
             }
+            animator.SetBool("attack3", false);
+            animator.SetBool("attack2", false);
+            animator.SetBool("attack1", false);
+            animator.SetBool("Firing", false);
+            health = health - 1;
+            ActiveCoroutine = StartCoroutine("Stunned");
         }
     }
 }
