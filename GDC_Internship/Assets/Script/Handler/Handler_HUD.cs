@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Handler_Timer : MonoBehaviour
+public class Handler_HUD : MonoBehaviour
 {
     [SerializeField] private PlayerController Player;
 
@@ -41,6 +41,7 @@ public class Handler_Timer : MonoBehaviour
         ImageHealth.fillAmount = Player.GetNormalizedHealth();
         ImageDodgeCooldown.fillAmount = Player.GetNormalizedDodgeCooldown();
         ImageHealCooldown.fillAmount = Player.GetNormalizedHealCooldown();
+        ImageChargeCooldown.fillAmount = Player.GetNormalizedChargeCooldown();
         TextHerbCount.text = Player.GetHerbAmount().ToString();
 
         UpdateWeaponMode();

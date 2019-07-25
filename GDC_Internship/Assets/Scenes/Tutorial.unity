@@ -23234,12 +23234,12 @@ PrefabInstance:
     - target: {fileID: 6283254183085931084, guid: dcde394c99bc34f45a416bec44ea3a50,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 69.099
+      value: 69.569
       objectReference: {fileID: 0}
     - target: {fileID: 6283254183085931084, guid: dcde394c99bc34f45a416bec44ea3a50,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.557
+      value: -0.929
       objectReference: {fileID: 0}
     - target: {fileID: 6283254183085931084, guid: dcde394c99bc34f45a416bec44ea3a50,
         type: 3}
@@ -23454,6 +23454,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: CameraPack
       objectReference: {fileID: 0}
+    - target: {fileID: 5497265523732101280, guid: 85de0ad5af9c4c748a7a3af427b6a7f4,
+        type: 3}
+      propertyPath: m_TagString
+      value: Canvas
+      objectReference: {fileID: 0}
     - target: {fileID: 5991759806371876877, guid: 85de0ad5af9c4c748a7a3af427b6a7f4,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -23517,12 +23522,12 @@ PrefabInstance:
     - target: {fileID: 4970809289968487353, guid: 85de0ad5af9c4c748a7a3af427b6a7f4,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -15.390999
+      value: -14.920998
       objectReference: {fileID: 0}
     - target: {fileID: 4970809289968487353, guid: 85de0ad5af9c4c748a7a3af427b6a7f4,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.44699997
+      value: -0.819
       objectReference: {fileID: 0}
     - target: {fileID: 4970809289968487353, guid: 85de0ad5af9c4c748a7a3af427b6a7f4,
         type: 3}
@@ -23553,11 +23558,6 @@ PrefabInstance:
         type: 3}
       propertyPath: orthographic size
       value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5497265523732101280, guid: 85de0ad5af9c4c748a7a3af427b6a7f4,
-        type: 3}
-      propertyPath: m_TagString
-      value: Canvas
       objectReference: {fileID: 0}
     - target: {fileID: 7897668501021666916, guid: 85de0ad5af9c4c748a7a3af427b6a7f4,
         type: 3}

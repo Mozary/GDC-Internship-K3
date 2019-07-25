@@ -172,7 +172,6 @@ public class EnemyController_Veteran : MonoBehaviour
         {
             gotHit = true;
             this.health = this.health - 1;
-            Debug.Log("GOTHIT");
             if(health <= 0)
             {
                 StunCheck = true;

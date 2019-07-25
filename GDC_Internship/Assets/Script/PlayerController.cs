@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     public Rigidbody2D rb2d;
     public Collider2D col2d;
     public ParticleSystem Particle;
+    public TrailRenderer Trail;
     public Animator animator;
     public CharacterController2D controller;
 
@@ -18,11 +19,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float runSpeed = 15f;
     [SerializeField] private float maxHealth = 10f;
     [SerializeField] private float dodgeCooldown = 2f;
+    [SerializeField] private float chargeCooldown = 10f;
     [SerializeField] private float healTimeAndCooldown = 1f;
 
     //HUD Related
     private float Countdown_dodge;
     private float Countdown_heal;
+    private float Countdown_charge;
     private int CollectedHerb = 0;
     private float health;
     private bool RangedMode = false;
@@ -32,6 +35,7 @@ public class PlayerController : MonoBehaviour
     bool onGround = true;
     bool Immovable = false;
     bool canDodge = true;
+    bool invulnerable = false;
     Coroutine ActiveCoroutine = null;
 
     // Start is called before the first frame update
@@ -42,6 +46,7 @@ public class PlayerController : MonoBehaviour
         health = maxHealth;
         Countdown_dodge = dodgeCooldown;
         Countdown_heal = healTimeAndCooldown;
+        Countdown_charge = chargeCooldown;
 
     }
     // Update is called once per frame
@@ -94,6 +99,14 @@ public class PlayerController : MonoBehaviour
             {
                 animator.SetTrigger("heal");
                 StartCoroutine("Heal");
+            }
+        }
+        if (Input.GetButtonDown("Special"))
+        {
+            if (!Immovable && Countdown_charge >= chargeCooldown && !animator.GetBool("isJumping") && !RangedMode)
+            {
+                animator.SetTrigger("isCharging");
+                StartCoroutine("Charge");
             }
         }
     }
@@ -155,6 +168,8 @@ public class PlayerController : MonoBehaviour
     }
     IEnumerator Dodge()
     {
+        Trail.emitting = true;
+        Countdown_dodge = 0;
         while (!animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerDodge"))
         {
             yield return null;
@@ -168,8 +183,7 @@ public class PlayerController : MonoBehaviour
             yield return null;
         }
         Immovable = false;
-
-        Countdown_dodge = 0;
+        Trail.emitting = false;
         while (Countdown_dodge < dodgeCooldown)
         {
             Countdown_dodge += Time.deltaTime;
@@ -177,9 +191,53 @@ public class PlayerController : MonoBehaviour
         }
         canDodge = true;
     }
+    IEnumerator Charge()
+    {
+        Immovable = true;
+        ParticleSystem.MainModule setting = Particle.main;
+        ParticleSystem.MainModule temp = setting;
+        setting.startColor = Color.red;
+        Particle.Play();
+
+        yield return new WaitForSeconds(1.5f);
+        Particle.Stop();
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerCharge"))
+        {
+            Trail.emitting = true;
+            invulnerable = true;
+            transform.Find("Special").gameObject.SetActive(true);
+            this.gameObject.layer = LayerMask.NameToLayer("Enemy");
+
+            float direction = Mathf.Abs(transform.localScale.x) / transform.localScale.x;
+            rb2d.AddForce(new Vector2(direction * 300, -2.5f));
+            Immovable = false;
+            Attack();
+            Attack();
+            Attack();
+
+            Countdown_charge = 0;
+            yield return new WaitForSeconds(3f);
+            StartCoroutine(ChargeCooling());
+            this.gameObject.layer = LayerMask.NameToLayer("Player");
+            transform.Find("Special").gameObject.SetActive(false);
+            invulnerable = false;
+            Trail.emitting = false;
+        }
+    }
+    IEnumerator ChargeCooling()
+    {
+        while (Countdown_charge < chargeCooldown)
+        {
+            Countdown_charge += Time.deltaTime;
+            yield return null;
+        }
+    }
     IEnumerator Heal()
     {
         Immovable = true;
+        ParticleSystem.MainModule setting = Particle.main;
+        ParticleSystem.MainModule temp = setting;
+        setting.startColor = Color.green;
         animator.SetBool("stunned", true);
         CollectedHerb -= 1;
         Particle.Play();
@@ -304,7 +362,7 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        if (!animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerDodge"))
+        if (!animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerDodge") && !invulnerable)
         {
             if (ActiveCoroutine != null)
             {
@@ -329,6 +387,10 @@ public class PlayerController : MonoBehaviour
     public float GetNormalizedHealCooldown()
     {
         return Countdown_heal / healTimeAndCooldown;
+    }
+    public float GetNormalizedChargeCooldown()
+    {
+        return Countdown_charge / chargeCooldown;
     }
     public bool GetRangedCheck()
     {

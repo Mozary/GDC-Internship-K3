@@ -156,7 +156,6 @@ public class EnemyController_Scorpion : MonoBehaviour
     }
     IEnumerator Hurt()
     {
-        Debug.Log("Is Hurt");
         float flashTime = 0.05f;
         Color mycolour = GetComponent<SpriteRenderer>().color;
         mycolour.g = 0f;
