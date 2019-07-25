@@ -7,27 +7,42 @@ public class PlayerController : MonoBehaviour
 
     public Rigidbody2D rb2d;
     public Collider2D col2d;
+    public ParticleSystem Particle;
     public Animator animator;
     public CharacterController2D controller;
+
     [SerializeField] private Transform FirePoint;
     [SerializeField] private Transform SlashPoint;
     [SerializeField] private GameObject Arrow;
     [SerializeField] private GameObject Slash;
-    [SerializeField] private float runSpeed;
-    [SerializeField] private float health;
-    [SerializeField] private float dodgeCooldown;
+    [SerializeField] private float runSpeed = 15f;
+    [SerializeField] private float maxHealth = 10f;
+    [SerializeField] private float dodgeCooldown = 2f;
+    [SerializeField] private float healTimeAndCooldown = 1f;
+
+    //HUD Related
+    private float Countdown_dodge;
+    private float Countdown_heal;
+    private int CollectedHerb = 0;
+    private float health;
+    private bool RangedMode = false;
 
     float movement = 0f;
     bool jump = false;
     bool onGround = true;
     bool Immovable = false;
-    bool RangedMode = false;
     bool canDodge = true;
     Coroutine ActiveCoroutine = null;
+
     // Start is called before the first frame update
     void Start()
     {
         rb2d = this.GetComponent<Rigidbody2D>();
+
+        health = maxHealth;
+        Countdown_dodge = dodgeCooldown;
+        Countdown_heal = healTimeAndCooldown;
+
     }
     // Update is called once per frame
     void Update()
@@ -67,10 +82,18 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetButtonDown("Dodge"))
         {
-            if(!Immovable && canDodge && !jump)
+            if(!Immovable && canDodge && !animator.GetBool("isJumping"))
             {
                 animator.SetTrigger("isDodging");
                 StartCoroutine("Dodge");
+            }
+        }
+        if (Input.GetButtonDown("Heal"))
+        {
+            if (!Immovable && Countdown_heal>=healTimeAndCooldown && !animator.GetBool("isJumping") && CollectedHerb>0 && health<maxHealth)
+            {
+                animator.SetTrigger("heal");
+                StartCoroutine("Heal");
             }
         }
     }
@@ -145,8 +168,34 @@ public class PlayerController : MonoBehaviour
             yield return null;
         }
         Immovable = false;
-        yield return new WaitForSeconds(dodgeCooldown);
+
+        Countdown_dodge = 0;
+        while (Countdown_dodge < dodgeCooldown)
+        {
+            Countdown_dodge += Time.deltaTime;
+            yield return null;
+        }
         canDodge = true;
+    }
+    IEnumerator Heal()
+    {
+        Immovable = true;
+        animator.SetBool("stunned", true);
+        CollectedHerb -= 1;
+        Particle.Play();
+        Countdown_heal = 0;
+        while (Countdown_heal < healTimeAndCooldown)
+        {
+            Countdown_heal += Time.deltaTime;
+            if (health < maxHealth)
+            {
+                health += Time.deltaTime;
+            }
+            yield return null;
+        }
+        Particle.Stop();
+        animator.SetBool("stunned", false);
+        Immovable = false;
     }
     IEnumerator OnCompleteAttackAnimation()
     {
@@ -188,15 +237,30 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("attack1", false);
         }
     }
+    IEnumerator Hurt()
+    {
+        float flashTime = 0.1f;
+        Color mycolour = GetComponent<SpriteRenderer>().color;
+        mycolour.g = 0f;
+        mycolour.b = 0f;
+        GetComponent<SpriteRenderer>().color = mycolour;
+        while (flashTime > 0)
+        {
+            yield return new WaitForSeconds(flashTime);
+            flashTime = 0;
+        }
+        GetComponent<SpriteRenderer>().color = Color.white;
+    }
     IEnumerator Stunned()
     {
         animator.SetTrigger("isHurt");
         animator.SetBool("stunned",true);
-        while (!animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerHurt"))
+        while (!animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerHurt") && !animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerAirHurt"))
         {
             yield return null;
         }
         Immovable = true;
+        StartCoroutine(Hurt());
         while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
         {
             yield return null;
@@ -237,11 +301,11 @@ public class PlayerController : MonoBehaviour
             Immovable = false;
         }
     }
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.tag == "EnemyAttack" && !animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerDodge"))
-        {
 
+    public void TakeDamage(float damage)
+    {
+        if (!animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerDodge"))
+        {
             if (ActiveCoroutine != null)
             {
                 StopCoroutine(ActiveCoroutine);
@@ -250,8 +314,32 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("attack2", false);
             animator.SetBool("attack1", false);
             animator.SetBool("Firing", false);
-            health = health - 1;
+            health -= damage;
             ActiveCoroutine = StartCoroutine("Stunned");
         }
+    }
+    public float GetNormalizedHealth()
+    {
+        return health / maxHealth;
+    }
+    public float GetNormalizedDodgeCooldown()
+    {
+        return Countdown_dodge / dodgeCooldown;
+    }
+    public float GetNormalizedHealCooldown()
+    {
+        return Countdown_heal / healTimeAndCooldown;
+    }
+    public bool GetRangedCheck()
+    {
+        return RangedMode;
+    }
+    public int GetHerbAmount()
+    {
+        return CollectedHerb;
+    }
+    public void AddCollectedHerb()
+    {
+        CollectedHerb += 1;
     }
 }

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4506919885902633858}
   - component: {fileID: 4506919885902633859}
   - component: {fileID: 4506919885902633885}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Scorpion
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -157,6 +157,7 @@ MonoBehaviour:
   health: 5
   hitRange: 0.4
   waitTime: 2
+  Herb: {fileID: 8863576755217939462, guid: 67b4e8efef4e10a4e8319e7e02bbcf46, type: 3}
 --- !u!1 &4917374383019658952
 GameObject:
   m_ObjectHideFlags: 0
@@ -169,7 +170,7 @@ GameObject:
   - component: {fileID: 6125387179105903369}
   - component: {fileID: 2955927685885065194}
   - component: {fileID: 1935308035975878753}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: AttackBody
   m_TagString: EnemyAttack
   m_Icon: {fileID: 0}

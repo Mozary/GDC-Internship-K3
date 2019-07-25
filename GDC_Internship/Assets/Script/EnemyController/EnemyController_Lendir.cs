@@ -23,6 +23,7 @@ public class EnemyController_Lendir : MonoBehaviour
 
     [SerializeField] private Transform SlashPoint;
     [SerializeField] private GameObject Slash;
+    [SerializeField] private GameObject Herb;
 
     private float constSpeed;
     private float constWait;
@@ -54,7 +55,6 @@ public class EnemyController_Lendir : MonoBehaviour
         }
         else
         {
-            Debug.Log("Following Player");
             state = "follow";
         }
         
@@ -68,14 +68,12 @@ public class EnemyController_Lendir : MonoBehaviour
             targetDistance = Vector2.Distance(selfTransform.position, targetPlayer.position);
             if (targetDistance <= argoRange && state == "patrol")
             {
-                Debug.Log("Following");
                 waitTime = constWait;
                 maxSpeed = constSpeed;
                 state = "follow";
             }
             else if(targetDistance >= giveupRange && state == "follow")
             {
-                Debug.Log("Patroling");
                 state = "patrol";
             }
         }
@@ -172,11 +170,18 @@ public class EnemyController_Lendir : MonoBehaviour
         {
             yield return null;
         }
-        Vector3 SlashDirection = new Vector3(transform.localScale.x, 0, 0).normalized;
-        GameObject clone = Instantiate(Slash, SlashPoint.position, Slash.transform.rotation);
-        clone.transform.localScale *= SlashDirection.x;
-        clone.GetComponent<Rigidbody2D>().velocity = SlashDirection * 2f;
-        Debug.Log("ATTACKING");
+        if (!StunCheck)
+        {
+            Vector3 SlashDirection = new Vector3(transform.localScale.x, 0, 0).normalized;
+            GameObject clone = Instantiate(Slash, SlashPoint.position, Slash.transform.rotation);
+            clone.transform.localScale *= SlashDirection.x;
+            clone.GetComponent<Rigidbody2D>().velocity = SlashDirection * 1f;
+        }
+        else
+        {
+            AttackCheck = false;
+            animator.SetBool("attack", false);
+        }
 
         while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
         {
@@ -185,11 +190,32 @@ public class EnemyController_Lendir : MonoBehaviour
         AttackCheck = false;
         animator.SetBool("attack", false);
     }
+    IEnumerator Hurt()
+    {
+        float flashTime = 0.1f;
+        Color mycolour = GetComponent<SpriteRenderer>().color;
+        mycolour.g = 0f;
+        mycolour.b = 0f;
+        GetComponent<SpriteRenderer>().color = mycolour;
+        while (flashTime > 0)
+        {
+            yield return new WaitForSeconds(flashTime);
+            flashTime = 0;
+        }
+        GetComponent<SpriteRenderer>().color = Color.white;
+    }
+    private void DropHerb()
+    {
+        Vector3 DropDirection = new Vector3(-transform.localScale.x, 1, 0).normalized;
+        GameObject clone = Instantiate(Herb, transform.position, transform.rotation);
+        clone.GetComponent<Rigidbody2D>().velocity = DropDirection * 1f;
+    }
     IEnumerator Stunned()
     {
         animator.SetTrigger("isHurt");
         animator.SetBool("stunned", true);
         StunCheck = true;
+        StartCoroutine(Hurt());
         float counter = 0.5f;
         while (counter > 0)
         {
@@ -198,6 +224,7 @@ public class EnemyController_Lendir : MonoBehaviour
         }
         if (health <= 0)
         {
+            DropHerb();
             animator.SetTrigger("isDying");
             foreach (Transform child in transform)
             {

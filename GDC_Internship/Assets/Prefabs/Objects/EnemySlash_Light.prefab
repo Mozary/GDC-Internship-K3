@@ -96,6 +96,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Knockback: 25
   SlashRange: 0.1
+  SlashDamage: 0.5
 --- !u!60 &9114217586531016290
 PolygonCollider2D:
   m_ObjectHideFlags: 0

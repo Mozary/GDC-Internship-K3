@@ -17,6 +17,7 @@ public class EnemyController_Veteran : MonoBehaviour
     [SerializeField] private Transform SlashPoint;
     [SerializeField] private GameObject Slash;
     [SerializeField] private float argoRange = 2f;
+    [SerializeField] private GameObject Herb;
 
     private float SmoothMovement = 0.05f;
     private bool hadap_kanan = true;
@@ -28,6 +29,11 @@ public class EnemyController_Veteran : MonoBehaviour
     private float targetDistance;
     private Color originColor;
 
+    private bool gotHit = false;
+
+    private Transform HealthBar;
+    private float maxHealth;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -35,11 +41,14 @@ public class EnemyController_Veteran : MonoBehaviour
         rb2d = this.GetComponent<Rigidbody2D>();
         selfTransform = this.GetComponent<Transform>();
         originColor = GetComponent<SpriteRenderer>().color;
-    }
 
+        HealthBar = transform.Find("HealthBar");
+        maxHealth = health;
+    }
     // Update is called once per frame
     void Update()
     {
+        HealthBar.localScale = new Vector3(Mathf.Clamp(health / maxHealth, 0, maxHealth), HealthBar.localScale.y, HealthBar.localScale.z);
         if (target == null && dummyTarget)
         {
             float dummyDistance = Vector2.Distance(selfTransform.position, dummyTarget.position);
@@ -108,6 +117,7 @@ public class EnemyController_Veteran : MonoBehaviour
     }
     IEnumerator Dying()
     {
+        DropHerb();
         animator.SetTrigger("isDying");
         rb2d.isKinematic = true;
         Collider2D[] cols = this.GetComponents<Collider2D>();
@@ -147,14 +157,22 @@ public class EnemyController_Veteran : MonoBehaviour
             yield return new WaitForSeconds(flashTime);
             flashTime = 0;
         }
+        gotHit = false;
         GetComponent<SpriteRenderer>().color = originColor;
-
+    }
+    private void DropHerb()
+    {
+        Vector3 DropDirection = new Vector3(-transform.localScale.x, 1, 0).normalized;
+        GameObject clone = Instantiate(Herb, transform.position, transform.rotation);
+        clone.GetComponent<Rigidbody2D>().velocity = DropDirection * 1f;
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Attack")
+        if (collision.gameObject.tag == "Attack" && !gotHit)
         {
+            gotHit = true;
             this.health = this.health - 1;
+            Debug.Log("GOTHIT");
             if(health <= 0)
             {
                 StunCheck = true;

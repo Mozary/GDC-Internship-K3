@@ -12,6 +12,7 @@ TagManager:
   - Torch
   - PathToSubscene
   - EnemyAttack
+  - Collectable
   layers:
   - Default
   - TransparentFX
@@ -24,8 +25,8 @@ TagManager:
   - Ground
   - Player
   - Camera
-  - 
-  - 
+  - Collectibles
+  - Enemy
   - 
   - 
   - 

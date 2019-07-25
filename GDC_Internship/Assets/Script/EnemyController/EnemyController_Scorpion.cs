@@ -7,7 +7,6 @@ public class EnemyController_Scorpion : MonoBehaviour
     private Animator animator;
     private Rigidbody2D rb2d;
     private Vector3 target = Vector3.zero;
-    private CapsuleCollider2D bodyCollider;
     private Bounds patrolBounds;
     private Vector3 ref_velocity = Vector3.zero;
     private Transform targetPlayer;
@@ -17,6 +16,7 @@ public class EnemyController_Scorpion : MonoBehaviour
     [SerializeField] private float health;
     [SerializeField] private float hitRange;
     [SerializeField] private float waitTime;
+    [SerializeField] private GameObject Herb;
 
     private float constSpeed;
     private float constWait;
@@ -27,13 +27,13 @@ public class EnemyController_Scorpion : MonoBehaviour
 
     private Coroutine ActiveCoroutine = null;
     private bool faceRight = true;
+    private bool gotHit = false;
     // Start is called before the first frame update
     void Start()
     {
         constSpeed = maxSpeed;
         constWait = waitTime;
-
-        bodyCollider = GetComponent<CapsuleCollider2D>();
+        
         targetPlayer = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         animator = GetComponent<Animator>();
         rb2d = GetComponent<Rigidbody2D>();
@@ -117,14 +117,22 @@ public class EnemyController_Scorpion : MonoBehaviour
         transform.localScale = theScale;
         faceDirection *= -1;
     }
+    private void DropHerb()
+    {
+        Vector3 DropDirection = new Vector3(-transform.localScale.x, 1, 0).normalized;
+        GameObject clone = Instantiate(Herb, transform.position, transform.rotation);
+        clone.GetComponent<Rigidbody2D>().velocity = DropDirection * 1f;
+    }
     IEnumerator Death()
     {
+        this.GetComponent<Collider2D>().enabled = false;
         foreach (Transform child in transform)
         {
             Destroy(child.gameObject);
         }
         rb2d.isKinematic = true;
-        this.GetComponent<Collider2D>().enabled = false;
+        
+        DropHerb();
         float transformChange = 0f;
         while (transformChange < 180)
         {
@@ -159,13 +167,16 @@ public class EnemyController_Scorpion : MonoBehaviour
             yield return new WaitForSeconds(flashTime);
             flashTime = 0;
         }
+        gotHit = false;
         GetComponent<SpriteRenderer>().color = Color.white;
 
     }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Attack")
+        if (collision.gameObject.tag == "Attack" && !gotHit)
         {
+            gotHit = true;
             this.health = this.health - 1;
             if (health <= 0)
             {

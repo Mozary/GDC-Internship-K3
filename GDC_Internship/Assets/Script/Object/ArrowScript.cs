@@ -13,7 +13,7 @@ public class ArrowScript : MonoBehaviour
         float knockforceX = 75; //Knockback force
         if (collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "Ground")
         {
-            if(collision.gameObject.tag == "Enemy")
+            if (collision.gameObject.tag == "Enemy")
             {
                 if (collision.gameObject.transform.position.x < transform.position.x)
                 {

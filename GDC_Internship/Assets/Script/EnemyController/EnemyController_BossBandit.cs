@@ -15,6 +15,7 @@ public class EnemyController_BossBandit : MonoBehaviour
 
     [SerializeField] private Transform SlashPoint;
     [SerializeField] private GameObject Slash;
+    [SerializeField] private GameObject Herb;
 
     private float SmoothMovement = 0.05f;
     private bool hadap_kanan = true;
@@ -25,17 +26,25 @@ public class EnemyController_BossBandit : MonoBehaviour
     private Coroutine StunTimer = null;
     private float targetDistance;
 
+    private Transform HealthBar;
+    private float maxHealth;
+
     // Start is called before the first frame update
     void Start()
     {
         target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         rb2d = this.GetComponent<Rigidbody2D>();
         selfTransform = this.GetComponent<Transform>();
+
+        HealthBar = transform.Find("HealthBar");
+        maxHealth = health;
     }
 
     // Update is called once per frame
     void Update()
     {
+        HealthBar.localScale = new Vector3(Mathf.Clamp(health / maxHealth, 0, maxHealth), HealthBar.localScale.y, HealthBar.localScale.z);
+        
         if (target != null)
         {
             targetDistance = Vector2.Distance(selfTransform.position, target.position);
@@ -64,6 +73,12 @@ public class EnemyController_BossBandit : MonoBehaviour
             rb2d.velocity = Vector3.SmoothDamp(rb2d.velocity, moveVelocity, ref m_Velocity, SmoothMovement);
         } else { animator.SetFloat("speed", 0f); }
     }
+    private void DropHerb()
+    {
+        Vector3 DropDirection = new Vector3(-transform.localScale.x, 1, 0).normalized;
+        GameObject clone = Instantiate(Herb, transform.position, transform.rotation);
+        clone.GetComponent<Rigidbody2D>().velocity = DropDirection * 1f;
+    }
     private void Flip()
     {
         hadap_kanan = !hadap_kanan;
@@ -84,10 +99,18 @@ public class EnemyController_BossBandit : MonoBehaviour
         {
             yield return null;
         }
-        Vector3 SlashDirection = new Vector3(transform.localScale.x, 0, 0).normalized;
-        GameObject clone = Instantiate(Slash, SlashPoint.position, Slash.transform.rotation);
-        clone.transform.localScale *= SlashDirection.x;
-        clone.GetComponent<Rigidbody2D>().velocity = SlashDirection * 1f;
+        if (!StunCheck)
+        {
+            Vector3 SlashDirection = new Vector3(transform.localScale.x, 0, 0).normalized;
+            GameObject clone = Instantiate(Slash, SlashPoint.position, Slash.transform.rotation);
+            clone.transform.localScale *= SlashDirection.x;
+            clone.GetComponent<Rigidbody2D>().velocity = SlashDirection * 1f;
+        }
+        else
+        {
+            AttackCheck = false;
+            animator.SetBool("attack", false);
+        }
 
         while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
         {
@@ -96,11 +119,26 @@ public class EnemyController_BossBandit : MonoBehaviour
         AttackCheck = false;
         animator.SetBool("attack", false);
     }
+    IEnumerator Hurt()
+    {
+        float flashTime = 0.1f;
+        Color mycolour = GetComponent<SpriteRenderer>().color;
+        mycolour.g = 0f;
+        mycolour.b = 0f;
+        GetComponent<SpriteRenderer>().color = mycolour;
+        while (flashTime > 0)
+        {
+            yield return new WaitForSeconds(flashTime);
+            flashTime = 0;
+        }
+        GetComponent<SpriteRenderer>().color = Color.white;
+    }
     IEnumerator Stunned()
     {
         animator.SetTrigger("isHurt");
         animator.SetBool("stunned", true);
         StunCheck = true;
+        StartCoroutine(Hurt());
         float counter = 0.5f;
         while (counter > 0)
         {
@@ -109,6 +147,9 @@ public class EnemyController_BossBandit : MonoBehaviour
         }
         if (health <= 0)
         {
+            DropHerb();
+            DropHerb();
+            DropHerb();
             animator.SetTrigger("isDying");
             rb2d.isKinematic = true;
             this.GetComponent<Collider2D>().enabled = false;

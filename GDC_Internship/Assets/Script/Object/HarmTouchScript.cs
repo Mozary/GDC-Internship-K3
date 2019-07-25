@@ -31,6 +31,7 @@ public class HarmTouchScript : MonoBehaviour
             float knockforceX = Knockback; //Knockback force
             if (collision.gameObject.tag == "Player")
             {
+                collision.gameObject.GetComponent<PlayerController>().TakeDamage(0.5f);
                 if (collision.gameObject.transform.position.x < transform.position.x)
                 {
                     knockforceX = -1 * knockforceX;

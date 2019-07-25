@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3068847485026706658}
   - component: {fileID: 2544967247414866380}
   - component: {fileID: 6513421784363591020}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: AttackBody
   m_TagString: EnemyAttack
   m_Icon: {fileID: 0}
@@ -124,7 +124,7 @@ GameObject:
   - component: {fileID: 3261379321676721238}
   - component: {fileID: 3261379321676721239}
   - component: {fileID: 3261379321676721233}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Lendir
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -138,7 +138,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3261379321676721235}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 65.381, y: 0.042, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -266,12 +266,13 @@ MonoBehaviour:
   patrolArea: {fileID: 0}
   maxSpeed: 25
   health: 5
-  hitRange: 0.3
+  hitRange: 0.25
   waitTime: 2
   argoRange: 1.5
   giveupRange: 2.5
   SlashPoint: {fileID: 4252997825350620491}
   Slash: {fileID: 2838766830951665151, guid: 5280054dac46e5243b9724cbcdfbaac9, type: 3}
+  Herb: {fileID: 8863576755217939462, guid: 67b4e8efef4e10a4e8319e7e02bbcf46, type: 3}
 --- !u!1 &7762190996245252058
 GameObject:
   m_ObjectHideFlags: 0
@@ -282,7 +283,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4252997825350620491}
   - component: {fileID: 1090199795724270873}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: SlashPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}

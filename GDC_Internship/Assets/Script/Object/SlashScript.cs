@@ -5,12 +5,18 @@ public class SlashScript : MonoBehaviour
     //Invisible short-ranged hitbox (to be used like arrow)
     [SerializeField] private float Knockback = 35f;
     [SerializeField] private float SlashRange = 0.05f;
+    [SerializeField] private float SlashDamage = 1f;
+
     private new Collider2D collider;
     
     void Awake()
     {
         collider = GetComponent<Collider2D>();
         Destroy(this.gameObject, SlashRange);
+    }
+    public float GetDamage()
+    {
+        return SlashDamage;
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -34,6 +40,8 @@ public class SlashScript : MonoBehaviour
             float knockforceX = Knockback; //Knockback force
             if (collision.gameObject.tag == "Player")
             {
+                collision.gameObject.GetComponent<PlayerController>().TakeDamage(SlashDamage);
+
                 if (collision.gameObject.transform.position.x < transform.position.x)
                 {
                     knockforceX = -1 * knockforceX;
