@@ -45,7 +45,6 @@ public class AttackSpellScript : MonoBehaviour
             rb2d.velocity = transform.right * Speed * Time.deltaTime;
             Vector3 targetVector = Target.position - transform.position;
             float rotatingIndex = Vector3.Cross(targetVector, transform.right).z;
-            Debug.Log(rotatingIndex);
             rb2d.angularVelocity = -1 * rotatingIndex * rotateSpeed * Time.deltaTime;
         }
         else
@@ -93,6 +92,7 @@ public class AttackSpellScript : MonoBehaviour
 
             if (collision.gameObject.tag == "Player")
             {
+                collision.gameObject.GetComponent<PlayerController>().TakeDamage(Damage);
                 if (SpellType == Spell.Fireball)
                 {
                     collision.gameObject.GetComponent<PlayerController>().TakeFireDamage();

@@ -249,8 +249,10 @@ MonoBehaviour:
   health: 5
   Herb: {fileID: 8863576755217939462, guid: 67b4e8efef4e10a4e8319e7e02bbcf46, type: 3}
   SpellPoint: {fileID: 776179344435627506}
-  Spell1: {fileID: 0}
-  Spell2: {fileID: 0}
+  Spell1: {fileID: 2838766830951665151, guid: 717d126f17c82194d8afa05f61d32d62, type: 3}
+  Spell2: {fileID: 2838766830951665151, guid: b7dc45fffd4b7694ea32844eee732a38, type: 3}
+  Deathplode: {fileID: 2838766830951665151, guid: 1cca40ee9faf96f4eba0f7cccebef916,
+    type: 3}
   argoRange: 4
 --- !u!95 &8565169995029485808
 Animator:

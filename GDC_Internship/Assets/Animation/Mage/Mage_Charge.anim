@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Mage_Attack
+  m_Name: Mage_Charge
   serializedVersion: 6
   m_Legacy: 0
   m_Compressed: 0
@@ -49,16 +49,6 @@ AnimationClip:
       value: {fileID: 21300000, guid: 8c994e7aaa641ed43bd12c7359b1f30c, type: 3}
     - time: 1.1666666
       value: {fileID: 21300000, guid: d663db4c35d98764c9424ffa7dc3d7fe, type: 3}
-    - time: 1.25
-      value: {fileID: 21300000, guid: 56e0a1805d64c5441b01655b506373fd, type: 3}
-    - time: 1.3333334
-      value: {fileID: 21300000, guid: e1b51644aa5c5f045971d99793c90117, type: 3}
-    - time: 1.4166666
-      value: {fileID: 21300000, guid: bcdc17b010fb947478dd9549bb191d70, type: 3}
-    - time: 1.5
-      value: {fileID: 21300000, guid: 7a7a4531b522cd64a8657c47917f9f10, type: 3}
-    - time: 1.5833334
-      value: {fileID: 21300000, guid: 26bc6421908053d489d96a7db25e7608, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -93,17 +83,12 @@ AnimationClip:
     - {fileID: 21300000, guid: 35d08f6f5fa8a584faf1d87ef0ce10a4, type: 3}
     - {fileID: 21300000, guid: 8c994e7aaa641ed43bd12c7359b1f30c, type: 3}
     - {fileID: 21300000, guid: d663db4c35d98764c9424ffa7dc3d7fe, type: 3}
-    - {fileID: 21300000, guid: 56e0a1805d64c5441b01655b506373fd, type: 3}
-    - {fileID: 21300000, guid: e1b51644aa5c5f045971d99793c90117, type: 3}
-    - {fileID: 21300000, guid: bcdc17b010fb947478dd9549bb191d70, type: 3}
-    - {fileID: 21300000, guid: 7a7a4531b522cd64a8657c47917f9f10, type: 3}
-    - {fileID: 21300000, guid: 26bc6421908053d489d96a7db25e7608, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 1.6666667
+    m_StopTime: 1.25
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0

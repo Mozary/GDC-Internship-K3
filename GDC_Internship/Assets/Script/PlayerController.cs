@@ -31,6 +31,7 @@ public class PlayerController : MonoBehaviour
     private bool RangedMode = false;
 
     float movement = 0f;
+    float constantSpeed;
     bool jump = false;
     bool onGround = true;
     bool Immovable = false;
@@ -43,6 +44,7 @@ public class PlayerController : MonoBehaviour
     {
         rb2d = this.GetComponent<Rigidbody2D>();
 
+        constantSpeed = runSpeed;
         health = maxHealth;
         Countdown_dodge = dodgeCooldown;
         Countdown_heal = healTimeAndCooldown;
@@ -361,30 +363,32 @@ public class PlayerController : MonoBehaviour
     }
     IEnumerator BurnDamage()
     {
-        while (true)
+        int counter = 0;
+        while(counter < 5)
         {
-
+            TakeDamage(0.3f);
+            counter++;
+            yield return new WaitForSeconds(0.2f);
         }
     }
     IEnumerator IceDamage()
     {
-        while (true)
-        {
-
-        }
+        runSpeed = constantSpeed / 2;
+        yield return new WaitForSeconds(3f);
+        runSpeed = constantSpeed;
     }
     public void TakeFireDamage()
     {
-        Debug.Log("FIREDAMAGE");
+        StartCoroutine(BurnDamage());
     }
     public void TakeIceDamage()
     {
-        Debug.Log("ICEDAMAGE");
+        StartCoroutine(IceDamage());
     }
 
     public void TakeDamage(float damage)
     {
-        if (!animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerDodge") && !invulnerable)
+        if (!animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerDodge") && !invulnerable && health>0)
         {
             if (ActiveCoroutine != null)
             {
@@ -425,5 +429,9 @@ public class PlayerController : MonoBehaviour
     public void AddCollectedHerb()
     {
         CollectedHerb += 1;
+    }
+    public bool IsIdle()
+    {
+        return (movement == 0);
     }
 }
