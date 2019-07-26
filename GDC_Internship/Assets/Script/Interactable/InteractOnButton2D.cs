@@ -5,23 +5,19 @@ public class InteractOnButton2D : InteractOnTrigger2D
 {
     
     public static string Notes = "Salah satu collider di Player harus dimatikan terlebih/n " +
-             "dahulu agar OnStay tidak terpanggil dua kali sekaligus.";
+                                 "dahulu agar OnStay tidak terpanggil dua kali sekaligus.";
 
     public UnityEvent OnButtonPress;
     private bool m_CanExecuteButtons;
 
     private GameObject parentCanvas;
     private GameObject dialogueBox;
-    private DialogueManager dialogueManager;
-    private Interactable_Dialogue cekDialogue;
     [HideInInspector]                     //dijadikan public karena SceneLoader ########################################
     public PlayerController i_player;
 
-    //bool untuk SceneLoader
+    //bool untuk Script lain
     [HideInInspector]
     public bool inCollider;
-
-    float a;
     protected override void ExecuteOnEnter(Collider2D other)
     {
         m_CanExecuteButtons = true;
@@ -61,12 +57,6 @@ public class InteractOnButton2D : InteractOnTrigger2D
     {
         parentCanvas = GameObject.FindGameObjectWithTag("Canvas");
         dialogueBox = parentCanvas.transform.GetChild(0).gameObject;
-
-        cekDialogue = gameObject.GetComponent<Interactable_Dialogue>();
-        if (cekDialogue != null)
-        {
-            dialogueManager = FindObjectOfType<DialogueManager>();
-        }
         
         i_player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
 
@@ -87,11 +77,5 @@ public class InteractOnButton2D : InteractOnTrigger2D
         {
             i_player.enabled = true;
         }
-    }
-    void branchEvent()
-    {
-        //make a special event with code here
-
-
     }
 }

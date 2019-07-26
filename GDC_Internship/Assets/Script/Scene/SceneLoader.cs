@@ -12,20 +12,20 @@ using UnityEngine.SceneManagement;
 // ******  ******
 public class SceneLoader : MonoBehaviour
 {
-    InteractOnButton2D interactOnButton2D;
+    private InteractOnButton2D interactOnButton2D;
     private bool inCollider;
 
-    DialogueManager dialogueManager;
+    private DialogueManager dialogueManager;
 
     [SerializeField]
     private string SceneName;
     private bool doMoveScene = false;
 
-    GameObject parentCanvas;
+    private GameObject parentCanvas;
     [SerializeField]
     private Animator aniHold;
-    GameObject hold_button;
-    GameObject fade_out;
+    private GameObject hold_button;
+    private GameObject fade_out;
     [SerializeField]
     private Animator fadeScreen;
 
@@ -43,12 +43,12 @@ public class SceneLoader : MonoBehaviour
     private void Start()
     {
         interactOnButton2D = GetComponent<InteractOnButton2D>();
+        dialogueManager = FindObjectOfType<DialogueManager>();
 
         parentCanvas = GameObject.FindGameObjectWithTag("Canvas");
         hintofInstruction = parentCanvas.transform.GetChild(1).gameObject;
         fade_out = parentCanvas.transform.GetChild(2).gameObject;
 
-        dialogueManager = FindObjectOfType<DialogueManager>();
         HintofInstruction.text = instruction;
 
         hold_button = gameObject.transform.GetChild(0).gameObject;
