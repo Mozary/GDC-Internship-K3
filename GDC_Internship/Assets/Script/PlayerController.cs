@@ -359,6 +359,28 @@ public class PlayerController : MonoBehaviour
             Immovable = false;
         }
     }
+    IEnumerator BurnDamage()
+    {
+        while (true)
+        {
+
+        }
+    }
+    IEnumerator IceDamage()
+    {
+        while (true)
+        {
+
+        }
+    }
+    public void TakeFireDamage()
+    {
+        Debug.Log("FIREDAMAGE");
+    }
+    public void TakeIceDamage()
+    {
+        Debug.Log("ICEDAMAGE");
+    }
 
     public void TakeDamage(float damage)
     {

@@ -11,7 +11,7 @@ public class ArrowScript : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         float knockforceX = 75; //Knockback force
-        if (collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "Ground")
+        if (collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "Ground" || collision.gameObject.tag == "EnemyAttack")
         {
             if (collision.gameObject.tag == "Enemy")
             {
