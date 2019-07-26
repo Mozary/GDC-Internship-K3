@@ -7,31 +7,63 @@ public class PlayerController : MonoBehaviour
 
     public Rigidbody2D rb2d;
     public Collider2D col2d;
+    public ParticleSystem Particle;
+    public TrailRenderer Trail;
     public Animator animator;
     public CharacterController2D controller;
-    [SerializeField] private Transform FirePoint;
-    [SerializeField] private GameObject Arrow;
 
+    [SerializeField] private Transform FirePoint;
+    [SerializeField] private Transform SlashPoint;
+    [SerializeField] private GameObject Arrow;
+    [SerializeField] private GameObject Slash;
+    [SerializeField] private float runSpeed = 15f;
+    [SerializeField] private float maxHealth = 10f;
+    [SerializeField] private float dodgeCooldown = 2f;
+    [SerializeField] private float chargeCooldown = 10f;
+    [SerializeField] private float healTimeAndCooldown = 1f;
+
+    //HUD Related
+    private float Countdown_dodge;
+    private float Countdown_heal;
+    private float Countdown_charge;
+    private int CollectedHerb = 0;
+    private float health;
+    private bool RangedMode = false;
+
+    float movement = 0f;
     bool jump = false;
     bool onGround = true;
-    public float runSpeed = 20f;
-    public float health = 10f;
-    float movement = 0f;
-    private bool AttackCheck = false;
-    private bool RangedMode = false;
-    private bool Immovable = false;
+    bool Immovable = false;
+    bool canDodge = true;
+    bool invulnerable = false;
+    Coroutine ActiveCoroutine = null;
+
     // Start is called before the first frame update
     void Start()
     {
+        rb2d = this.GetComponent<Rigidbody2D>();
+
+        health = maxHealth;
+        Countdown_dodge = dodgeCooldown;
+        Countdown_heal = healTimeAndCooldown;
+        Countdown_charge = chargeCooldown;
+
     }
     // Update is called once per frame
     void Update()
     {
-        movement = Input.GetAxisRaw("Horizontal") * runSpeed;
+        if (!Immovable)
+        {
+            movement = Input.GetAxisRaw("Horizontal") * runSpeed;
+        }
+        else
+        {
+            movement = 0;
+        }
         animator.SetFloat("Speed", Mathf.Abs(movement));
         if (Input.GetButtonDown("Jump"))
         {
-            if (!AttackCheck)
+            if (!Immovable)
             {
                 jump = true;
                 animator.SetTrigger("jumping");
@@ -39,18 +71,42 @@ public class PlayerController : MonoBehaviour
             }
         }
         if (Input.GetButtonDown ("Attack")) {
-            attack();
+            Attack();
         }
-        if (Input.GetButtonDown("Switch") && !checkPendingAttack())
+        if (Input.GetButtonDown("Switch") && !CheckPendingAttack())
         {
             RangedMode = !RangedMode;
             animator.SetBool("RangedMode", RangedMode);
         }
         if (animator.GetBool("attack1") || animator.GetBool("attack2") || animator.GetBool("attack3") ||animator.GetBool("Firing"))
         {
-            if (!AttackCheck)
+            if (!Immovable)
             {
                 StartCoroutine("OnCompleteAttackAnimation");
+            }
+        }
+        if (Input.GetButtonDown("Dodge"))
+        {
+            if(!Immovable && canDodge && !animator.GetBool("isJumping"))
+            {
+                animator.SetTrigger("isDodging");
+                StartCoroutine("Dodge");
+            }
+        }
+        if (Input.GetButtonDown("Heal"))
+        {
+            if (!Immovable && Countdown_heal>=healTimeAndCooldown && !animator.GetBool("isJumping") && CollectedHerb>0 && health<maxHealth)
+            {
+                animator.SetTrigger("heal");
+                StartCoroutine("Heal");
+            }
+        }
+        if (Input.GetButtonDown("Special"))
+        {
+            if (!Immovable && Countdown_charge >= chargeCooldown && !animator.GetBool("isJumping") && !RangedMode)
+            {
+                animator.SetTrigger("isCharging");
+                StartCoroutine("Charge");
             }
         }
     }
@@ -63,18 +119,19 @@ public class PlayerController : MonoBehaviour
         controller.Move(movement * Time.fixedDeltaTime, false, jump);
         jump = false;
     }
-    public void onLand() //Bug Fix buat CharacterController
+    public void OnLand()
     {
-        if (!onGround)
+        if (!onGround && animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerJump"))
         {
             animator.SetBool("isJumping", false);
             onGround = true;
         }
     }
-    public void attack()
+    public void Attack()
     {
         if (movement == 0 && !animator.GetBool("isJumping") && !RangedMode)
         {
+            
             if (animator.GetBool("attack2") == true)
             {
                 animator.SetBool("attack3", true);
@@ -93,7 +150,7 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("Firing", true);
         }
     }
-    public void rangedAttack()
+    public void RangedAttack()
     {
         if (movement == 0 && !animator.GetBool("isJumping") && RangedMode)
         {
@@ -101,7 +158,7 @@ public class PlayerController : MonoBehaviour
         }
 
     }
-    public bool checkPendingAttack()
+    public bool CheckPendingAttack()
     {
         if (animator.GetBool("attack1") || animator.GetBool("attack2") || animator.GetBool("attack3") || animator.GetBool("Firing"))
         {
@@ -109,15 +166,111 @@ public class PlayerController : MonoBehaviour
         }
         else return false;
     }
+    IEnumerator Dodge()
+    {
+        Trail.emitting = true;
+        Countdown_dodge = 0;
+        while (!animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerDodge"))
+        {
+            yield return null;
+        }
+        Immovable = true;
+        canDodge = false;
+        float direction =Mathf.Abs(transform.localScale.x)/transform.localScale.x;
+        rb2d.AddForce(new Vector2(direction*-125, -5f));
+        while (animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerDodge"))
+        {
+            yield return null;
+        }
+        Immovable = false;
+        Trail.emitting = false;
+        while (Countdown_dodge < dodgeCooldown)
+        {
+            Countdown_dodge += Time.deltaTime;
+            yield return null;
+        }
+        canDodge = true;
+    }
+    IEnumerator Charge()
+    {
+        Immovable = true;
+        ParticleSystem.MainModule setting = Particle.main;
+        ParticleSystem.MainModule temp = setting;
+        setting.startColor = Color.red;
+        Particle.Play();
+
+        yield return new WaitForSeconds(1.5f);
+        Particle.Stop();
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerCharge"))
+        {
+            Trail.emitting = true;
+            invulnerable = true;
+            transform.Find("Special").gameObject.SetActive(true);
+            this.gameObject.layer = LayerMask.NameToLayer("Enemy");
+
+            float direction = Mathf.Abs(transform.localScale.x) / transform.localScale.x;
+            rb2d.AddForce(new Vector2(direction * 300, -2.5f));
+            Immovable = false;
+            Attack();
+            Attack();
+            Attack();
+
+            Countdown_charge = 0;
+            yield return new WaitForSeconds(3f);
+            StartCoroutine(ChargeCooling());
+            this.gameObject.layer = LayerMask.NameToLayer("Player");
+            transform.Find("Special").gameObject.SetActive(false);
+            invulnerable = false;
+            Trail.emitting = false;
+        }
+    }
+    IEnumerator ChargeCooling()
+    {
+        while (Countdown_charge < chargeCooldown)
+        {
+            Countdown_charge += Time.deltaTime;
+            yield return null;
+        }
+    }
+    IEnumerator Heal()
+    {
+        Immovable = true;
+        ParticleSystem.MainModule setting = Particle.main;
+        ParticleSystem.MainModule temp = setting;
+        setting.startColor = Color.green;
+        animator.SetBool("stunned", true);
+        CollectedHerb -= 1;
+        Particle.Play();
+        Countdown_heal = 0;
+        while (Countdown_heal < healTimeAndCooldown)
+        {
+            Countdown_heal += Time.deltaTime;
+            if (health < maxHealth)
+            {
+                health += Time.deltaTime;
+            }
+            yield return null;
+        }
+        Particle.Stop();
+        animator.SetBool("stunned", false);
+        Immovable = false;
+    }
     IEnumerator OnCompleteAttackAnimation()
     {
-        AttackCheck = true;
+        Immovable = true;
+        if (!animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerFireBow"))
+        {
+            Vector3 SlashDirection = new Vector3(transform.localScale.x, 0, 0).normalized;
+            GameObject clone = Instantiate(Slash, SlashPoint.position, Slash.transform.rotation);
+            clone.transform.localScale *= SlashDirection.x;
+            clone.GetComponent<Rigidbody2D>().velocity = SlashDirection * 5f;
+        }
         while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
         {
             movement = 0f;
             yield return null;
         }
-        AttackCheck = false;
+        Immovable = false;
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerFireBow"))
         {
             Vector3 FireDirection = new Vector3(transform.localScale.x, 0,0).normalized;
@@ -142,16 +295,135 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("attack1", false);
         }
     }
-    private void OnTriggerEnter2D(Collider2D collision)
+    IEnumerator Hurt()
     {
-        if (collision.gameObject.tag == "Attack")
+        float flashTime = 0.1f;
+        Color mycolour = GetComponent<SpriteRenderer>().color;
+        mycolour.g = 0f;
+        mycolour.b = 0f;
+        GetComponent<SpriteRenderer>().color = mycolour;
+        while (flashTime > 0)
         {
-            Debug.Log("HIT!");
-            this.health = this.health - 1;
-            if (this.health <= 0f)
-            {
-                Destroy(this.gameObject);
-            }
+            yield return new WaitForSeconds(flashTime);
+            flashTime = 0;
         }
+        GetComponent<SpriteRenderer>().color = Color.white;
+    }
+    IEnumerator Stunned()
+    {
+        animator.SetTrigger("isHurt");
+        animator.SetBool("stunned",true);
+        while (!animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerHurt") && !animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerAirHurt"))
+        {
+            yield return null;
+        }
+        Immovable = true;
+        StartCoroutine(Hurt());
+        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
+        {
+            yield return null;
+        }
+        if (health <= 0)
+        {
+            animator.SetTrigger("isDying");
+            rb2d.isKinematic = true;
+            Collider2D[]cols = this.GetComponents<Collider2D>();
+            foreach (Collider2D element in cols)
+            {
+                element.enabled = false;
+            }
+            while (!animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerDie"))
+            {
+                yield return null;
+            }
+            while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
+            {
+                yield return null;
+            }
+            Color mycolour = GetComponent<SpriteRenderer>().color;
+            float colourfade = 1;
+            yield return new WaitForSeconds(2f);
+            while (colourfade > 0)
+            {
+                colourfade -= 0.03f;
+                mycolour.a = colourfade;
+                GetComponent<SpriteRenderer>().color = mycolour;
+                yield return null;
+            }
+            Destroy(this.gameObject);
+            Debug.Log("GAME OVER");
+        }
+        else
+        {
+            animator.SetBool("stunned", false);
+            Immovable = false;
+        }
+    }
+    IEnumerator BurnDamage()
+    {
+        while (true)
+        {
+
+        }
+    }
+    IEnumerator IceDamage()
+    {
+        while (true)
+        {
+
+        }
+    }
+    public void TakeFireDamage()
+    {
+        Debug.Log("FIREDAMAGE");
+    }
+    public void TakeIceDamage()
+    {
+        Debug.Log("ICEDAMAGE");
+    }
+
+    public void TakeDamage(float damage)
+    {
+        if (!animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerDodge") && !invulnerable)
+        {
+            if (ActiveCoroutine != null)
+            {
+                StopCoroutine(ActiveCoroutine);
+            }
+            animator.SetBool("attack3", false);
+            animator.SetBool("attack2", false);
+            animator.SetBool("attack1", false);
+            animator.SetBool("Firing", false);
+            health -= damage;
+            ActiveCoroutine = StartCoroutine("Stunned");
+        }
+    }
+    public float GetNormalizedHealth()
+    {
+        return health / maxHealth;
+    }
+    public float GetNormalizedDodgeCooldown()
+    {
+        return Countdown_dodge / dodgeCooldown;
+    }
+    public float GetNormalizedHealCooldown()
+    {
+        return Countdown_heal / healTimeAndCooldown;
+    }
+    public float GetNormalizedChargeCooldown()
+    {
+        return Countdown_charge / chargeCooldown;
+    }
+    public bool GetRangedCheck()
+    {
+        return RangedMode;
+    }
+    public int GetHerbAmount()
+    {
+        return CollectedHerb;
+    }
+    public void AddCollectedHerb()
+    {
+        CollectedHerb += 1;
     }
 }
