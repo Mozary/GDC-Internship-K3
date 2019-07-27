@@ -1,11 +1,14 @@
 # GDC-Internship-K3
 GDC Internship Project for Kelompok 3 <Insert Title Here>
 
-## Completion : ~5%
+## Completion : ~50%
 ## Features : 
-- Gameplay (Ideas):
+- Gameplay :
   - Story     : 100%
   - Mechanics : 80%
+    - Dialogue: 50% (Not Implemented Yet)
+    - Event   : 75% (Not Implemented Yet)
+    - Sounds  :  0% (Not Implemented Yet)
 - Sounds
   - BGM       : 0%
   - SFX       : 0%
@@ -18,19 +21,19 @@ GDC Internship Project for Kelompok 3 <Insert Title Here>
 - Chapter 1
   - Events    : 0%
   - Dialogue  : 0%
-  - Map       : 50%
+  - Map       : 100%
 - Chapter 2
   - Events    : 0%
   - Dialogue  : 0%
-  - Map       : 0%
+  - Map       : 100%
 - Chapter 3
   - Events    : 0%
   - Dialogue  : 0%
-  - Map       : -0%
+  - Map       : 50%
 - Ending
   - Dialogue  : 0%
 - Enemy
-  - AI        : 5%
-  - Anim      : 20%
+  - AI        : 75%
+  - Anim      : 75%
 - Player
   -  Control : 50%
