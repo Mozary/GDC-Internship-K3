@@ -92,20 +92,6 @@ public class EnemyController_Mage : MonoBehaviour
         transform.localScale = theScale;
         direction *= -1;
     }
-    IEnumerator Hurt()
-    {
-        float flashTime = 0.1f;
-        Color mycolour = GetComponent<SpriteRenderer>().color;
-        mycolour.g = 0f;
-        mycolour.b = 0f;
-        GetComponent<SpriteRenderer>().color = mycolour;
-        while (flashTime > 0)
-        {
-            yield return new WaitForSeconds(flashTime);
-            flashTime = 0;
-        }
-        GetComponent<SpriteRenderer>().color = Color.white;
-    }
     IEnumerator Attacking()
     {
         AttackCheck = true;
@@ -148,7 +134,13 @@ public class EnemyController_Mage : MonoBehaviour
         {
             clone = Instantiate(Spell2, SpellPoint.position, SpellPoint.transform.rotation);
         }
-        clone.transform.localScale *= SlashDirection.x;
+        if (direction < 0)
+        {
+            Quaternion rotation = clone.transform.rotation;
+            rotation.z -= 180;
+            clone.transform.rotation = rotation;
+        }
+        //clone.transform.localScale *= SlashDirection.x;
 
         while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
         {
@@ -156,6 +148,16 @@ public class EnemyController_Mage : MonoBehaviour
         }
         Invulnerable = false;
         AttackCheck = false;
+    }
+    IEnumerator Hurt()
+    {
+        float flashTime = 0.1f;
+        Color mycolour = GetComponent<SpriteRenderer>().color;
+        mycolour.g = 0f;
+        mycolour.b = 0f;
+        GetComponent<SpriteRenderer>().color = mycolour;
+        yield return new WaitForSeconds(flashTime);
+        GetComponent<SpriteRenderer>().color = Color.white;
     }
     IEnumerator Stunned()
     {
@@ -169,12 +171,19 @@ public class EnemyController_Mage : MonoBehaviour
 
             GameObject Explosion = Instantiate(Deathplode, transform.position, transform.rotation);
             yield return null;
-            while (Explosion.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime < 0.9f)
+            while (Explosion)
             {
-                if (transform.localScale.x > 0)
+                if ( transform.localScale.x  > 0)
                 {
                     transform.Rotate(Vector3.forward*30);
                     transform.localScale -= new Vector3(0.025f, 0.025f, 0.025f);
+                    if (transform.localScale.x < 0) { transform.localScale = Vector3.zero;}
+                }
+                else if (transform.localScale.x < 0)
+                {
+                    transform.Rotate(Vector3.back * 30);
+                    transform.localScale += new Vector3(0.025f, 0.025f, 0.025f);
+                    if(transform.localScale.x > 0) { transform.localScale = Vector3.zero;}
                 }
                 yield return null;
             }
