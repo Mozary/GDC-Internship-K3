@@ -36,4 +36,4 @@ GDC Internship Project for Kelompok 3 <Insert Title Here>
   - AI        : 75%
   - Anim      : 75%
 - Player
-  -  Control : 50%
+  -  Control : 100%
