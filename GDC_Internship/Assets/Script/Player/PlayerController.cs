@@ -249,7 +249,7 @@ public class PlayerController : MonoBehaviour
             Countdown_heal += Time.deltaTime;
             if (health < maxHealth)
             {
-                health += Time.deltaTime;
+                health += Time.deltaTime*1.5f;
             }
             yield return null;
         }

@@ -1,26 +1,28 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class EnemyController_BossBandit : MonoBehaviour
+public class EnemyController_Knight : MonoBehaviour
 {
     public Animator animator;
     private Rigidbody2D rb2d;
     private Transform target;
     private Transform selfTransform;
+    private Transform dummyTarget;
     private Vector3 m_Velocity = Vector3.zero;
     private ParticleSystem.MainModule ParticleSetting;
 
     [SerializeField] private ParticleSystem Particle;
     [SerializeField] private TrailRenderer Trail;
-
-    public float maxSpeed;
-    public float hitRange;
-    public float health;
-
     [SerializeField] private Transform SlashPoint;
     [SerializeField] private GameObject Slash;
     [SerializeField] private GameObject Herb;
 
+    [SerializeField] private float maxSpeed;
+    [SerializeField] private float hitRange;
+    [SerializeField] private float health;
+    [SerializeField] private float argoRange;
+
+    
     private float SmoothMovement = 0.05f;
     private bool hadap_kanan = true;
     private bool onGround = true;
@@ -39,7 +41,7 @@ public class EnemyController_BossBandit : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+        dummyTarget = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         rb2d = this.GetComponent<Rigidbody2D>();
         selfTransform = this.GetComponent<Transform>();
         ParticleSetting = Particle.main;
@@ -52,13 +54,23 @@ public class EnemyController_BossBandit : MonoBehaviour
     void Update()
     {
         HealthBar.localScale = new Vector3(Mathf.Clamp(health / maxHealth, 0, maxHealth), HealthBar.localScale.y, HealthBar.localScale.z);
-        
+
+        if (target == null && dummyTarget)
+        {
+            float dummyDistance = Vector2.Distance(transform.position, dummyTarget.position);
+            if (dummyDistance <= argoRange)
+            {
+                target = dummyTarget;
+                dummyTarget = null;
+            }
+        }
+
         if (target != null)
         {
             targetDistance = Vector2.Distance(selfTransform.position, target.position);
             if (targetDistance <= hitRange && !StunCheck && !AttackCheck && !counterCheck && animator.GetFloat("speed") == 0f)
             {
-                if (Random.Range(0, 100) < 15)
+                if (Random.Range(0, 100) < 10)
                 {
                     animator.SetBool("onGuard", true);
                 }
@@ -82,7 +94,6 @@ public class EnemyController_BossBandit : MonoBehaviour
         }
         else if(rb2d != null && target != null && (AttackCheck || StunCheck || counterCheck))
         {
-            //Debug.Log(AttackCheck+","+StunCheck+","+counterCheck);
             animator.SetFloat("speed", 0f);
         }
         if (!counterCheck && animator.GetBool("onGuard") && !AttackCheck && !StunCheck)
@@ -125,11 +136,11 @@ public class EnemyController_BossBandit : MonoBehaviour
         Debug.Log("ENGARDE!");
         Invulnerable = true;
         AttackCheck = true;
-        while (!animator.GetCurrentAnimatorStateInfo(0).IsName("BossBandit_Dodge"))
+        while (!animator.GetCurrentAnimatorStateInfo(0).IsName("Knight_Dodge"))
         {
             yield return null;
         }
-        if (!animator.GetCurrentAnimatorStateInfo(0).IsName("BossBandit_Dodge") && !animator.GetCurrentAnimatorStateInfo(0).IsName("BossBandit_Guard"))
+        if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Knight_Dodge") && !animator.GetCurrentAnimatorStateInfo(0).IsName("Knight_Guard"))
         {
             animator.SetBool("onGuard", false);
             counterCheck = false;
@@ -142,7 +153,7 @@ public class EnemyController_BossBandit : MonoBehaviour
         Trail.emitting = true;
         float direction = Mathf.Abs(transform.localScale.x) / transform.localScale.x;
         rb2d.AddForce(new Vector2(direction * -70, -5f));
-        while (animator.GetCurrentAnimatorStateInfo(0).IsName("BossBandit_Dodge"))
+        while (animator.GetCurrentAnimatorStateInfo(0).IsName("Knight_Dodge"))
         {
             yield return null;
         }
@@ -153,7 +164,7 @@ public class EnemyController_BossBandit : MonoBehaviour
 
         Invulnerable = false;
         float counter = 0f;
-        while (targetDistance >= hitRange * 7 && counter < 1.5f)
+        while (counter<1f)
         {
             rb2d.mass = 5f;
             if (StunCheck)
@@ -168,7 +179,7 @@ public class EnemyController_BossBandit : MonoBehaviour
                 Particle.Stop();
                 yield break;
             }
-            counter += Time.deltaTime;
+            counter+= Time.deltaTime;
             yield return null;
         }
         Invulnerable = true;
@@ -205,7 +216,7 @@ public class EnemyController_BossBandit : MonoBehaviour
         {
             yield return null;
         }
-        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.25f)
+        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.5f)
         {
             if (StunCheck)
             {
@@ -215,12 +226,13 @@ public class EnemyController_BossBandit : MonoBehaviour
             }
             yield return null;
         }
+        Invulnerable = true;
         Vector3 SlashDirection = new Vector3(transform.localScale.x, 0, 0).normalized;
         GameObject clone = Instantiate(Slash, SlashPoint.position, Slash.transform.rotation);
+        clone.GetComponent<SlashScript>().SetDamage(0.25f);
         clone.transform.localScale *= SlashDirection.x;
         clone.GetComponent<Rigidbody2D>().velocity = SlashDirection * 1f;
-
-        Invulnerable = true;
+        
         while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
         {
             yield return null;
@@ -259,10 +271,8 @@ public class EnemyController_BossBandit : MonoBehaviour
         animator.SetBool("stunned", true);
         StunCheck = true;
         StartCoroutine(Hurt());
-        yield return new WaitForSeconds(0.5f);
         if (health <= 0)
         {
-            DropHerb();
             DropHerb();
             DropHerb();
             animator.SetTrigger("isDying");
@@ -278,7 +288,6 @@ public class EnemyController_BossBandit : MonoBehaviour
             }
             Color mycolour = GetComponent<SpriteRenderer>().color;
             float colourfade = 1;
-            yield return new WaitForSeconds(2f);
             while (colourfade > 0)
             {
                 colourfade -= 0.03f;
@@ -290,12 +299,13 @@ public class EnemyController_BossBandit : MonoBehaviour
         }
         else
         {
+            yield return new WaitForSeconds(0.25f);
             StunCheck = false;
             animator.SetBool("stunned", false);
         }
     }
 
-    IEnumerator CallReinforcement()
+    IEnumerator Jump()
     {
         while (true)
         {
