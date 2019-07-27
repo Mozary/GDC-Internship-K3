@@ -11,7 +11,7 @@ GDC Internship Project for Kelompok 3 <Insert Title Here>
     - Sounds  :  0% (Not Implemented Yet)
 - Sounds
   - BGM       : 0%
-  - SFX       : 0%
+  - SFX       : 75%
 - Main menu
   - Title : -
   - Chapters  : 100%
