@@ -1,12 +1,12 @@
 fileFormatVersion: 2
-guid: 5b3850997adf8234d9914d8499d1efff
+guid: 6813f280c555b1f40af6166d6f83af40
 TextureImporter:
   fileIDToRecycleName:
-    21300000: eye monster idle_0
-    21300002: eye monster idle_1
-    21300004: eye monster idle_2
-    21300006: eye monster idle_3
-    21300008: eye monster idle_4
+    21300000: breath_0
+    21300002: breath_1
+    21300004: breath_2
+    21300006: breath_3
+    21300008: breath_4
   externalObjects: {}
   serializedVersion: 9
   mipmaps:
@@ -68,7 +68,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -79,7 +79,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -89,13 +89,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: eye monster idle_0
+      name: breath_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 320
-        height: 320
+        width: 160
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -103,19 +103,39 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 139aa14aab78d2349b60f6afbce32fbd
+      spriteID: c5ca3990820898a4cbd050c87f6022dd
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: eye monster idle_1
+      name: breath_1
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 0
+        width: 160
+        height: 96
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dc68bb02d0a6cef44a3887af6db290fe
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: breath_2
       rect:
         serializedVersion: 2
         x: 320
         y: 0
-        width: 320
-        height: 320
+        width: 160
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -123,19 +143,39 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2eb9e035e3fa65941bf719f54784debd
+      spriteID: fa475a92cc50b394b84c745b5f85de49
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: eye monster idle_2
+      name: breath_3
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 0
+        width: 160
+        height: 96
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1b2c5937c346ade47b36e10f3d9b053e
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: breath_4
       rect:
         serializedVersion: 2
         x: 640
         y: 0
-        width: 320
-        height: 320
+        width: 160
+        height: 96
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -143,47 +183,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: aa81bf069c38a0f499fdf680c5e0e75e
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: eye monster idle_3
-      rect:
-        serializedVersion: 2
-        x: 960
-        y: 0
-        width: 320
-        height: 320
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2a5290579198e3c49afa8ad54a35ac0c
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: eye monster idle_4
-      rect:
-        serializedVersion: 2
-        x: 1280
-        y: 0
-        width: 320
-        height: 320
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2fa8bc0789926214fa1b060c661513e4
+      spriteID: 455dd6c6c36a52c4f80c7bc991dd3738
       vertices: []
       indices: 
       edges: []
@@ -191,7 +191,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 79ee9ddb36215a74b8b4cb356e94c883
+    spriteID: 1f04c508c65fd3c4b98a1173e58714b1
     vertices: []
     indices: 
     edges: []
