@@ -7,7 +7,8 @@ public class AttackSpellScript : MonoBehaviour
     enum Spell
     {
         Fireball,
-        Iceshard
+        Iceshard,
+        Blind
     }
 
     [SerializeField] private Animator animator;
@@ -25,16 +26,22 @@ public class AttackSpellScript : MonoBehaviour
     private float rotateSpeed = 4500f;
     private float countdown = 0f;
     private float Speed = 0;
+    private Vector3 OriginScale;
     private Coroutine Explosion = null;
 
     private void Start()
     {
         rb2d = GetComponent<Rigidbody2D>();
         collitor = GetComponent<Collider2D>();
+        OriginScale = transform.localScale;
         Target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
     }
     void Awake()
     {
+        if(SpellType == Spell.Blind)
+        {
+            //transform.localScale = Vector3.zero;
+        }
         StartCoroutine(Charging());
     }
     private void Update()
@@ -59,6 +66,12 @@ public class AttackSpellScript : MonoBehaviour
     {
         while (!animator.GetCurrentAnimatorStateInfo(0).IsName("Homing"))
         {
+            if (SpellType == Spell.Blind && transform.localScale.x < OriginScale.x)
+            {
+                float AnimTime = animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
+                transform.localScale = new Vector3(AnimTime * OriginScale.x, AnimTime * OriginScale.x, 0);
+                //transform.localScale += new Vector3(0.025f, 0.025f, 0.025f);
+            }
             Speed = 0;
             yield return null;
         }
@@ -101,6 +114,11 @@ public class AttackSpellScript : MonoBehaviour
                 {
                     collision.gameObject.GetComponent<PlayerController>().TakeIceDamage();
                 }
+                else if (SpellType == Spell.Blind)
+                {
+                    collision.gameObject.GetComponent<PlayerController>().TakeBlindDamage();
+                }
+
                 if (collision.gameObject.transform.position.x < transform.position.x)
                 {
                     Knockback = -1 * Knockback;

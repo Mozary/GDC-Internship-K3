@@ -37,6 +37,8 @@ public class PlayerController : MonoBehaviour
     bool Immovable = false;
     bool canDodge = true;
     bool invulnerable = false;
+    bool blinded = false;
+
     Coroutine ActiveCoroutine = null;
 
     // Start is called before the first frame update
@@ -363,6 +365,18 @@ public class PlayerController : MonoBehaviour
             Immovable = false;
         }
     }
+    IEnumerator BlindDamage()
+    {
+        blinded = true;
+        transform.Find("FOV").Find("NearVision").gameObject.SetActive(true);
+        transform.Find("FOV").Find("FarVision").gameObject.SetActive(false);
+
+        yield return new WaitForSeconds(10f);
+
+        transform.Find("FOV").Find("NearVision").gameObject.SetActive(false);
+        transform.Find("FOV").Find("FarVision").gameObject.SetActive(true);
+        blinded = false;
+    }
     IEnumerator BurnDamage()
     {
         int counter = 0;
@@ -387,7 +401,14 @@ public class PlayerController : MonoBehaviour
     {
         StartCoroutine(IceDamage());
     }
-
+    public void TakeBlindDamage()
+    {
+        if (!blinded)
+        {
+            StartCoroutine(BlindDamage());
+        }
+        
+    }
     public void TakeDamage(float damage)
     {
         if (!animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerDodge") && !invulnerable && health>0)

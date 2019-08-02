@@ -48,7 +48,14 @@ public class EnemyController_Gargoyle : MonoBehaviour
     {
         HealthBar.localScale = new Vector3(Mathf.Clamp(health / maxHealth, 0, maxHealth), HealthBar.localScale.y, HealthBar.localScale.z);
 
-        if (target == null && dummyTarget)
+        
+        if (!AttackCheck && !StunCheck && Lifetime > 10f)
+        {
+            StunCheck = true;
+            health = 0;
+            StartCoroutine(Stunned());
+        }
+        else if (target == null && dummyTarget)
         {
             float dummyDistance = Vector2.Distance(transform.position, dummyTarget.position);
             if (dummyDistance <= argoRange)
@@ -56,12 +63,6 @@ public class EnemyController_Gargoyle : MonoBehaviour
                 target = dummyTarget;
                 dummyTarget = null;
             }
-        }
-        else if (!AttackCheck && !StunCheck && Lifetime > 10f)
-        {
-            StunCheck = true;
-            health = 0;
-            StartCoroutine(Stunned());
         }
         else if (target != null)
         {

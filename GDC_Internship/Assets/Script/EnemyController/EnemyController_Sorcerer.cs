@@ -1,10 +1,12 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyController_Sorcerer : MonoBehaviour
 {
 
     [SerializeField] private Animator animator;
+    [SerializeField] private ParticleSystem particle;
     [SerializeField] private CapsuleCollider2D Slimebody;
     [SerializeField] private CapsuleCollider2D Mainbody;
     [SerializeField] private Rigidbody2D rb2d;
@@ -13,21 +15,32 @@ public class EnemyController_Sorcerer : MonoBehaviour
     [SerializeField] private float health;
     [SerializeField] private float argoRange = 2f;
 
+    [SerializeField] private Transform TeleportPoint1;
+    [SerializeField] private Transform TeleportPoint2;
+    [SerializeField] private Transform TeleportPoint3;
+
     [SerializeField] private Transform SpellPoint;
     [SerializeField] private GameObject Herb;
+
+    //Attack Spell
     [SerializeField] private GameObject Fireball;
     [SerializeField] private GameObject Iceshard;
-    [SerializeField] private GameObject SummonA;
-    [SerializeField] private GameObject SummonB;
-    [SerializeField] private GameObject SummonC;
-    [SerializeField] private GameObject Fog;
+    [SerializeField] private GameObject Blind;
+
+    //Summoned Beasts
+    [SerializeField] private GameObject Summon_Gargoyle;
+    [SerializeField] private GameObject Summon_Skeleton;
+
+    //Exploding FX
     [SerializeField] private GameObject Deathplode;
-    
+    [SerializeField] private GameObject Summonplode;
+
     private Coroutine StunTimer = null;
     private Transform HealthBar;
     private Transform dummyTarget;
     private Transform target = null;
     private Vector3 m_Velocity = Vector3.zero;
+    private List<GameObject> SummonedBeast = new List<GameObject>();
 
     private float SmoothMovement = 0.05f;
     private bool hadap_kanan = true;
@@ -37,10 +50,13 @@ public class EnemyController_Sorcerer : MonoBehaviour
     private bool StunCheck = false;
     private float targetDistance;
     private float maxHealth;
+    private float rageChance = 100;
+    
 
     // Start is called before the first frame update
     void Start()
     {
+
         dummyTarget = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         HealthBar = transform.Find("HealthBar");
         maxHealth = health;
@@ -50,7 +66,7 @@ public class EnemyController_Sorcerer : MonoBehaviour
     void Update()
     {
         HealthBar.localScale = new Vector3(Mathf.Clamp(health / maxHealth, 0, maxHealth), HealthBar.localScale.y, HealthBar.localScale.z);
-
+        
         if (target == null && dummyTarget)
         {
             float dummyDistance = Vector2.Distance(transform.position, dummyTarget.position);
@@ -71,10 +87,18 @@ public class EnemyController_Sorcerer : MonoBehaviour
         }
     }
     void FixedUpdate()
-    {   
+    {
         if (rb2d != null && !AttackCheck && !StunCheck && target != null)
         {
-            CloseDistance();
+            if (targetDistance > hitRange)
+            {
+                CloseDistance();
+            }
+            else
+            {
+                animator.SetFloat("speed", 0f);
+            }
+
             if (target.position.x > transform.position.x && !hadap_kanan) Flip();
             else if (target.position.x < transform.position.x && hadap_kanan) Flip();
         }
@@ -85,23 +109,15 @@ public class EnemyController_Sorcerer : MonoBehaviour
     }
     void CloseDistance()
     {
-        if (targetDistance > hitRange)
+        Vector3 moveVelocity = new Vector2(direction * maxSpeed * Time.deltaTime, rb2d.velocity.y);
+        animator.SetFloat("speed", Mathf.Abs(moveVelocity.x));
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("ShiftToShadow") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
         {
-            
-            Vector3 moveVelocity = new Vector2(direction * maxSpeed * Time.deltaTime, rb2d.velocity.y);
-            animator.SetFloat("speed", Mathf.Abs(moveVelocity.x));
-            if (animator.GetCurrentAnimatorStateInfo(0).IsName("ShiftToShadow") && animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+            if (Mainbody.enabled)
             {
-                if (Mainbody.enabled)
-                {
-                    Mainbody.enabled = false;
-                }
-                rb2d.velocity = Vector3.SmoothDamp(rb2d.velocity, moveVelocity, ref m_Velocity, SmoothMovement);
+                Mainbody.enabled = false;
             }
-        } else
-        {
-            
-            animator.SetFloat("speed", 0f);
+            rb2d.velocity = Vector3.SmoothDamp(rb2d.velocity, moveVelocity, ref m_Velocity, SmoothMovement);
         }
     }
     private void Flip()
@@ -111,6 +127,34 @@ public class EnemyController_Sorcerer : MonoBehaviour
         theScale.x *= -1;
         transform.localScale = theScale;
         direction *= -1;
+    }
+    IEnumerator Teleport()
+    {
+        Invulnerable = true;
+        StunCheck = true;
+        animator.SetFloat("speed", 3);
+        while (!animator.GetCurrentAnimatorStateInfo(0).IsName("ShiftToShadow")) { yield return null; }
+        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f) {yield return null;}
+
+        float rand = Random.Range(0, 100);
+        if (rand<30)
+        {
+            transform.position = TeleportPoint1.position;
+        }
+        else if (rand >70)
+        {
+            transform.position = TeleportPoint2.position;
+        }
+        else
+        {
+            transform.position = TeleportPoint3.position;
+        }
+        animator.SetFloat("speed", 0);
+
+        while (!animator.GetCurrentAnimatorStateInfo(0).IsName("ShiftToSorcerer")) { yield return null; }
+        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f) { yield return null; }
+        StunCheck = false;
+        Invulnerable = false;
     }
     IEnumerator Attacking()
     {
@@ -144,32 +188,87 @@ public class EnemyController_Sorcerer : MonoBehaviour
             AttackCheck = false;
             yield break;
         }
-        Vector3 SlashDirection = new Vector3(transform.localScale.x, 0, 0).normalized;
-        GameObject clone =null;
-        if (Random.Range(1, 100) <= 50)
+
+        for (var i = SummonedBeast.Count - 1; i > -1; i--)
         {
-            clone = Instantiate(Fireball, SpellPoint.position, SpellPoint.transform.rotation);
+            if (SummonedBeast[i] == null)
+                SummonedBeast.RemoveAt(i);
+        }
+        if (Random.Range(0, 100) > 60 && SummonedBeast.Count <4)
+        {
+            GameObject beast = null;
+            float rand = Random.Range(0, 100);
+            Instantiate(Summonplode, SpellPoint.position, SpellPoint.transform.rotation);
+            if (rand < 90 && Summon_Skeleton)
+            {
+                beast = Instantiate(Summon_Skeleton, SpellPoint.position, SpellPoint.transform.rotation);
+            }
+            else
+            {
+                beast = Instantiate(Summon_Gargoyle, SpellPoint.position, SpellPoint.transform.rotation);
+                beast.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+                beast.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, 50));
+            }
+
+            SummonedBeast.Add(beast);
         }
         else
         {
-            clone = Instantiate(Iceshard, SpellPoint.position, SpellPoint.transform.rotation);
+            GameObject spell = null;
+            float SpellRand = Random.Range(1, 100);
+            if (SpellRand < 40)
+            {
+                spell = Instantiate(Fireball, SpellPoint.position, SpellPoint.transform.rotation);
+            }
+            else if(SpellRand>60)
+            {
+                spell = Instantiate(Iceshard, SpellPoint.position, SpellPoint.transform.rotation);
+            }
+            else
+            {
+                spell = Instantiate(Blind, SpellPoint.position, SpellPoint.transform.rotation);
+            }
+            if (direction < 0)
+            {
+                Quaternion rotation = spell.transform.rotation;
+                rotation.z -= 180;
+                spell.transform.rotation = rotation;
+            }
         }
-        if (direction < 0)
-        {
-            Quaternion rotation = clone.transform.rotation;
-            rotation.z -= 180;
-            clone.transform.rotation = rotation;
-        }
-
+        
         while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
         {
             yield return null;
         }
         Invulnerable = false;
+        yield return new WaitForSeconds(1.5f);
         AttackCheck = false;
+        
     }
     IEnumerator Hurt()
     {
+        if (Random.Range(0, 100) < rageChance && TeleportPoint1 && TeleportPoint2 && TeleportPoint3)
+        {
+            particle.Play();
+            if (target && targetDistance < 0.7)
+            {
+                target.GetComponent<PlayerController>().TakeDamage(0.2f);
+                float knockforceX = 100;
+                if (target.transform.position.x < transform.position.x)
+                {
+                    knockforceX = -1 * knockforceX;
+                }
+                target.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+                target.GetComponent<Rigidbody2D>().AddForce(new Vector2(knockforceX, -10));
+            }
+            StartCoroutine(Teleport());
+            rageChance = 0;
+        }
+        else
+        {
+            rageChance += 2f;
+        }
+
         float flashTime = 0.1f;
         Color mycolour = GetComponent<SpriteRenderer>().color;
         mycolour.g = 0f;

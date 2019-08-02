@@ -260,7 +260,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 4825900414856256348}
   Emitor: {fileID: 6594649583872791207}
-  Damage: 1
+  Damage: 0.5
   Knockback: 70
   Lifetime: 4
   MaxSpeed: 200
