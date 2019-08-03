@@ -38,7 +38,6 @@ public class Cutscene_Dialogue : MonoBehaviour
             if (!startDialogue)
             {
                 dialogueEnded = dialogueManager.dialogueEnded;
-                Debug.Log("dialogueEnded di Cutscene_Dialogue _____" + dialogueEnded);
                 if (Input.GetKeyDown("e"))
                 {
                     dialogueManager.DisplayNextSentence();

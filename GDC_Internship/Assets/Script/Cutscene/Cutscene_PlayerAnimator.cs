@@ -33,6 +33,7 @@ public class Cutscene_PlayerAnimator : MonoBehaviour
         {
             if (playableDirector.state != PlayState.Playing)
             {
+                moveMagic = false;
                 i_pAnimator.runtimeAnimatorController = runtimeAnimator;
                 i_pController.enabled = true;
             }
