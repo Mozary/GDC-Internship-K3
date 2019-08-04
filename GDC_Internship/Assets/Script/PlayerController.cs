@@ -36,6 +36,8 @@ public class PlayerController : MonoBehaviour
     bool Immovable = false;
     bool canDodge = true;
     bool invulnerable = false;
+    [HideInInspector]
+    public bool jumpDown = false; //bool untuk turun dari sub tilemap
     Coroutine ActiveCoroutine = null;
 
     // Start is called before the first frame update
@@ -61,7 +63,7 @@ public class PlayerController : MonoBehaviour
             movement = 0;
         }
         animator.SetFloat("Speed", Mathf.Abs(movement));
-        if (Input.GetButtonDown("Jump"))
+        if (Input.GetButtonDown("Jump") && !Input.GetKey("down")) //// get key down diganti crounch
         {
             if (!Immovable)
             {
@@ -107,6 +109,17 @@ public class PlayerController : MonoBehaviour
             {
                 animator.SetTrigger("isCharging");
                 StartCoroutine("Charge");
+            }
+        }
+
+        //// input untuk turun dari sub tilemap
+        ///  pilihan huruf hanya sementara
+        if (Input.GetKey("down")/*Input.GetButtonDown("Crounch")*/)
+        {
+            if (Input.GetKeyDown("up")/*Input.GetButtonDown("Jump")*/)
+            {
+                Debug.Log("masuk?");
+                jumpDown = true;
             }
         }
     }
