@@ -94,7 +94,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 575be61bedcb6dc4b8a55f093112fd17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Knockback: 35
+  Knockback: 45
+  SlashRange: 0.05
+  SlashDamage: 1
 --- !u!60 &9114217586531016290
 PolygonCollider2D:
   m_ObjectHideFlags: 0

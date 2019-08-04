@@ -10,6 +10,7 @@ public class EnemyController_BanditKing : MonoBehaviour
     }
 
     [SerializeField] private Animator animator;
+    [SerializeField] private ParticleSystem particle;
     [SerializeField] private Transform SlashPoint;
     [SerializeField] private GameObject Slash;
     [SerializeField] private Transform Firepoint;
@@ -30,6 +31,7 @@ public class EnemyController_BanditKing : MonoBehaviour
 
     private float SmoothMovement = 0.05f;
     private float direction = 1f;
+    private float rageChance = 0f;
     private float targetDistance;
     private float maxHealth;
 
@@ -252,6 +254,27 @@ public class EnemyController_BanditKing : MonoBehaviour
 
     IEnumerator Hurt()
     {
+        if (Random.Range(0, 100) < rageChance)
+        {
+            particle.Play();
+            if(targetDistance<= meleeRange)
+            {
+                target.GetComponent<PlayerController>().TakeDamage(0.2f);
+                float knockforceX = 100;
+                if (target.transform.position.x < transform.position.x)
+                {
+                    knockforceX = -1 * knockforceX;
+                }
+                target.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+                target.GetComponent<Rigidbody2D>().AddForce(new Vector2(knockforceX, -10));
+            }
+            rageChance = 0;
+        }
+        else
+        {
+            rageChance += 2f;
+        }
+
         float flashTime = 0.05f;
         Color mycolour = GetComponent<SpriteRenderer>().color;
         mycolour.g = 0f;

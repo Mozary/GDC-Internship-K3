@@ -18,6 +18,10 @@ public class SlashScript : MonoBehaviour
     {
         return SlashDamage;
     }
+    public void SetDamage(float damage)
+    {
+        SlashDamage = damage;
+    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(transform.tag == "Attack")

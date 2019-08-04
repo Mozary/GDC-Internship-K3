@@ -2687,7 +2687,7 @@ GameObject:
   - component: {fileID: 347750973}
   m_Layer: 0
   m_Name: Castle Depth - topGround
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12205,7 +12205,7 @@ GameObject:
   - component: {fileID: 721262207}
   m_Layer: 0
   m_Name: Hallway - Background
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12799,7 +12799,7 @@ GameObject:
   - component: {fileID: 818903772}
   m_Layer: 0
   m_Name: Hallway - Foreground
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -15857,7 +15857,7 @@ GameObject:
   - component: {fileID: 1401795723}
   m_Layer: 0
   m_Name: Hallway - Ground
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -20703,7 +20703,7 @@ GameObject:
   - component: {fileID: 1613906993}
   m_Layer: 0
   m_Name: Castle Depth - Foreground
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -21225,11 +21225,6 @@ PrefabInstance:
       propertyPath: m_ShowCameraFrustum
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 7897668501021666916, guid: 85de0ad5af9c4c748a7a3af427b6a7f4,
-        type: 3}
-      propertyPath: Player
-      value: 
-      objectReference: {fileID: 749047582}
     m_RemovedComponents:
     - {fileID: 4970809288973194730, guid: 85de0ad5af9c4c748a7a3af427b6a7f4, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 85de0ad5af9c4c748a7a3af427b6a7f4, type: 3}
@@ -21570,7 +21565,7 @@ GameObject:
   - component: {fileID: 1789598619}
   m_Layer: 0
   m_Name: Castle Depth - Ground
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -32005,7 +32000,7 @@ GameObject:
   - component: {fileID: 1882949505}
   m_Layer: 0
   m_Name: Castle Depth - Background
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

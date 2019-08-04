@@ -21,16 +21,14 @@ public class CutsceneManager : MonoBehaviour
         {
             usedCutscene = gameObject.transform.GetChild(0).gameObject;
             endMarkerClip = usedCutscene.transform.GetChild(0).GetComponent<Cutscene_PlayerAnimator>();
-            activeDialogueClip = usedCutscene.transform.GetChild(1).gameObject;    // GetChild(jumlahAnak.count)
+            activeDialogueClip = usedCutscene.transform.GetChild(1).gameObject;    // dialogue terakhir harus diposisi ke dua
         }
-
 
         if (activeDialogueClip.activeSelf)
         {
             endMarker = endMarkerClip.moveMagic;
-            if (endMarker)
+            if (!endMarker)
             {
-                endMarkerClip.moveMagic = false;
                 endMarker = false;
                 dialogueManager.dialogueEnded = false;
                 Destroy(usedCutscene);

@@ -23,7 +23,7 @@ public class ArrowScript : MonoBehaviour
                         knockforceX = -1 * knockforceX;
                     }
                     collision.gameObject.GetComponent<Rigidbody2D>().velocity =  Vector2.zero;
-                    collision.gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(knockforceX, 0));
+                    collision.gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(knockforceX*2, 0));
                 }
                 Destroy(this.gameObject);
             }

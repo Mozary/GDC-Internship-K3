@@ -43,7 +43,7 @@ public class TimeMachineBehaviour : PlayableBehaviour
 
                 if (dialogueEnded)
                 {
-                    Debug.Log("udah masuk ke _______condition");
+                    //Debug.Log("udah masuk ke _______condition");
 
                     //dialogueManager.dialogueEnded = false;      //cari tempat untuk toogle ini
                     //dialogueEnded = false;
