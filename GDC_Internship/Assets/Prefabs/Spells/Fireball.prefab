@@ -237,7 +237,7 @@ Animator:
   m_GameObject: {fileID: 2838766830951665151}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 09fe6211e3d041440a114ce8c43c8d27, type: 2}
+  m_Controller: {fileID: 9100000, guid: 212e01864eed8f14a8a479bdcea58e81, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -260,7 +260,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 4825900414856256348}
   Emitor: {fileID: 6594649583872791207}
-  Damage: 2
+  Damage: 0.5
   Knockback: 70
   Lifetime: 4
   MaxSpeed: 200

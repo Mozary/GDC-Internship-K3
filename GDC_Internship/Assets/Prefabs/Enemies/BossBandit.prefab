@@ -270,7 +270,7 @@ Animator:
   m_GameObject: {fileID: 8715965931469778999}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 4f9b7cac75c3b0447b308c01f21863dd, type: 2}
+  m_Controller: {fileID: 9100000, guid: 239fb69aed20b9943a93000d8c79976c, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -331,7 +331,7 @@ MonoBehaviour:
   animator: {fileID: 8715965931469778992}
   Particle: {fileID: 4566199176337788896}
   Trail: {fileID: 3984285020651647261}
-  maxSpeed: 70
+  maxSpeed: 80
   hitRange: 0.25
   health: 25
   SlashPoint: {fileID: 1990979380501251690}

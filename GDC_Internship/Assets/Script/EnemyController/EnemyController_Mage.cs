@@ -17,17 +17,18 @@ public class EnemyController_Mage : MonoBehaviour
     [SerializeField] private Transform SpellPoint;
     [SerializeField] private GameObject Spell1;
     [SerializeField] private GameObject Spell2;
+    [SerializeField] private GameObject Deathplode;
     [SerializeField] private float argoRange = 2f;
 
     private float SmoothMovement = 0.05f;
     private bool hadap_kanan = true;
-    private bool onGround = true;
+    private bool Invulnerable = false;
     private float direction = 1f;
     private bool AttackCheck = false;
     private bool StunCheck = false;
-    private Coroutine StunTimer = null;
     private float targetDistance;
 
+    private Coroutine StunTimer = null;
     private Transform HealthBar;
     private float maxHealth;
 
@@ -76,7 +77,7 @@ public class EnemyController_Mage : MonoBehaviour
     }
     void CloseDistance()
     {
-        if (onGround && (targetDistance > hitRange))
+        if (targetDistance > hitRange)
         {
             Vector3 moveVelocity = new Vector2(direction * maxSpeed * Time.deltaTime, rb2d.velocity.y);
             animator.SetFloat("speed", Mathf.Abs(moveVelocity.x));
@@ -91,6 +92,63 @@ public class EnemyController_Mage : MonoBehaviour
         transform.localScale = theScale;
         direction *= -1;
     }
+    IEnumerator Attacking()
+    {
+        AttackCheck = true;
+        //---Charging---//
+        while (!animator.GetCurrentAnimatorStateInfo(0).IsName("SpellCharge"))
+        {
+            if (StunCheck)
+            {
+                AttackCheck = false;
+                animator.SetBool("attack", false);
+                yield break;
+            }
+            yield return null;
+        }
+        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
+        {
+            if (StunCheck)
+            {
+                AttackCheck = false;
+                animator.SetBool("attack", false);
+                yield break;
+            }
+            yield return null;
+        }
+        animator.SetBool("attack", false);
+        Invulnerable = true;
+        if (!target)
+        {
+            Invulnerable = false;
+            AttackCheck = false;
+            yield break;
+        }
+        Vector3 SlashDirection = new Vector3(transform.localScale.x, 0, 0).normalized;
+        GameObject clone =null;
+        if (Random.Range(1, 100) <= 50)
+        {
+            clone = Instantiate(Spell1, SpellPoint.position, SpellPoint.transform.rotation);
+        }
+        else
+        {
+            clone = Instantiate(Spell2, SpellPoint.position, SpellPoint.transform.rotation);
+        }
+        if (direction < 0)
+        {
+            Quaternion rotation = clone.transform.rotation;
+            rotation.z -= 180;
+            clone.transform.rotation = rotation;
+        }
+        //clone.transform.localScale *= SlashDirection.x;
+
+        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
+        {
+            yield return null;
+        }
+        Invulnerable = false;
+        AttackCheck = false;
+    }
     IEnumerator Hurt()
     {
         float flashTime = 0.1f;
@@ -98,86 +156,43 @@ public class EnemyController_Mage : MonoBehaviour
         mycolour.g = 0f;
         mycolour.b = 0f;
         GetComponent<SpriteRenderer>().color = mycolour;
-        while (flashTime > 0)
-        {
-            yield return new WaitForSeconds(flashTime);
-            flashTime = 0;
-        }
+        yield return new WaitForSeconds(flashTime);
         GetComponent<SpriteRenderer>().color = Color.white;
-    }
-    IEnumerator Attacking()
-    {
-        AttackCheck = true;
-
-        while (!animator.GetCurrentAnimatorStateInfo(0).IsName("EnemyAttack"))
-        {
-            yield return null;
-        }
-        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.5f)
-        {
-            yield return null;
-        }
-        if (!StunCheck)
-        {
-            //Vector3 SlashDirection = new Vector3(transform.localScale.x, 0, 0).normalized;
-            //GameObject clone = Instantiate(, SlashPoint.position, Slash.transform.rotation);
-            //clone.transform.localScale *= SlashDirection.x;
-            //clone.GetComponent<Rigidbody2D>().velocity = SlashDirection * 1f;
-        }
-        else
-        {
-            AttackCheck = false;
-            animator.SetBool("attack", false);
-        }
-        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
-        {
-            yield return null;
-        }
-        AttackCheck = false;
-        animator.SetBool("attack", false);
     }
     IEnumerator Stunned()
     {
-        animator.SetTrigger("isHurt");
-        animator.SetBool("stunned", true);
         StartCoroutine(Hurt());
         StunCheck = true;
-        float counter = 0.5f;
-        while (counter > 0)
-        {
-            yield return new WaitForSeconds(0.5f);
-            counter = counter - 0.5f;
-        }
         if (health <= 0)
         {
             DropHerb();
-            animator.SetTrigger("isDying");
             rb2d.isKinematic = true;
             this.GetComponent<Collider2D>().enabled = false;
-            while (!animator.GetCurrentAnimatorStateInfo(0).IsName("EnemyDie"))
+
+            GameObject Explosion = Instantiate(Deathplode, transform.position, transform.rotation);
+            yield return null;
+            while (Explosion)
             {
+                if ( transform.localScale.x  > 0)
+                {
+                    transform.Rotate(Vector3.forward*30);
+                    transform.localScale -= new Vector3(0.025f, 0.025f, 0.025f);
+                    if (transform.localScale.x < 0) { transform.localScale = Vector3.zero;}
+                }
+                else if (transform.localScale.x < 0)
+                {
+                    transform.Rotate(Vector3.back * 30);
+                    transform.localScale += new Vector3(0.025f, 0.025f, 0.025f);
+                    if(transform.localScale.x > 0) { transform.localScale = Vector3.zero;}
+                }
                 yield return null;
             }
-            while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
-            {
-                yield return null;
-            }
-            Color mycolour = GetComponent<SpriteRenderer>().color;
-            float colourfade = 1;
-            yield return new WaitForSeconds(2f);
-            while (colourfade > 0)
-            {
-                colourfade -= 0.03f;
-                mycolour.a = colourfade;
-                GetComponent<SpriteRenderer>().color = mycolour;
-                yield return null;
-            }
-            Destroy(this.gameObject);
+            Destroy(gameObject);
         }
         else
         {
+            yield return new WaitForSeconds(0.25f);
             StunCheck = false;
-            animator.SetBool("stunned", false);
         }
     }
     private void DropHerb()
@@ -188,7 +203,7 @@ public class EnemyController_Mage : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Attack")
+        if (collision.gameObject.tag == "Attack" && !Invulnerable)
         {
             if (StunTimer != null)
             {

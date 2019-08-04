@@ -10,19 +10,42 @@ public class ArrowScript : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        float knockforceX = 75; //Knockback force
-        if (collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "Ground" || collision.gameObject.tag == "EnemyAttack")
+        float knockforceX = 35; //Knockback force
+        if(gameObject.tag == "Attack")
         {
-            if (collision.gameObject.tag == "Enemy")
+            if (collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "Ground" || collision.gameObject.tag == "EnemyAttack")
             {
-                if (collision.gameObject.transform.position.x < transform.position.x)
+                collider.enabled = false;
+                if (collision.gameObject.tag == "Enemy")
                 {
-                    knockforceX = -1* knockforceX;
+                    if (collision.gameObject.transform.position.x < transform.position.x)
+                    {
+                        knockforceX = -1 * knockforceX;
+                    }
+                    collision.gameObject.GetComponent<Rigidbody2D>().velocity =  Vector2.zero;
+                    collision.gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(knockforceX*2, 0));
                 }
-                collision.gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
-                collision.gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(knockforceX, 0));
+                Destroy(this.gameObject);
             }
-            Destroy(this.gameObject);
+        }
+        else if(gameObject.tag == "EnemyAttack")
+        {
+            if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Ground" || collision.gameObject.tag == "Attack")
+            {
+                collider.enabled = false;
+                if (collision.gameObject.tag == "Player")
+                {
+                    Debug.Log("Player Got Hit");
+                    collision.gameObject.GetComponent<PlayerController>().TakeDamage(0.5f);
+                    if (collision.gameObject.transform.position.x < transform.position.x)
+                    {
+                        knockforceX = -1 * knockforceX;
+                    }
+                    collision.gameObject.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+                    collision.gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(knockforceX, 0));
+                }
+                Destroy(this.gameObject);
+            }
         }
     }
 }

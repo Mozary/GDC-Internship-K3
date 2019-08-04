@@ -125,6 +125,8 @@ public class EnemyController_Scorpion : MonoBehaviour
     }
     IEnumerator Death()
     {
+        maxSpeed = 0;
+        constSpeed = 0;
         this.GetComponent<Collider2D>().enabled = false;
         foreach (Transform child in transform)
         {

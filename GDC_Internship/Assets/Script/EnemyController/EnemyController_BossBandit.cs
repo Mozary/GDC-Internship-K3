@@ -58,8 +58,15 @@ public class EnemyController_BossBandit : MonoBehaviour
             targetDistance = Vector2.Distance(selfTransform.position, target.position);
             if (targetDistance <= hitRange && !StunCheck && !AttackCheck && !counterCheck && animator.GetFloat("speed") == 0f)
             {
-                animator.SetBool("attack", true);
-                StartCoroutine("Attacking");
+                if (Random.Range(0, 100) < 15)
+                {
+                    animator.SetBool("onGuard", true);
+                }
+                else
+                {
+                    animator.SetBool("attack", true);
+                    StartCoroutine("Attacking");
+                }
             }
 
         }
@@ -145,7 +152,8 @@ public class EnemyController_BossBandit : MonoBehaviour
         Particle.Play();
 
         Invulnerable = false;
-        while (targetDistance >= hitRange * 7)
+        float counter = 0f;
+        while (targetDistance >= hitRange * 7 && counter < 1.5f)
         {
             rb2d.mass = 5f;
             if (StunCheck)
@@ -160,6 +168,7 @@ public class EnemyController_BossBandit : MonoBehaviour
                 Particle.Stop();
                 yield break;
             }
+            counter += Time.deltaTime;
             yield return null;
         }
         Invulnerable = true;
@@ -167,7 +176,7 @@ public class EnemyController_BossBandit : MonoBehaviour
         Trail.emitting = true;
         Particle.Stop();
 
-        rb2d.mass = 0.2f;
+        rb2d.mass = 0.15f;
         rb2d.gravityScale = 5f;
         rb2d.drag = 5;
 
@@ -196,23 +205,22 @@ public class EnemyController_BossBandit : MonoBehaviour
         {
             yield return null;
         }
-        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.5f)
+        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.25f)
         {
+            if (StunCheck)
+            {
+                AttackCheck = false;
+                animator.SetBool("attack", false);
+                yield break;
+            }
             yield return null;
         }
-        if (!StunCheck)
-        {
-            Vector3 SlashDirection = new Vector3(transform.localScale.x, 0, 0).normalized;
-            GameObject clone = Instantiate(Slash, SlashPoint.position, Slash.transform.rotation);
-            clone.transform.localScale *= SlashDirection.x;
-            clone.GetComponent<Rigidbody2D>().velocity = SlashDirection * 1f;
-        }
-        else
-        {
-            AttackCheck = false;
-            animator.SetBool("attack", false);
-        }
-        
+        Vector3 SlashDirection = new Vector3(transform.localScale.x, 0, 0).normalized;
+        GameObject clone = Instantiate(Slash, SlashPoint.position, Slash.transform.rotation);
+        clone.transform.localScale *= SlashDirection.x;
+        clone.GetComponent<Rigidbody2D>().velocity = SlashDirection * 1f;
+
+        Invulnerable = true;
         while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
         {
             yield return null;
