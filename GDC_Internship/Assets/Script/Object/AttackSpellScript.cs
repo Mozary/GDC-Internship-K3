@@ -62,6 +62,10 @@ public class AttackSpellScript : MonoBehaviour
             }
         }
     }
+    public void SetDamage(float NewDamage)
+    {
+        Damage = NewDamage;
+    }
     IEnumerator Charging()
     {
         while (!animator.GetCurrentAnimatorStateInfo(0).IsName("Homing"))

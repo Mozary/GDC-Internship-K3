@@ -4,19 +4,12 @@ using UnityEngine;
 
 public class SummonSpellScript : MonoBehaviour
 {
-    [SerializeField] private GameObject Summon1;
-    [SerializeField] private GameObject Summon2;
-    [SerializeField] private GameObject Summon3;
 
     private Animator animator;
     // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
-    }
-    private void Awake()
-    {
-        
     }
     void Update()
     {

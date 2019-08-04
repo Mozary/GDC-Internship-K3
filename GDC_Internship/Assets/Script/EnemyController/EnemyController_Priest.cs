@@ -202,20 +202,29 @@ public class EnemyController_Priest : MonoBehaviour
         GameObject clone =null;
         if (Random.Range(1, 100) <= 80)
         {
-            clone = Instantiate(Iceshard, SpellPoint.position, SpellPoint.transform.rotation);
+            for (int i = 0; i < 3; i++)
+            {
+                yield return new WaitForSeconds(0.1f);
+                clone = Instantiate(Iceshard, SpellPoint.position, SpellPoint.transform.rotation);
+                clone.GetComponent<AttackSpellScript>().SetDamage(0.25f);
+                if (direction < 0)
+                {
+                    Quaternion rotation = clone.transform.rotation;
+                    rotation.z -= 180;
+                    clone.transform.rotation = rotation;
+                }
+            }
         }
         else
         {
             clone = Instantiate(Blind, SpellPoint.position, SpellPoint.transform.rotation);
+            if (direction < 0)
+            {
+                Quaternion rotation = clone.transform.rotation;
+                rotation.z -= 180;
+                clone.transform.rotation = rotation;
+            }
         }
-
-        if (direction < 0)
-        {
-            Quaternion rotation = clone.transform.rotation;
-            rotation.z -= 180;
-            clone.transform.rotation = rotation;
-        }
-
         while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
         {
             yield return null;
@@ -226,6 +235,10 @@ public class EnemyController_Priest : MonoBehaviour
     }
     IEnumerator Hurt()
     {
+        if (Random.Range(0, 100) > 60)
+        {
+            NinjaPartner.AskForBodySwap();
+        }
         float flashTime = 0.1f;
         Color mycolour = GetComponent<SpriteRenderer>().color;
         mycolour.g = 0f;

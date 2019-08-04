@@ -133,8 +133,14 @@ public class EnemyController_Sorcerer : MonoBehaviour
         Invulnerable = true;
         StunCheck = true;
         animator.SetFloat("speed", 3);
-        while (!animator.GetCurrentAnimatorStateInfo(0).IsName("ShiftToShadow")) { yield return null; }
-        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f) {yield return null;}
+        while (!animator.GetCurrentAnimatorStateInfo(0).IsName("ShiftToShadow")) {
+            animator.SetFloat("speed", 3);
+            yield return null;
+        }
+        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f) {
+            animator.SetFloat("speed", 3);
+            yield return null;
+        }
 
         float rand = Random.Range(0, 100);
         if (rand<30)
@@ -151,8 +157,14 @@ public class EnemyController_Sorcerer : MonoBehaviour
         }
         animator.SetFloat("speed", 0);
 
-        while (!animator.GetCurrentAnimatorStateInfo(0).IsName("ShiftToSorcerer")) { yield return null; }
-        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f) { yield return null; }
+        while (!animator.GetCurrentAnimatorStateInfo(0).IsName("ShiftToSorcerer")) {
+            animator.SetFloat("speed", 0);
+            yield return null;
+        }
+        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1f) {
+            animator.SetFloat("speed", 0);
+            yield return null;
+        }
         StunCheck = false;
         Invulnerable = false;
     }

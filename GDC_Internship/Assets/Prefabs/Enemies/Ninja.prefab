@@ -163,6 +163,7 @@ MonoBehaviour:
   SlashPoint: {fileID: 5335868273741934831}
   Slash: {fileID: 2838766830951665151, guid: 525d522bb2f32e446b81af128ff39cbb, type: 3}
   Herb: {fileID: 8863576755217939462, guid: 67b4e8efef4e10a4e8319e7e02bbcf46, type: 3}
+  Smoke: {fileID: 2838766830951665151, guid: d3c394620049d0444a6ee1ec4b2bf774, type: 3}
   maxSpeed: 90
   hitRange: 0.5
   health: 25
@@ -181,7 +182,7 @@ ParticleSystem:
   cullingMode: 0
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
-  looping: 0
+  looping: 1
   prewarm: 0
   playOnAwake: 0
   useUnscaledTime: 0
