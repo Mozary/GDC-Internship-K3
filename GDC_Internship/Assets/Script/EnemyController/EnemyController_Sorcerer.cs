@@ -211,13 +211,14 @@ public class EnemyController_Sorcerer : MonoBehaviour
             GameObject beast = null;
             float rand = Random.Range(0, 100);
             Instantiate(Summonplode, SpellPoint.position, SpellPoint.transform.rotation);
-            if (rand < 90 && Summon_Skeleton)
+            if (rand < 85 && Summon_Skeleton)
             {
                 beast = Instantiate(Summon_Skeleton, SpellPoint.position, SpellPoint.transform.rotation);
             }
             else
             {
                 beast = Instantiate(Summon_Gargoyle, SpellPoint.position, SpellPoint.transform.rotation);
+                beast.GetComponent<EnemyController_Gargoyle>().SetAsSummoned();
                 beast.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
                 beast.GetComponent<Rigidbody2D>().AddForce(new Vector2(0, 50));
             }
