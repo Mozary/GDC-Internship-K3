@@ -26,6 +26,7 @@ public class EnemyController_Gargoyle : MonoBehaviour
     private float direction = 1f;
     private bool AttackCheck = false;
     private bool StunCheck = false;
+    private bool Summoned = false;
     private float targetDistance;
 
     private Coroutine StunTimer = null;
@@ -47,9 +48,7 @@ public class EnemyController_Gargoyle : MonoBehaviour
     void Update()
     {
         HealthBar.localScale = new Vector3(Mathf.Clamp(health / maxHealth, 0, maxHealth), HealthBar.localScale.y, HealthBar.localScale.z);
-
-        
-        if (!AttackCheck && !StunCheck && Lifetime > 10f)
+        if (!AttackCheck && !StunCheck && Lifetime > 10f && Summoned)
         {
             StunCheck = true;
             health = 0;
@@ -79,11 +78,26 @@ public class EnemyController_Gargoyle : MonoBehaviour
     {   
         if (rb2d != null && !AttackCheck && !StunCheck && target != null)
         {
+            if (!Summoned)
+            {
+                CloseDistance();
+            }
+
             if (target.position.x > transform.position.x && !hadap_kanan) Flip();
             else if (target.position.x < transform.position.x && hadap_kanan) Flip();
         }
         Lifetime += Time.deltaTime;
         
+    }
+    void CloseDistance()
+    {
+        if (targetDistance > hitRange)
+        {
+            Vector3 moveVelocity = new Vector2(direction * maxSpeed * Time.deltaTime, rb2d.velocity.y);
+            animator.SetFloat("speed", Mathf.Abs(moveVelocity.x));
+            rb2d.velocity = Vector3.SmoothDamp(rb2d.velocity, moveVelocity, ref m_Velocity, SmoothMovement);
+        }
+        else { animator.SetFloat("speed", 0f); }
     }
     private void Flip()
     {
@@ -149,6 +163,7 @@ public class EnemyController_Gargoyle : MonoBehaviour
         }
         
         Invulnerable = false;
+        yield return new WaitForSeconds(0.75f);
         AttackCheck = false;
     }
     IEnumerator Stunned()
@@ -203,5 +218,10 @@ public class EnemyController_Gargoyle : MonoBehaviour
             this.health = this.health - 1;
             StunTimer = StartCoroutine(Stunned());
         }
+    }
+    public void SetAsSummoned()
+    {
+        maxSpeed = 0f;
+        Summoned = true;
     }
 }

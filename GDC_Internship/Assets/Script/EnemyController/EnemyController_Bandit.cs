@@ -112,10 +112,20 @@ public class EnemyController_Bandit : MonoBehaviour
 
         while (!animator.GetCurrentAnimatorStateInfo(0).IsName("EnemyAttack"))
         {
+            if (StunCheck)
+            {
+                AttackCheck = false;
+                yield break;
+            }
             yield return null;
         }
         while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.5f)
         {
+            if (StunCheck)
+            {
+                AttackCheck = false;
+                yield break;
+            }
             yield return null;
         }
         if (!StunCheck)
@@ -177,6 +187,7 @@ public class EnemyController_Bandit : MonoBehaviour
         }
         else
         {
+            yield return new WaitForSeconds(0.25f);
             StunCheck = false;
             animator.SetBool("stunned", false);
         }

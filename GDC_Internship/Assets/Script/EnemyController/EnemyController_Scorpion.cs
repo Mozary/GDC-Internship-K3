@@ -57,7 +57,7 @@ public class EnemyController_Scorpion : MonoBehaviour
         //Check if patrol position is reached
         if (state == "patrol")
         {
-            if (Mathf.Abs(transform.localPosition.x - target.x) <= 0.4f)
+            if (Mathf.Abs(transform.position.x - target.x) <= 0.4f)
             {
                 //Telling the object to wait
                 if (waitTime <= 0)
@@ -82,8 +82,8 @@ public class EnemyController_Scorpion : MonoBehaviour
             if (rb2d != null && target != null)
             {
                 Move();
-                if (target.x > transform.localPosition.x && !faceRight) Flip();
-                else if (target.x < transform.localPosition.x && faceRight) Flip();
+                if (target.x > transform.position.x && !faceRight) Flip();
+                else if (target.x < transform.position.x && faceRight) Flip();
             }
         }
         else if (state == "follow" && rb2d.isKinematic == false)
@@ -91,8 +91,8 @@ public class EnemyController_Scorpion : MonoBehaviour
             if (rb2d != null && targetPlayer != null)
             {
                 Move();
-                if (targetPlayer.position.x > transform.localPosition.x && !faceRight) Flip();
-                else if (targetPlayer.position.x < transform.localPosition.x && faceRight) Flip();
+                if (targetPlayer.position.x > transform.position.x && !faceRight) Flip();
+                else if (targetPlayer.position.x < transform.position.x && faceRight) Flip();
             }
         }
         

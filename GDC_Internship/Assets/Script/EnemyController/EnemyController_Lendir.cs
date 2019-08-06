@@ -80,7 +80,7 @@ public class EnemyController_Lendir : MonoBehaviour
 
         if (state == "patrol" && targetPlayer)
         {
-            if (Mathf.Abs(transform.localPosition.x - target.x) <= 0.4f)
+            if (Mathf.Abs(transform.position.x - target.x) <= 0.4f)
             {
                 if (waitTime <= 0)
                 {
@@ -113,8 +113,8 @@ public class EnemyController_Lendir : MonoBehaviour
                 if (rb2d != null && target != null)
                 {
                     Move();
-                    if (target.x > transform.localPosition.x && !faceRight) Flip();
-                    else if (target.x < transform.localPosition.x && faceRight) Flip();
+                    if (target.x > transform.position.x && !faceRight) Flip();
+                    else if (target.x < transform.position.x && faceRight) Flip();
                 }
             }
             else if (state == "follow" && rb2d.isKinematic == false && !StunCheck)
@@ -122,8 +122,8 @@ public class EnemyController_Lendir : MonoBehaviour
                 if (rb2d != null && targetPlayer != null)
                 {
                     Follow();
-                    if (targetPlayer.position.x > transform.localPosition.x && !faceRight) Flip();
-                    else if (targetPlayer.position.x < transform.localPosition.x && faceRight) Flip();
+                    if (targetPlayer.position.x > transform.position.x && !faceRight) Flip();
+                    else if (targetPlayer.position.x < transform.position.x && faceRight) Flip();
                 }
             }
         }
@@ -143,6 +143,7 @@ public class EnemyController_Lendir : MonoBehaviour
     {
         float new_patrolPoint = Random.Range(-patrolBounds.extents.x, patrolBounds.extents.x);
         new_patrolPoint = new_patrolPoint + patrolBounds.center.x;
+        //Debug.Log(new_patrolPoint);
         target =  new Vector2(new_patrolPoint, transform.localPosition.y);
     }
     void Move()
