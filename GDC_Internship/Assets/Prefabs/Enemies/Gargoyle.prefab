@@ -276,10 +276,10 @@ CapsuleCollider2D:
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_UsedByEffector: 0
+  m_UsedByEffector: 1
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.3, y: 0.5}
+  m_Size: {x: 0.4, y: 1}
   m_Direction: 0
 --- !u!114 &1620150999220921473
 MonoBehaviour:
@@ -294,7 +294,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 8464160168755753872}
-  maxSpeed: 0
+  maxSpeed: 50
   hitRange: 4
   health: 3
   Herb: {fileID: 8863576755217939462, guid: 67b4e8efef4e10a4e8319e7e02bbcf46, type: 3}
@@ -303,4 +303,4 @@ MonoBehaviour:
   Spell2: {fileID: 2838766830951665151, guid: b7dc45fffd4b7694ea32844eee732a38, type: 3}
   Deathplode: {fileID: 2838766830951665151, guid: 1cca40ee9faf96f4eba0f7cccebef916,
     type: 3}
-  argoRange: 5
+  argoRange: 4
