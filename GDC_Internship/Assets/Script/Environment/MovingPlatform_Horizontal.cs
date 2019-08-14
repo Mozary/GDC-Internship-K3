@@ -44,5 +44,16 @@ public class MovingPlatform_Horizontal : MonoBehaviour
         {
             direction = direction * -1;
         }
+
+        /*
+         
+        myManager.MovingInHorizontal(parentTransform, pos_x);
+         
+        atau
+
+        method di sini yang dipanggil oleh manager?
+         
+         
+         */
     }
 }

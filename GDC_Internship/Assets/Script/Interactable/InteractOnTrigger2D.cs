@@ -4,11 +4,17 @@ using UnityEngine.Events;
 
 public class InteractOnTrigger2D : MonoBehaviour
 {
+    public GameObject dialogueBox;
+    public PlayerController i_player;
+
+    private bool readyActive;
+
+    ////
+    [Space]
     public LayerMask layers;                                        //biar gampang bedain layer?
     public UnityEvent OnEnter, OnExit, OnStay;                              //bisa MANGGIL SESUATU dengan gampang!
 
     protected Collider2D m_Collider;
-
     void Reset()                                                    //gak ngerti kenapa reset, tapi tahu fungsinya
     {
         layers = LayerMask.NameToLayer("Everything");
@@ -23,7 +29,10 @@ public class InteractOnTrigger2D : MonoBehaviour
 
         if (layers.Contains(other.gameObject))                       //Contains di sini dicover di LayerMaskExtension
         {
-            ExecuteOnEnter(other);                                   //other kayaknya input kita sendiri dari menu di unity
+            if (other.gameObject.CompareTag("Player"))
+            {
+                ExecuteOnEnter(other);                                   //other kayaknya input kita sendiri dari menu di unity
+            }
         }
     }
     void OnTriggerExit2D(Collider2D other)                          //sama dengan diatas
@@ -33,31 +42,52 @@ public class InteractOnTrigger2D : MonoBehaviour
 
         if (layers.Contains(other.gameObject))
         {
-            ExecuteOnExit(other);
+            if (other.gameObject.CompareTag("Player"))
+            {
+                ExecuteOnExit(other);
+            }
         }
     }
     private void OnTriggerStay2D(Collider2D other)
     {
-        if (!enabled)                                                //coba jangan dipake dulu, kayak, bukannya udah pasti terjadi?
+        if (!enabled)                                                
             return;
 
-        if (layers.Contains(other.gameObject))                       //Contains di sini dicover di LayerMaskExtension
+        if (layers.Contains(other.gameObject))                       
         {
-            ExecuteOnStay(other);                                   //other kayaknya input kita sendiri dari menu di unity
+            if (other.gameObject.CompareTag("Player"))
+            {
+                ExecuteOnStay(other);                                   
+            }
         }
     }
 
     protected virtual void ExecuteOnEnter(Collider2D other)         //virtual itu buat anak class
     {
+        readyActive = true;
         OnEnter.Invoke();
     }
     protected virtual void ExecuteOnExit(Collider2D other)
     {
+        readyActive = false;
         OnExit.Invoke();
     }
-    protected virtual void ExecuteOnStay(Collider2D other)         //virtual itu buat anak class
+    protected virtual void ExecuteOnStay(Collider2D other)         
     {
-        OnStay.Invoke();
+        if(GetComponent<Interactable_Dialogue>() != null)
+        {
+            if (readyActive && dialogueBox.activeSelf)
+            {
+                if (Input.GetKeyDown("e"))
+                {
+                    OnStay.Invoke();
+                }   
+            }
+        }
+        else
+        {
+            OnStay.Invoke();
+        }
     }
 }
 

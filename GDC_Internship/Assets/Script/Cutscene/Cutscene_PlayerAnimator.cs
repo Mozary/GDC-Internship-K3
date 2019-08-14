@@ -3,7 +3,7 @@ using UnityEngine.Playables;
 
 public class Cutscene_PlayerAnimator : MonoBehaviour
 {
-    private GameObject i_player;
+    public GameObject i_player;
     private Animator i_pAnimator;
     private PlayerController i_pController;
 
@@ -15,7 +15,6 @@ public class Cutscene_PlayerAnimator : MonoBehaviour
     public bool moveMagic = false;
     private void Awake()
     {
-        i_player = GameObject.FindGameObjectWithTag("Player");
         i_pAnimator = i_player.GetComponent<Animator>();
         i_pController = i_player.GetComponent<PlayerController>();
 

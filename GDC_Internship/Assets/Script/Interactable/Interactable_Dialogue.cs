@@ -2,20 +2,13 @@
 
 public class Interactable_Dialogue : MonoBehaviour
 {
-    public Dialogue dialogue;
-    DialogueManager dialogueManager;
+    public DialogueManager dialogueManager;
     private bool dialogueEnded;
 
-    private GameObject parentCanvas;
-    private GameObject dialogueBox;
+    public GameObject dialogueBox;
 
-    private void Start()
-    {
-        dialogueManager = FindObjectOfType<DialogueManager>();
-
-        parentCanvas = GameObject.FindGameObjectWithTag("Canvas");
-        dialogueBox = parentCanvas.transform.GetChild(0).gameObject;
-    }
+    [Space]
+    public Dialogue dialogue;
     private void Update()
     {
         dialogueEnded = dialogueManager.dialogueEnded;
@@ -23,12 +16,14 @@ public class Interactable_Dialogue : MonoBehaviour
 
     public void InteractableDialogue()
     {
-        FindObjectOfType<DialogueManager>().DisplayAfterInteract(dialogue);
         dialogueBox.SetActive(true);
+        dialogueManager.DisplayAfterInteract(dialogue);
     }
     public void OneTimeDialogue()
     {
         if (dialogueEnded)
+        {
             Destroy(GetComponent<Interactable_Dialogue>());
+        }   
     }
 }

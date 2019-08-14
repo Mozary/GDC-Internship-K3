@@ -47,7 +47,7 @@ public class MovingPlatform_Rotating : MonoBehaviour
         if (rotateDelay >= 2.0f)
         {
             rotatingPlatform.transform.Rotate(0.0f, 0.0f, rotateSpeed, Space.Self);
-            gameObject.transform.Rotate(0.0f, 0.0f, -rotateSpeed, Space.Self);
+            gameObject.transform.Rotate(0.0f, 0.0f, -rotateSpeed, /*gameObject.transform.GetChild(0).*/ Space.Self);
             platformAngle.z += rotateSpeed;
 
             if (platformAngle.z == 0 || platformAngle.z == 90 || platformAngle.z == 180 || platformAngle.z == 270 || platformAngle.z == 360 ||
@@ -61,5 +61,16 @@ public class MovingPlatform_Rotating : MonoBehaviour
                 }
             }
         }
+
+        /*
+         
+        myManager.MovingInRotation(rotateSpeed, platformAngle.z);
+         
+        atau
+
+        method di sini yang dipanggil oleh manager?
+         
+         
+         */
     }
 }

@@ -10,14 +10,9 @@ public class InteractOnButton2D : InteractOnTrigger2D
     public UnityEvent OnButtonPress;
     private bool m_CanExecuteButtons;
 
-    private GameObject parentCanvas;
-    private GameObject dialogueBox;
-    [HideInInspector]                     //dijadikan public karena SceneLoader ########################################
-    public PlayerController i_player;
-
     //bool untuk Script lain
     [HideInInspector]
-    public bool inCollider;
+    public bool inCollider = false;
     protected override void ExecuteOnEnter(Collider2D other)
     {
         m_CanExecuteButtons = true;
@@ -30,7 +25,6 @@ public class InteractOnButton2D : InteractOnTrigger2D
         inCollider = false;
         OnExit.Invoke();
     }
-    int countt = 0;
     protected override void ExecuteOnStay(Collider2D other)         
     {
         if (!m_CanExecuteButtons && dialogueBox.activeSelf)
@@ -53,15 +47,6 @@ public class InteractOnButton2D : InteractOnTrigger2D
         }
     }
 
-    private void Start()
-    {
-        parentCanvas = GameObject.FindGameObjectWithTag("Canvas");
-        dialogueBox = parentCanvas.transform.GetChild(0).gameObject;
-        
-        i_player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
-
-        inCollider = false;
-    }
     private void Update()
     {
         if (m_CanExecuteButtons /* && detect player sedang idle */)      //pos.x pos.y == 0 ##################
@@ -72,10 +57,11 @@ public class InteractOnButton2D : InteractOnTrigger2D
                 OnButtonPress.Invoke();
             }
         }
-
+/*
         if (!dialogueBox.activeSelf && !i_player.enabled)
         {
             i_player.enabled = true;
         }
+*/
     }
 }

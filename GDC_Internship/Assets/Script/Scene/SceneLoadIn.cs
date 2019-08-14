@@ -2,6 +2,7 @@
 
 public class SceneLoadIn : MonoBehaviour
 {
+/*
     GameObject parentCanvas;
 
     [SerializeField] //changes it to require instead
@@ -16,4 +17,5 @@ public class SceneLoadIn : MonoBehaviour
         //start the scene with FadeIn
         fadeScreen.SetTrigger("fadeIn");
     }
+*/
 }

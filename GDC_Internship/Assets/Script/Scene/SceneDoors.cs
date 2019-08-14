@@ -2,22 +2,16 @@
 
 public class SceneDoors : MonoBehaviour
 {
-    GameObject i_player;
+    public GameObject i_player;
     public GameObject targetPosition;
 
-    GameObject parentCanvas;
-    GameObject dialogueBox;
+    public GameObject dialogueBox;
 
-    InteractOnButton2D interactOnButton2D;
+    private InteractOnButton2D interactOnButton2D;
     private bool inCollider;
 
     private void Start()
     {
-        i_player = GameObject.FindGameObjectWithTag("Player");
-
-        parentCanvas = GameObject.FindGameObjectWithTag("Canvas");
-        dialogueBox = parentCanvas.transform.GetChild(0).gameObject;
-
         interactOnButton2D = GetComponent<InteractOnButton2D>();
     }
 

@@ -122,7 +122,6 @@ public class PlayerController : MonoBehaviour
         {
             if (Input.GetKeyDown("up")/*Input.GetButtonDown("Jump")*/)
             {
-                Debug.Log("masuk?");
                 jumpDown = true;
             }
         }
