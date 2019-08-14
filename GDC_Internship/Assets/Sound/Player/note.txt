@@ -1,0 +1,5 @@
+untuk sound pedang, itu kemungkinan ada 2 sound
+, 1 sound kalau gak ngehit musuh, yang satunya lagi sound pas ngehit musuh
+
+untuk yang suara langkah kaki, itu gua masukin 2 sound
+yang pertama sound 8 bit, yang satunya lagi footstep biasa
