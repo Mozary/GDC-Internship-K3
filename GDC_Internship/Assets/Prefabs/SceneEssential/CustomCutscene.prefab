@@ -105,6 +105,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playableDirector: {fileID: 6638461134559054572}
+  moveMagic: 0
 --- !u!1 &6638461134559054561
 GameObject:
   m_ObjectHideFlags: 0
@@ -117,7 +118,7 @@ GameObject:
   - component: {fileID: 6638461134559054572}
   - component: {fileID: 6638461134559054563}
   m_Layer: 0
-  m_Name: InsertNameScene
+  m_Name: CustomCutscene
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

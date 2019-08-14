@@ -16,17 +16,17 @@ public class SubTilemap : MonoBehaviour
     }
     void Update()
     {
-        if (effector2D.rotationalOffset != 0.0f && delayOffset >= 0.298f)
+        if (player.jumpDown && delayOffset >= 0.298f)
         {
-            Debug.Log("Masuk?? atass");
-            effector2D.rotationalOffset = 0.0f;
+            effector2D.colliderMask |= LayerMask.GetMask("Player");
+
             player.jumpDown = false;
             delayOffset = 0.0f;
         }
         if (player.jumpDown)
         {
-            Debug.Log("Masuk??");
-            effector2D.rotationalOffset = 180.0f;
+            effector2D.colliderMask &= ~LayerMask.GetMask("Player");
+
             delayOffset += Time.deltaTime;
         }
     }

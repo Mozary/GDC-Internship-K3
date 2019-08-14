@@ -122,7 +122,6 @@ public class PlayerController : MonoBehaviour
         {
             if (Input.GetKeyDown("up")/*Input.GetButtonDown("Jump")*/)
             {
-                Debug.Log("masuk?");
                 jumpDown = true;
             }
         }
@@ -466,8 +465,19 @@ public class PlayerController : MonoBehaviour
     {
         CollectedHerb += 1;
     }
+
     public bool IsIdle()
     {
         return (movement == 0);
+    }
+    public void Freeze()
+    {
+        Immovable = true;
+        invulnerable = true;
+    }
+    public void UnFreeze()
+    {
+        Immovable = false;
+        invulnerable = false;
     }
 }

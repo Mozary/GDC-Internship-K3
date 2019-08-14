@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class Handler_HUD : MonoBehaviour
 {
-    [SerializeField] private PlayerController Player;
+    private PlayerController Player;
 
     private Timer Timer;
 
@@ -19,31 +19,38 @@ public class Handler_HUD : MonoBehaviour
 
     private void Awake()
     {
-        ImageTimer = transform.Find("Timebar").Find("Bar").GetComponent<Image>();
-        ImageTimerShadow = transform.Find("Timebar").Find("Border").GetComponent<Image>();
-        ImageHealth = transform.Find("PlayerPortrait").Find("Health").GetComponent<Image>();
-        ImageDodgeCooldown = transform.Find("Skills").Find("Skill_Dodge").Find("Cooldown").GetComponent<Image>();
-        ImageHealCooldown = transform.Find("Skills").Find("Skill_Heal").Find("Cooldown").GetComponent<Image>();
-        ImageChargeCooldown = transform.Find("Skills").Find("Skill_Charge").Find("Cooldown").GetComponent<Image>();
-        TextHerbCount = transform.Find("Herb").Find("HerbCount").GetComponent<Text>();
+        Player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        if (Player)
+        {
+            ImageTimer = transform.Find("Timebar").Find("Bar").GetComponent<Image>();
+            ImageTimerShadow = transform.Find("Timebar").Find("Border").GetComponent<Image>();
+            ImageHealth = transform.Find("PlayerPortrait").Find("Health").GetComponent<Image>();
+            ImageDodgeCooldown = transform.Find("Skills").Find("Skill_Dodge").Find("Cooldown").GetComponent<Image>();
+            ImageHealCooldown = transform.Find("Skills").Find("Skill_Heal").Find("Cooldown").GetComponent<Image>();
+            ImageChargeCooldown = transform.Find("Skills").Find("Skill_Charge").Find("Cooldown").GetComponent<Image>();
+            TextHerbCount = transform.Find("Herb").Find("HerbCount").GetComponent<Text>();
 
-        Mode_Ranged = transform.Find("Mode").Find("Toggle_Ranged");
-        Mode_Melee = transform.Find("Mode").Find("Toggle_Melee");
+            Mode_Ranged = transform.Find("Mode").Find("Toggle_Ranged");
+            Mode_Melee = transform.Find("Mode").Find("Toggle_Melee");
 
-        Timer = new Timer();
+            Timer = new Timer();
+        }
     }
     private void Update()
     {
-        ImageTimer.fillAmount = Timer.GetTimerNormalized();
-        ImageTimerShadow.fillAmount = Timer.GetTimerNormalized();
-        ImageHealth.fillAmount = Player.GetNormalizedHealth();
-        ImageDodgeCooldown.fillAmount = Player.GetNormalizedDodgeCooldown();
-        ImageHealCooldown.fillAmount = Player.GetNormalizedHealCooldown();
-        ImageChargeCooldown.fillAmount = Player.GetNormalizedChargeCooldown();
-        TextHerbCount.text = Player.GetHerbAmount().ToString();
+        if (Player)
+        {
+            ImageTimer.fillAmount = Timer.GetTimerNormalized();
+            ImageTimerShadow.fillAmount = Timer.GetTimerNormalized();
+            ImageHealth.fillAmount = Player.GetNormalizedHealth();
+            ImageDodgeCooldown.fillAmount = Player.GetNormalizedDodgeCooldown();
+            ImageHealCooldown.fillAmount = Player.GetNormalizedHealCooldown();
+            ImageChargeCooldown.fillAmount = Player.GetNormalizedChargeCooldown();
+            TextHerbCount.text = Player.GetHerbAmount().ToString();
 
-        UpdateWeaponMode();
-        Timer.DecreaseTime();
+            UpdateWeaponMode();
+            Timer.DecreaseTime();
+        }
     }
     private void UpdateWeaponMode()
     {
@@ -69,7 +76,7 @@ public class Timer
         timeRemaining = Max_Time_Amount;
     }
 
-    public void DecreaseTime() //Not Implemented, Do NOT Use yet
+    public void DecreaseTime()
     {
         if(timeRemaining > 0)
         {

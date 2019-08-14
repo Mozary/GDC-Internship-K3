@@ -12,6 +12,7 @@ using UnityEngine.SceneManagement;
 // ******  ******
 public class SceneLoader : MonoBehaviour
 {
+/*
     private InteractOnButton2D interactOnButton2D;
     private bool inCollider;
 
@@ -29,7 +30,7 @@ public class SceneLoader : MonoBehaviour
     [SerializeField]
     private Animator fadeScreen;
 
-    GameObject hintofInstruction;
+    private GameObject hintofInstruction;
     public TextMeshProUGUI HintofInstruction;
     public string instruction;
     private bool moveScene;
@@ -58,7 +59,7 @@ public class SceneLoader : MonoBehaviour
         inCollider = interactOnButton2D.inCollider;
         moveScene = dialogueManager.dialogueEnded;
 
-        if (inCollider /* && detect player sedang idle */)      //belum rangkum ##################)
+        if (inCollider *//* && detect player sedang idle *//*)      //belum rangkum ##################)
         {
             //////
             if (moveScene && !doMoveScene)
@@ -128,4 +129,5 @@ public class SceneLoader : MonoBehaviour
             }
         }
     }
+    */
 }

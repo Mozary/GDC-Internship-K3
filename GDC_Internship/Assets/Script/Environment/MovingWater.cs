@@ -46,44 +46,32 @@ public class MovingWater : MonoBehaviour
             resetValue_c *= -1;
         }
     }
-    void OnTriggerStay2D(Collider2D collider)
+    private void Update()
     {
-        if (collider.gameObject.CompareTag("Player"))
+        //// position
+        waterPos = new Vector3(pos_x, oriPosition.y, oriPosition.z);
+        gameObject.transform.position = waterPos;
+
+        pos_x = pos_x + (pos_x_offset * Time.deltaTime * -resetValue_a);
+        if (pos_x >= oripos_x + pos_x_offset || pos_x <= oripos_x - pos_x_offset)
         {
-            waterPos = new Vector3(pos_x, oriPosition.y, oriPosition.z);
-            gameObject.transform.position = waterPos;
+            resetValue_a *= -1;
+        }
 
-            waterScale = new Vector3(scale_x, scale_y, oriScale.z);
-            gameObject.transform.localScale = waterScale;
+        //// scale
+        waterScale = new Vector3(scale_x, scale_y, oriScale.z);
+        gameObject.transform.localScale = waterScale;
 
-            //// position
-            if (true)
-            {
-                pos_x = pos_x + (pos_x_offset * Time.deltaTime * -resetValue_a);
-                if (pos_x >= oripos_x + pos_x_offset || pos_x <= oripos_x - pos_x_offset)
-                {
-                    resetValue_a *= -1;
-                }
-            }
 
-            //// scale
-            if (true)
-            {
-                scale_x = scale_x + (scale_x_offset * Time.deltaTime * -resetValue_b);
-                if (scale_x >= oriscale_x + scale_x_offset || scale_x <= oriscale_x - scale_x_offset)
-                {
-                    resetValue_b *= -1;
-                }
-                
-            }
-            if (true)
-            {
-                scale_y = scale_y + (scale_y_offset * Time.deltaTime * -resetValue_c);
-                if (scale_y >= oriscale_y + scale_y_offset || scale_y <= oriscale_y - scale_y_offset)
-                {
-                    resetValue_c *= -1;
-                }
-            }
+        scale_x = scale_x + (scale_x_offset * Time.deltaTime * -resetValue_b);
+        if (scale_x >= oriscale_x + scale_x_offset || scale_x <= oriscale_x - scale_x_offset)
+        {
+            resetValue_b *= -1;
+        }
+        scale_y = scale_y + (scale_y_offset * Time.deltaTime * -resetValue_c);
+        if (scale_y >= oriscale_y + scale_y_offset || scale_y <= oriscale_y - scale_y_offset)
+        {
+            resetValue_c *= -1;
         }
     }
 }

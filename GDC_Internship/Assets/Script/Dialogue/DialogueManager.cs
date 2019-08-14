@@ -9,8 +9,7 @@ public class DialogueManager : MonoBehaviour
 
     private Queue<string> ListDialogues;
 
-    private GameObject parentCanvas;
-    private GameObject dialogueBox;
+    public GameObject dialogueBox;
 
     [HideInInspector]
     public bool dialogueEnded = false;
@@ -18,9 +17,6 @@ public class DialogueManager : MonoBehaviour
     private void Start()
     {
         ListDialogues = new Queue<string>();
-
-        parentCanvas = GameObject.FindGameObjectWithTag("Canvas");
-        dialogueBox = parentCanvas.transform.GetChild(0).gameObject;
     }
 
     public void DisplayAfterInteract(Dialogue dialogue)
@@ -29,12 +25,10 @@ public class DialogueManager : MonoBehaviour
         nameUI.text = dialogue.name;
         //bool for SceneLoader
         dialogueEnded = false;
-        Debug.Log("dialogueEnded dari displayafteronteract ___" + dialogueEnded);
 
         foreach (string sentence in dialogue.ListSentence)
         {
             ListDialogues.Enqueue(sentence);
-            Debug.Log(sentence);
         }
 
         DisplayNextSentence();
@@ -49,7 +43,7 @@ public class DialogueManager : MonoBehaviour
 
         string sentence = ListDialogues.Dequeue();
         dialogueUI.text = sentence;
-        Debug.Log(sentence + "dari nextsentence");
+        Debug.Log(sentence + "       ____dari nextsentence");
     }
     public void EndDialogue()
     {
