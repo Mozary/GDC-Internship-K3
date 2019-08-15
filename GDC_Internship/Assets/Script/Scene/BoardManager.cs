@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class Handler_HUD : MonoBehaviour
+public class BoardManager : MonoBehaviour
 {
     private PlayerController Player;
 
-    private Timer Timer;
+    private TimerClass Timer;
+    private SaveState State;
 
     private Image ImageTimer;
     private Image ImageTimerShadow;
@@ -20,6 +21,8 @@ public class Handler_HUD : MonoBehaviour
     private void Awake()
     {
         Player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        SaveSystem.init();
+        State = SaveSystem.LoadGame();
         if (Player)
         {
             ImageTimer = transform.Find("Timebar").Find("Bar").GetComponent<Image>();
@@ -33,8 +36,14 @@ public class Handler_HUD : MonoBehaviour
             Mode_Ranged = transform.Find("Mode").Find("Toggle_Ranged");
             Mode_Melee = transform.Find("Mode").Find("Toggle_Melee");
 
-            Timer = new Timer();
+            if (State.ActiveChapter == 0)
+            {
+                State.ActiveChapter = 1;
+            }
+            Timer = new TimerClass(State.ChapterStates[State.ActiveChapter-1].Time);
+            Player.SetHerb(State.ChapterStates[State.ActiveChapter - 1].Herb);
         }
+        
     }
     private void Update()
     {
@@ -63,37 +72,40 @@ public class Handler_HUD : MonoBehaviour
             Mode_Ranged.SetAsFirstSibling();
         }
     }
-}
 
-public class Timer
-{
-    public const float Max_Time_Amount = 15*60;// ~15 Minutes
-    private float timeRemaining;
-    private const float timeDecrement = 1f;
-
-    public Timer()
+    private class TimerClass
     {
-        timeRemaining = Max_Time_Amount;
-    }
+        public const float Max_Time_Amount = Constants.Max_Time;
+        private float timeRemaining;
+        private const float timeDecrement = 10f;
 
-    public void DecreaseTime()
-    {
-        if(timeRemaining > 0)
+        public TimerClass(float time)
         {
-            timeRemaining -= timeDecrement * Time.deltaTime;
+            Debug.Log("Time for this chapter :"+time);
+            timeRemaining = time;
+        }
+
+        public void DecreaseTime()
+        {
+            if (timeRemaining > 0)
+            {
+                timeRemaining -= timeDecrement * Time.deltaTime;
+            }
+        }
+
+        public void IncreaseTime(float amount)
+        {
+            float threshold = timeRemaining + amount;
+            if (threshold > Max_Time_Amount)
+            {
+                threshold = Max_Time_Amount;
+            }
+        }
+        public float GetTimerNormalized()
+        {
+            return timeRemaining / Max_Time_Amount;
         }
     }
-
-    public void IncreaseTime(float amount)
-    {
-        float threshold = timeRemaining + amount;
-        if (threshold > Max_Time_Amount)
-        {
-            threshold = Max_Time_Amount;
-        }
-    }
-    public float GetTimerNormalized()
-    {
-        return timeRemaining / Max_Time_Amount;
-    }
 }
+
+

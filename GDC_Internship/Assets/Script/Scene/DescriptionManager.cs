@@ -13,9 +13,12 @@ public class DescriptionManager : MonoBehaviour
     private Coroutine DisplayCoroutine;
     private int CurrentId = 0;
     private string CurrentTitle = "";
+    private SaveState State;
     
     void Start()
     {
+        State = SaveSystem.LoadGame();
+
         DescriptionText = transform.Find("Description").GetComponent<TextMeshProUGUI>();
         TitleText = transform.Find("Title").GetComponent<Text>();
         TitleText = transform.Find("Title").GetComponent<Text>();
@@ -71,6 +74,12 @@ public class DescriptionManager : MonoBehaviour
     {
         if (title != CurrentTitle)
         {
+            if (id != 0 && State.ChapterStates[id - 1].Completed == false)
+            {
+                text = "You have not unlocked this chapter yet.";
+                title = "???";
+            }
+
             CurrentTitle = title;
             StopAllCoroutines();
 

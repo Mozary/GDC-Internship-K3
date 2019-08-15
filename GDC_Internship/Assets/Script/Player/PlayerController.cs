@@ -465,7 +465,10 @@ public class PlayerController : MonoBehaviour
     {
         CollectedHerb += 1;
     }
-
+    public void SetHerb(int value)
+    {
+        CollectedHerb = value;
+    }
     public bool IsIdle()
     {
         return (movement == 0);
