@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class BoardManager : MonoBehaviour
 {
@@ -14,9 +15,13 @@ public class BoardManager : MonoBehaviour
     private Image ImageDodgeCooldown;
     private Image ImageHealCooldown;
     private Image ImageChargeCooldown;
+    private Image FadingLayer;
     private Transform Mode_Ranged;
     private Transform Mode_Melee;
     private Text TextHerbCount;
+
+    private bool DefeatedFlag = false;
+    private bool VictoriousFlag = false;
 
     private void Awake()
     {
@@ -25,6 +30,7 @@ public class BoardManager : MonoBehaviour
         State = SaveSystem.LoadGame();
         if (Player)
         {
+            FadingLayer = transform.Find("BlackLayer").GetComponent<Image>();
             ImageTimer = transform.Find("Timebar").Find("Bar").GetComponent<Image>();
             ImageTimerShadow = transform.Find("Timebar").Find("Border").GetComponent<Image>();
             ImageHealth = transform.Find("PlayerPortrait").Find("Health").GetComponent<Image>();
@@ -40,10 +46,13 @@ public class BoardManager : MonoBehaviour
             {
                 State.ActiveChapter = 1;
             }
-            Timer = new TimerClass(State.ChapterStates[State.ActiveChapter-1].Time);
-            Player.SetHerb(State.ChapterStates[State.ActiveChapter - 1].Herb);
+
+            int HerbFlux = Mathf.Clamp(State.ChapterStates[State.ActiveChapter - 1].Herb, 0, 2);
+            float AddedTime = (State.ChapterStates[State.ActiveChapter - 1].Herb - HerbFlux) * 60 * 1.5f;
+
+            Timer = new TimerClass(State.ChapterStates[State.ActiveChapter-1].Time + AddedTime);
+            Player.SetHerb(HerbFlux);
         }
-        
     }
     private void Update()
     {
@@ -59,7 +68,23 @@ public class BoardManager : MonoBehaviour
 
             UpdateWeaponMode();
             Timer.DecreaseTime();
+            
         }
+    }
+    public void PlayerIsDefeated()
+    {
+        DefeatedFlag = true;
+        StartCoroutine(ActivateBlackLayer(true));
+    }
+    public void BossIsDefeated()
+    {
+        VictoriousFlag = true;
+        if(State.ActiveChapter < 4)
+        {
+            State.ChapterStates[State.ActiveChapter + 1].Unlocked = true;
+        }
+        SaveSystem.SaveGame(State);
+        StartCoroutine(ActivateBlackLayer(false));
     }
     private void UpdateWeaponMode()
     {
@@ -105,6 +130,34 @@ public class BoardManager : MonoBehaviour
         {
             return timeRemaining / Max_Time_Amount;
         }
+    }
+    IEnumerator ActivateBlackLayer(bool Defeated)
+    {
+        if (!Defeated)
+        {
+            yield return new WaitForSeconds(3f);
+        }
+        Color mycolour = Color.black;
+        float colourfade = 0;
+        while (colourfade < 1)
+        {
+            colourfade += 0.03f;
+            mycolour.a = colourfade;
+            FadingLayer.color = mycolour;
+            yield return null;
+        }
+        if (Defeated)
+        {
+            transform.Find("BlackLayer").GetComponent<ChapterLoader>().IsDefeated();
+        }
+        else
+        {
+            transform.Find("BlackLayer").GetComponent<ChapterLoader>().IsVictorious();
+        }
+    }
+    public bool GetVictoryStatus()
+    {
+        return VictoriousFlag;
     }
 }
 

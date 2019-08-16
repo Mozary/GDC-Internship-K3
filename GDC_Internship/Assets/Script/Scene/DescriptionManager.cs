@@ -74,7 +74,7 @@ public class DescriptionManager : MonoBehaviour
     {
         if (title != CurrentTitle)
         {
-            if (id != 0 && State.ChapterStates[id - 1].Completed == false)
+            if (id>= 0 && State.ChapterStates[id].Unlocked == false)
             {
                 text = "You have not unlocked this chapter yet.";
                 title = "???";

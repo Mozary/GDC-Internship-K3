@@ -128,7 +128,7 @@ GameObject:
   - component: {fileID: 17852677}
   m_Layer: 5
   m_Name: btn_PortalCh3
-  m_TagString: Untagged
+  m_TagString: Chapter
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -218,7 +218,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TitleText: Chapter 3 - Six Feet Under
-  id: 4
+  id: 3
   DescriptionText: The Bandit King revealed in his last breath, that the sorcerer
     responsible for The Plage as well as the fall of the Kingdom has the cure. He
     reign over an unholy cemetry, experimenting futher on various abominable activity...
@@ -331,7 +331,7 @@ GameObject:
   - component: {fileID: 189185814}
   - component: {fileID: 189185813}
   m_Layer: 5
-  m_Name: 5
+  m_Name: 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -488,7 +488,7 @@ GameObject:
   - component: {fileID: 227814335}
   m_Layer: 5
   m_Name: btn_PortalCh2
-  m_TagString: Untagged
+  m_TagString: Chapter
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -578,7 +578,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TitleText: Chapter 2 - Bandit Fortress
-  id: 3
+  id: 2
   DescriptionText: For months, you have been wandering the country side searching
     for a cure for your sister. As you rest your fatigued self in a pub, you heard
     an interesting rumour...
@@ -625,7 +625,7 @@ GameObject:
   - component: {fileID: 334292858}
   - component: {fileID: 334292857}
   m_Layer: 5
-  m_Name: 1
+  m_Name: 0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -697,7 +697,6 @@ GameObject:
   m_Component:
   - component: {fileID: 371603373}
   - component: {fileID: 371603377}
-  - component: {fileID: 371603376}
   - component: {fileID: 371603375}
   - component: {fileID: 371603374}
   m_Layer: 5
@@ -766,17 +765,17 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 371603376}
+      - m_Target: {fileID: 1103240936}
         m_MethodName: LoadScene
-        m_Mode: 1
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Chapter 2
           m_BoolArgument: 0
-        m_CallState: 2
+        m_CallState: 1
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &371603375
@@ -808,20 +807,6 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
---- !u!114 &371603376
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 371603372}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 596cffd9620e35346898c3ca651a0b72, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SelectScene: Chapter 2
-  SceneID: 2
 --- !u!222 &371603377
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -829,6 +814,80 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 371603372}
+  m_CullTransparentMesh: 0
+--- !u!1 &392225666
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 392225667}
+  - component: {fileID: 392225669}
+  - component: {fileID: 392225668}
+  m_Layer: 5
+  m_Name: FadingLayer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &392225667
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 392225666}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1103240935}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 40, y: 40}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &392225668
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 392225666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 0}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+--- !u!222 &392225669
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 392225666}
   m_CullTransparentMesh: 0
 --- !u!1 &441760864
 GameObject:
@@ -840,7 +899,6 @@ GameObject:
   m_Component:
   - component: {fileID: 441760865}
   - component: {fileID: 441760869}
-  - component: {fileID: 441760868}
   - component: {fileID: 441760867}
   - component: {fileID: 441760866}
   m_Layer: 5
@@ -909,17 +967,17 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 441760868}
+      - m_Target: {fileID: 1103240936}
         m_MethodName: LoadScene
-        m_Mode: 1
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: EndGame
           m_BoolArgument: 0
-        m_CallState: 2
+        m_CallState: 1
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &441760867
@@ -951,20 +1009,6 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
---- !u!114 &441760868
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 441760864}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 596cffd9620e35346898c3ca651a0b72, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SelectScene: EndGame
-  SceneID: 4
 --- !u!222 &441760869
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1059,7 +1103,7 @@ GameObject:
   - component: {fileID: 575315853}
   - component: {fileID: 575315852}
   m_Layer: 5
-  m_Name: 3
+  m_Name: 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1205,7 +1249,6 @@ GameObject:
   m_Component:
   - component: {fileID: 742432762}
   - component: {fileID: 742432766}
-  - component: {fileID: 742432765}
   - component: {fileID: 742432764}
   - component: {fileID: 742432763}
   m_Layer: 5
@@ -1274,15 +1317,15 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 742432765}
+      - m_Target: {fileID: 1103240936}
         m_MethodName: LoadScene
-        m_Mode: 1
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Chapter 3
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
@@ -1316,20 +1359,6 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
---- !u!114 &742432765
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 742432761}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 596cffd9620e35346898c3ca651a0b72, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SelectScene: Chapter 3
-  SceneID: 3
 --- !u!222 &742432766
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1350,7 +1379,7 @@ GameObject:
   - component: {fileID: 796032032}
   - component: {fileID: 796032031}
   m_Layer: 5
-  m_Name: 4
+  m_Name: 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1763,6 +1792,7 @@ GameObject:
   - component: {fileID: 1103240934}
   - component: {fileID: 1103240933}
   - component: {fileID: 1103240932}
+  - component: {fileID: 1103240936}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1849,6 +1879,7 @@ RectTransform:
   - {fileID: 17852672}
   - {fileID: 1400011829}
   - {fileID: 1078771690}
+  - {fileID: 392225667}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1857,6 +1888,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1103240936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1103240931}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 596cffd9620e35346898c3ca651a0b72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IsAChapterMenu: 1
 --- !u!1 &1152849432
 GameObject:
   m_ObjectHideFlags: 0
@@ -1967,7 +2011,7 @@ GameObject:
   - component: {fileID: 1270486589}
   m_Layer: 5
   m_Name: btn_PortalTutorial
-  m_TagString: Untagged
+  m_TagString: Chapter
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2075,7 +2119,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TitleText: Prelude - Where It All Began
-  id: 1
+  id: 0
   DescriptionText: The Kingdom has fallen, the capital laid waste, and the people
     suffer from the sweeping plague, your family is no exception.
 --- !u!114 &1270486591
@@ -2101,7 +2145,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1275625758}
   - component: {fileID: 1275625762}
-  - component: {fileID: 1275625761}
   - component: {fileID: 1275625760}
   - component: {fileID: 1275625759}
   m_Layer: 5
@@ -2170,17 +2213,17 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1275625761}
+      - m_Target: {fileID: 1103240936}
         m_MethodName: LoadScene
-        m_Mode: 1
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Chapter 1
           m_BoolArgument: 0
-        m_CallState: 2
+        m_CallState: 1
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1275625760
@@ -2212,20 +2255,6 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
---- !u!114 &1275625761
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1275625757}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 596cffd9620e35346898c3ca651a0b72, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SelectScene: Chapter 1
-  SceneID: 1
 --- !u!222 &1275625762
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2403,7 +2432,7 @@ GameObject:
   - component: {fileID: 1400011834}
   m_Layer: 5
   m_Name: btn_PortalEndGame
-  m_TagString: Untagged
+  m_TagString: Chapter
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2493,7 +2522,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TitleText: Endgame - New Dawn
-  id: 5
+  id: 4
   DescriptionText: As you slay countless beast with your blade, and fell many foes
     with your arrows. You confronted the blackhearted sorcerer. The end draws near...
 --- !u!114 &1400011834
@@ -2543,7 +2572,7 @@ GameObject:
   - component: {fileID: 1421619965}
   m_Layer: 5
   m_Name: btn_PortalCh1
-  m_TagString: Untagged
+  m_TagString: Chapter
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2633,7 +2662,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TitleText: Chapter 1 - Start of a Journey
-  id: 2
+  id: 1
   DescriptionText: Your Mother has died. Your Father has been gone for years searching
     for her cure, but has not returned since. Your very village suffer under the tyranny
     of a bandit clan. Now, your Sister has fallen ill to The Plague, and time is running
@@ -2679,7 +2708,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1484913469}
   - component: {fileID: 1484913474}
-  - component: {fileID: 1484913471}
   - component: {fileID: 1484913473}
   - component: {fileID: 1484913472}
   m_Layer: 5
@@ -2708,20 +2736,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -0.000021549038}
   m_SizeDelta: {x: 80, y: 260}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1484913471
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1484913468}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 596cffd9620e35346898c3ca651a0b72, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SelectScene: Tutorial
-  SceneID: 0
 --- !u!114 &1484913472
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2762,17 +2776,17 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1484913471}
+      - m_Target: {fileID: 1103240936}
         m_MethodName: LoadScene
-        m_Mode: 1
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Tutorial
           m_BoolArgument: 0
-        m_CallState: 2
+        m_CallState: 1
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1484913473
@@ -3207,7 +3221,6 @@ GameObject:
   - component: {fileID: 1748027297}
   - component: {fileID: 1748027296}
   - component: {fileID: 1748027295}
-  - component: {fileID: 1748027298}
   m_Layer: 5
   m_Name: btn_BackMenu
   m_TagString: Untagged
@@ -3275,17 +3288,17 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1748027298}
+      - m_Target: {fileID: 1103240936}
         m_MethodName: LoadScene
-        m_Mode: 1
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: MainMenu
           m_BoolArgument: 0
-        m_CallState: 2
+        m_CallState: 1
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1748027296
@@ -3325,20 +3338,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1748027293}
   m_CullTransparentMesh: 0
---- !u!114 &1748027298
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1748027293}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 596cffd9620e35346898c3ca651a0b72, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SelectScene: MainMenu
-  SceneID: 0
 --- !u!1 &1816099913
 GameObject:
   m_ObjectHideFlags: 0
@@ -3430,7 +3429,7 @@ GameObject:
   - component: {fileID: 1844950448}
   - component: {fileID: 1844950447}
   m_Layer: 5
-  m_Name: 2
+  m_Name: 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3583,7 +3582,7 @@ GameObject:
   - component: {fileID: 2013314917}
   - component: {fileID: 2013314916}
   m_Layer: 5
-  m_Name: 0
+  m_Name: -1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

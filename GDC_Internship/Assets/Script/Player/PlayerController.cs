@@ -368,6 +368,7 @@ public class PlayerController : MonoBehaviour
                 GetComponent<SpriteRenderer>().color = mycolour;
                 yield return null;
             }
+            GameObject.Find("PlayerHUDCanvas").GetComponent<BoardManager>().PlayerIsDefeated();
             Destroy(this.gameObject);
             Debug.Log("GAME OVER");
         }

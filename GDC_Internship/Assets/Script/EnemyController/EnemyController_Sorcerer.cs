@@ -301,7 +301,7 @@ public class EnemyController_Sorcerer : MonoBehaviour
             Mainbody.enabled= false;
             Slimebody.enabled = false;
             transform.Find("Trail").gameObject.SetActive(false);
-
+            GameObject.Find("PlayerHUDCanvas").GetComponent<BoardManager>().BossIsDefeated();
             GameObject Explosion = Instantiate(Deathplode, transform.position, transform.rotation);
             yield return null;
             while (Explosion)

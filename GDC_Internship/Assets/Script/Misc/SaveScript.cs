@@ -70,14 +70,18 @@ public class SaveState
         {
             float time = 0;
             int herb = 0;
-            bool completion = false;
+            bool unlocked = false;
             if(i == 0)
             {
                 herb = 3;
                 time = Constants.Max_Time/2;
-                completion = true;
+                unlocked = true;
             }
-            ChapterStates[i] = new ChapterData(i, herb, time, completion);
+            if(i == 1)
+            {
+                unlocked = true;
+            }
+            ChapterStates[i] = new ChapterData(i, herb, time, unlocked);
         }
         Debug.Log("SAVE INITIALIZED");
     }
@@ -88,13 +92,13 @@ public struct ChapterData
     public int Id;
     public int Herb;
     public float Time;
-    public bool Completed;
-    public ChapterData(int id,int herb, float time, bool completed)
+    public bool Unlocked;
+    public ChapterData(int id,int herb, float time, bool unlocked)
     {
         Id = id;
         Herb = herb;
         Time = time;
-        Completed = completed;
+        Unlocked = unlocked;
     }
 }
 

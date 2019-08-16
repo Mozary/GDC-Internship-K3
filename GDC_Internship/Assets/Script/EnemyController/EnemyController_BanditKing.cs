@@ -292,6 +292,7 @@ public class EnemyController_BanditKing : MonoBehaviour
         if (health <= 0 && Immovable)
         {
             Immovable = true;
+            GameObject.Find("PlayerHUDCanvas").GetComponent<BoardManager>().BossIsDefeated();
             DropHerb();DropHerb();DropHerb();DropHerb();DropHerb();
             animator.SetTrigger("isDying");
             rb2d.isKinematic = true;

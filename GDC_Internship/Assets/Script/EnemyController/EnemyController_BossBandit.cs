@@ -265,6 +265,7 @@ public class EnemyController_BossBandit : MonoBehaviour
             DropHerb();
             DropHerb();
             DropHerb();
+            GameObject.Find("PlayerHUDCanvas").GetComponent<BoardManager>().BossIsDefeated();
             animator.SetTrigger("isDying");
             rb2d.isKinematic = true;
             this.GetComponent<Collider2D>().enabled = false;

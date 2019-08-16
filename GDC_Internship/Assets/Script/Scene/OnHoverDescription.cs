@@ -19,4 +19,8 @@ public class OnHoverDescription : MonoBehaviour
     {
         Manager.DisplayText(DescriptionText, TitleText, id);
     }
+    public int GetId()
+    {
+        return id;
+    }
 }
