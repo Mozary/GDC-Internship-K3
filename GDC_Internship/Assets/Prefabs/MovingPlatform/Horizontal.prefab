@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1573779082232860527}
   - component: {fileID: 1573779082232860526}
   - component: {fileID: 1573779082232860521}
+  - component: {fileID: 3102675642495527479}
   m_Layer: 0
   m_Name: MoveableSpike
   m_TagString: Untagged
@@ -189,6 +190,20 @@ TilemapCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0.03}
+--- !u!114 &3102675642495527479
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1573779082232860523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f54ad8ba90605f4b8bea4d3aa6d3864, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Knockback: 35
+  Damage: 0.25
 --- !u!1 &1573779082499242947
 GameObject:
   m_ObjectHideFlags: 0

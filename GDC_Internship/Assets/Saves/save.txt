@@ -31,5 +31,5 @@
             "Unlocked": false
         }
     ],
-    "ActiveChapter": 1
+    "ActiveChapter": 0
 }

@@ -5,6 +5,7 @@ public class EnemyController_BossBandit : MonoBehaviour
 {
     public Animator animator;
     private Rigidbody2D rb2d;
+    private Transform dummyTarget;
     private Transform target;
     private Transform selfTransform;
     private Vector3 m_Velocity = Vector3.zero;
@@ -20,6 +21,7 @@ public class EnemyController_BossBandit : MonoBehaviour
     [SerializeField] private Transform SlashPoint;
     [SerializeField] private GameObject Slash;
     [SerializeField] private GameObject Herb;
+    [SerializeField] private float argoRange = 2f;
 
     private float SmoothMovement = 0.05f;
     private bool hadap_kanan = true;
@@ -39,7 +41,7 @@ public class EnemyController_BossBandit : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+        dummyTarget = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         rb2d = this.GetComponent<Rigidbody2D>();
         selfTransform = this.GetComponent<Transform>();
         ParticleSetting = Particle.main;
@@ -52,7 +54,16 @@ public class EnemyController_BossBandit : MonoBehaviour
     void Update()
     {
         HealthBar.localScale = new Vector3(Mathf.Clamp(health / maxHealth, 0, maxHealth), HealthBar.localScale.y, HealthBar.localScale.z);
-        
+
+        if (target == null && dummyTarget)
+        {
+            float dummyDistance = Vector2.Distance(selfTransform.position, dummyTarget.position);
+            if (dummyDistance <= argoRange)
+            {
+                target = dummyTarget;
+                dummyTarget = null;
+            }
+        }
         if (target != null)
         {
             targetDistance = Vector2.Distance(selfTransform.position, target.position);
