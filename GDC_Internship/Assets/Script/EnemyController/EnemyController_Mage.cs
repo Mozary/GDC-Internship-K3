@@ -20,6 +20,13 @@ public class EnemyController_Mage : MonoBehaviour
     [SerializeField] private GameObject Deathplode;
     [SerializeField] private float argoRange = 2f;
 
+    [SerializeField] private AudioSource Audio;
+
+    [SerializeField] private AudioClip SoundHurt;
+    [SerializeField] private AudioClip SoundDie;
+    [SerializeField] private AudioClip SoundAttack;
+    [SerializeField] private AudioClip SoundArgo;
+
     private float SmoothMovement = 0.05f;
     private bool hadap_kanan = true;
     private bool Invulnerable = false;
@@ -52,6 +59,7 @@ public class EnemyController_Mage : MonoBehaviour
             float dummyDistance = Vector2.Distance(transform.position, dummyTarget.position);
             if (dummyDistance <= argoRange)
             {
+                Audio.PlayOneShot(SoundArgo);
                 target = dummyTarget;
                 dummyTarget = null;
             }
@@ -106,6 +114,7 @@ public class EnemyController_Mage : MonoBehaviour
             }
             yield return null;
         }
+        Audio.PlayOneShot(SoundAttack);
         while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
         {
             if (StunCheck)
@@ -151,6 +160,7 @@ public class EnemyController_Mage : MonoBehaviour
     }
     IEnumerator Hurt()
     {
+        Audio.PlayOneShot(SoundHurt);
         float flashTime = 0.1f;
         Color mycolour = GetComponent<SpriteRenderer>().color;
         mycolour.g = 0f;
@@ -165,6 +175,7 @@ public class EnemyController_Mage : MonoBehaviour
         StunCheck = true;
         if (health <= 0)
         {
+            Audio.PlayOneShot(SoundDie);
             DropHerb();
             rb2d.isKinematic = true;
             this.GetComponent<Collider2D>().enabled = false;

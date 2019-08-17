@@ -5,6 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class ChapterLoader : MonoBehaviour
 {
+    [SerializeField] private AudioSource Audio;
+    [SerializeField] private AudioClip MenuSelect;
+    [SerializeField] private AudioClip MenuHover;
+
     [SerializeField] private bool IsAChapterMenu = false;
     [SerializeField] private bool IsAGameplayMenu = false;
     private SaveState State;
@@ -61,10 +65,11 @@ public class ChapterLoader : MonoBehaviour
             FadingLayer.GetComponent<Image>().color = mycolour;
             yield return null;
         }
+        Debug.Log("Continue To " + Destination);
         SceneManager.LoadScene(Destination);
     }
 
-    public void IsDefeated()
+    public void IsDefeated(bool TimesUp)
     {
         if (!IsAChapterMenu)
         {
@@ -74,7 +79,11 @@ public class ChapterLoader : MonoBehaviour
             transform.Find("Button_Continue").gameObject.SetActive(false);
 
             Text Status = transform.Find("Status").GetComponent<Text>();
-            Status.text = "DEFEAT!";
+            Status.text = "YOU ARE DEFEATED";
+            if (TimesUp)
+            {
+                Status.text = "YOUR SISTER PERISHED";
+            }
             StartCoroutine(FadeIn());
         }
     }
@@ -88,15 +97,21 @@ public class ChapterLoader : MonoBehaviour
             transform.Find("Button_Restart").gameObject.SetActive(false);
 
             Text Status = transform.Find("Status").GetComponent<Text>();
-            Status.text = "VICTORY!";
+            Status.text = "YOU ARE VICTORIOUS!";
             StartCoroutine(FadeIn());
         }
+    }
+    public void HoverSound()
+    {
+        Audio.PlayOneShot(MenuSelect);
     }
     public void RestartScene()
     {
         if (!InTransition && !IsAChapterMenu)
         {
+            Audio.PlayOneShot(MenuSelect);
             Debug.Log("RESTARTING");
+            State = SaveSystem.LoadGame();
             InTransition = true;
             string destination = SceneManager.GetActiveScene().name;
             StartCoroutine(FadeOut(destination));
@@ -126,10 +141,11 @@ public class ChapterLoader : MonoBehaviour
                 SceneID = 0;
                 break;
         }
+        State = SaveSystem.LoadGame();
         if (SelectScene != null && State.ChapterStates[SceneID].Unlocked == true && !InTransition)
         {
+            Audio.PlayOneShot(MenuSelect);
             InTransition = true;
-            Debug.Log("ACTIVATED ID: " + SceneID);
             State.ActiveChapter = SceneID;
             SaveSystem.SaveGame(State);
             StartCoroutine(FadeOut(SelectScene));

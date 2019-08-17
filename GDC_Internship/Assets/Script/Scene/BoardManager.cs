@@ -68,7 +68,11 @@ public class BoardManager : MonoBehaviour
 
             UpdateWeaponMode();
             Timer.DecreaseTime();
-            
+
+            if (Timer.GetTimerNormalized() <= 0)
+            {
+                Player.TakeDamage(1000);
+            }
         }
     }
     public void PlayerIsDefeated()
@@ -82,8 +86,11 @@ public class BoardManager : MonoBehaviour
         if(State.ActiveChapter < 4)
         {
             State.ChapterStates[State.ActiveChapter + 1].Unlocked = true;
+            State.ChapterStates[State.ActiveChapter].Herb = Player.GetHerbAmount();
+            State.ChapterStates[State.ActiveChapter].Time = Timer.GetTimeRemaining();
         }
         SaveSystem.SaveGame(State);
+        State = SaveSystem.LoadGame();
         StartCoroutine(ActivateBlackLayer(false));
     }
     private void UpdateWeaponMode()
@@ -102,14 +109,17 @@ public class BoardManager : MonoBehaviour
     {
         public const float Max_Time_Amount = Constants.Max_Time;
         private float timeRemaining;
-        private const float timeDecrement = 10f;
+        private const float timeDecrement = 2f;
 
         public TimerClass(float time)
         {
             Debug.Log("Time for this chapter :"+time);
-            timeRemaining = time;
+            timeRemaining = Mathf.Clamp(time,0,Max_Time_Amount);
         }
-
+        public float GetTimeRemaining()
+        {
+            return timeRemaining;
+        }
         public void DecreaseTime()
         {
             if (timeRemaining > 0)
@@ -148,7 +158,12 @@ public class BoardManager : MonoBehaviour
         }
         if (Defeated)
         {
-            transform.Find("BlackLayer").GetComponent<ChapterLoader>().IsDefeated();
+            bool TimeUp = false;
+            if (Timer.GetTimerNormalized() <= 0)
+            {
+                TimeUp = true;
+            }
+            transform.Find("BlackLayer").GetComponent<ChapterLoader>().IsDefeated(TimeUp);
         }
         else
         {

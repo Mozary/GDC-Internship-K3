@@ -44,7 +44,7 @@ public class AttackSpellScript : MonoBehaviour
         }
         StartCoroutine(Charging());
     }
-    private void Update()
+    private void FixedUpdate()
     {
         countdown += Time.deltaTime;
         if (Target && countdown < Lifetime)
@@ -56,7 +56,7 @@ public class AttackSpellScript : MonoBehaviour
         }
         else
         {
-            if(Explosion == null)
+            if (Explosion == null)
             {
                 Explosion = StartCoroutine(Explode());
             }

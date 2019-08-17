@@ -19,6 +19,14 @@ public class EnemyController_Veteran : MonoBehaviour
     [SerializeField] private float argoRange = 2f;
     [SerializeField] private GameObject Herb;
 
+    [SerializeField] private AudioSource Audio;
+    [SerializeField] private AudioSource SoundStep;
+
+    [SerializeField] private AudioClip SoundHurt;
+    [SerializeField] private AudioClip SoundDie;
+    [SerializeField] private AudioClip SoundAttack;
+    [SerializeField] private AudioClip SoundArgo;
+
     private float SmoothMovement = 0.05f;
     private bool hadap_kanan = true;
     private bool onGround = true;
@@ -54,9 +62,18 @@ public class EnemyController_Veteran : MonoBehaviour
             float dummyDistance = Vector2.Distance(selfTransform.position, dummyTarget.position);
             if (dummyDistance <= argoRange)
             {
+                Audio.PlayOneShot(SoundArgo);
                 target = dummyTarget;
                 dummyTarget = null;
             }
+        }
+        if (animator.GetFloat("Speed") > 0 && !SoundStep.isPlaying)
+        {
+            SoundStep.Play();
+        }
+        else if (animator.GetFloat("Speed") <= 0.01 && SoundStep.isPlaying)
+        {
+            SoundStep.Stop();
         }
         if (target != null)
         {
@@ -103,6 +120,7 @@ public class EnemyController_Veteran : MonoBehaviour
         {
             yield return null;
         }
+        Audio.PlayOneShot(SoundAttack);
         Vector3 SlashDirection = new Vector3(transform.localScale.x, 0, 0).normalized;
         GameObject clone = Instantiate(Slash, SlashPoint.position, Slash.transform.rotation);
         clone.transform.localScale *= SlashDirection.x;
@@ -117,6 +135,7 @@ public class EnemyController_Veteran : MonoBehaviour
     }
     IEnumerator Dying()
     {
+        Audio.PlayOneShot(SoundDie);
         DropHerb();
         animator.SetTrigger("isDying");
         rb2d.isKinematic = true;
@@ -147,6 +166,7 @@ public class EnemyController_Veteran : MonoBehaviour
     }
     IEnumerator Hurt()
     {
+        Audio.PlayOneShot(SoundHurt);
         float flashTime = 0.05f;
         Color mycolour = GetComponent<SpriteRenderer>().color;
         mycolour.g = 0f;

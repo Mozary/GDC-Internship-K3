@@ -303,4 +303,4 @@ MonoBehaviour:
   Spell2: {fileID: 2838766830951665151, guid: b7dc45fffd4b7694ea32844eee732a38, type: 3}
   Deathplode: {fileID: 2838766830951665151, guid: 1cca40ee9faf96f4eba0f7cccebef916,
     type: 3}
-  argoRange: 4
+  argoRange: 3

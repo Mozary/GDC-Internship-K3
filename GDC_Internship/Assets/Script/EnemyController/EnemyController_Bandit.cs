@@ -10,6 +10,12 @@ public class EnemyController_Bandit : MonoBehaviour
     private Transform selfTransform;
     private Vector3 m_Velocity = Vector3.zero;
 
+    [SerializeField] private AudioSource Audio;
+    [SerializeField] private AudioClip SoundDeath;
+    [SerializeField] private AudioClip SoundHurt;
+    [SerializeField] private AudioClip SoundAttack;
+    [SerializeField] private AudioClip SoundArgo;
+
     public float maxSpeed;
     public float hitRange;
     public float health;
@@ -52,6 +58,7 @@ public class EnemyController_Bandit : MonoBehaviour
             float dummyDistance = Vector2.Distance(selfTransform.position, dummyTarget.position);
             if (dummyDistance <= argoRange)
             {
+                Audio.PlayOneShot(SoundArgo);
                 target = dummyTarget;
                 dummyTarget = null;
             }
@@ -130,6 +137,7 @@ public class EnemyController_Bandit : MonoBehaviour
         }
         if (!StunCheck)
         {
+            Audio.PlayOneShot(SoundAttack);
             Vector3 SlashDirection = new Vector3(transform.localScale.x, 0, 0).normalized;
             GameObject clone = Instantiate(Slash, SlashPoint.position, Slash.transform.rotation);
             clone.transform.localScale *= SlashDirection.x;
@@ -149,6 +157,7 @@ public class EnemyController_Bandit : MonoBehaviour
     }
     IEnumerator Stunned()
     {
+        Audio.PlayOneShot(SoundHurt);
         animator.SetTrigger("isHurt");
         animator.SetBool("stunned", true);
         StartCoroutine(Hurt());
@@ -161,6 +170,7 @@ public class EnemyController_Bandit : MonoBehaviour
         }
         if (health <= 0)
         {
+            Audio.PlayOneShot(SoundDeath);
             DropHerb();
             animator.SetTrigger("isDying");
             rb2d.isKinematic = true;

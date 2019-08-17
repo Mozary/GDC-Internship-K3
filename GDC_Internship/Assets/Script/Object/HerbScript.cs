@@ -2,6 +2,8 @@
 
 public class HerbScript : MonoBehaviour
 {
+    [SerializeField] private AudioSource Audio;
+    [SerializeField] private AudioClip GetHerb;
     private new Collider2D collider;
     void Awake()
     {
@@ -18,6 +20,7 @@ public class HerbScript : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player" && gameObject.layer != LayerMask.NameToLayer("UI"))
         {
+            Audio.PlayOneShot(GetHerb);
             gameObject.layer = LayerMask.NameToLayer("UI");
             collision.gameObject.GetComponent<PlayerController>().AddCollectedHerb();
             GetComponent<Rigidbody2D>().gravityScale = 0;

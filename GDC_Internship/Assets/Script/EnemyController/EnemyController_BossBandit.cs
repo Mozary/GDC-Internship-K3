@@ -14,6 +14,13 @@ public class EnemyController_BossBandit : MonoBehaviour
     [SerializeField] private ParticleSystem Particle;
     [SerializeField] private TrailRenderer Trail;
 
+    [SerializeField] private AudioSource Audio;
+    [SerializeField] private AudioClip SoundDeath;
+    [SerializeField] private AudioClip SoundHurt;
+    [SerializeField] private AudioClip SoundDodge;
+    [SerializeField] private AudioClip SoundAttack;
+    [SerializeField] private AudioClip SoundArgo;
+
     public float maxSpeed;
     public float hitRange;
     public float health;
@@ -60,6 +67,7 @@ public class EnemyController_BossBandit : MonoBehaviour
             float dummyDistance = Vector2.Distance(selfTransform.position, dummyTarget.position);
             if (dummyDistance <= argoRange)
             {
+                Audio.PlayOneShot(SoundArgo);
                 target = dummyTarget;
                 dummyTarget = null;
             }
@@ -153,6 +161,7 @@ public class EnemyController_BossBandit : MonoBehaviour
         Trail.emitting = true;
         float direction = Mathf.Abs(transform.localScale.x) / transform.localScale.x;
         rb2d.AddForce(new Vector2(direction * -70, -5f));
+        Audio.PlayOneShot(SoundDodge);
         while (animator.GetCurrentAnimatorStateInfo(0).IsName("BossBandit_Dodge"))
         {
             yield return null;
@@ -226,6 +235,7 @@ public class EnemyController_BossBandit : MonoBehaviour
             }
             yield return null;
         }
+        Audio.PlayOneShot(SoundAttack);
         Vector3 SlashDirection = new Vector3(transform.localScale.x, 0, 0).normalized;
         GameObject clone = Instantiate(Slash, SlashPoint.position, Slash.transform.rotation);
         clone.transform.localScale *= SlashDirection.x;
@@ -244,6 +254,7 @@ public class EnemyController_BossBandit : MonoBehaviour
     }
     IEnumerator Hurt()
     {
+        Audio.PlayOneShot(SoundHurt);
         if (Random.Range(1, 100) >= 75)
         {
             animator.SetBool("onGuard", true);
@@ -273,6 +284,7 @@ public class EnemyController_BossBandit : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         if (health <= 0)
         {
+            Audio.PlayOneShot(SoundDeath);
             DropHerb();
             DropHerb();
             DropHerb();
