@@ -17,14 +17,23 @@ public class EnemyController_Ninja : MonoBehaviour
     [SerializeField] private GameObject Slash;
     [SerializeField] private GameObject Herb;
     [SerializeField] private GameObject Smoke;
-
-
+    
     [SerializeField] private float maxSpeed;
     [SerializeField] private float hitRange;
     [SerializeField] private float health;
     [SerializeField] private float argoRange;
 
-    
+    [SerializeField] private AudioSource Audio;
+    [SerializeField] private AudioSource StepSound;
+    [SerializeField] private AudioClip SoundHurt;
+    [SerializeField] private AudioClip SoundArgo;
+    [SerializeField] private AudioClip SoundAttack;
+    [SerializeField] private AudioClip SoundWindSlash;
+    [SerializeField] private AudioClip SoundSpecial;
+    [SerializeField] private AudioClip SoundVanish;
+    [SerializeField] private AudioClip SoundDie;
+    [SerializeField] private AudioClip SoundHeal;
+
     private float SmoothMovement = 0.05f;
     private float direction = 1f;
 
@@ -35,6 +44,7 @@ public class EnemyController_Ninja : MonoBehaviour
     private bool Invulnerable = false;
     private bool Immobile = false;
     private bool CanSpecial = true;
+    private bool IsMoving = false;
 
     private Coroutine StunTimer = null;
     private float targetDistance;
@@ -52,6 +62,7 @@ public class EnemyController_Ninja : MonoBehaviour
 
         HealthBar = transform.Find("HealthBar");
         maxHealth = health;
+        StartCoroutine(Step());
     }
     // Update is called once per frame
     void Update()
@@ -63,6 +74,7 @@ public class EnemyController_Ninja : MonoBehaviour
             if (dummyDistance <= argoRange)
             {
                 target = dummyTarget;
+                Audio.PlayOneShot(SoundArgo);
             }
         }
         if (PriestPartner != null)
@@ -86,6 +98,14 @@ public class EnemyController_Ninja : MonoBehaviour
                     StartCoroutine("Special");
                 }
             }
+        }
+        if (animator.GetFloat("speed") > 0 && !StepSound.isPlaying)
+        {
+            IsMoving = true;
+        }
+        else if (animator.GetFloat("speed") <= 0.01 && StepSound.isPlaying)
+        {
+            IsMoving = false;
         }
     }
     void FixedUpdate()
@@ -137,14 +157,29 @@ public class EnemyController_Ninja : MonoBehaviour
         direction *= -1;
     }
 
+    IEnumerator Step()
+    {
+        while (true)
+        {
+            if (IsMoving)
+            {
+                yield return new WaitForSeconds(0.3f);
+                StepSound.Play();
+            }
+            else
+            {
+                yield return null;
+            }
+        }
+    }
     IEnumerator Special()
     {
-        Debug.Log("SPECIAL");
         Immobile = true;
         AttackCheck = true;
         animator.SetBool("special", true);
         float wait = 3f;
         Particle.Play();
+        Audio.PlayOneShot(SoundSpecial);
         while (wait > 0)
         {
             wait -= Time.deltaTime;
@@ -165,7 +200,7 @@ public class EnemyController_Ninja : MonoBehaviour
         {
             yield return null;
         }
-
+        Audio.PlayOneShot(SoundVanish);
         Invulnerable = true;
         Vector3 tptarget = target.position;
         tptarget.y += 0.08f;
@@ -182,11 +217,11 @@ public class EnemyController_Ninja : MonoBehaviour
         Instantiate(Smoke, transform.position, transform.rotation);
         if (target.position.x > transform.position.x && !hadap_kanan) Flip();
         else if (target.position.x < transform.position.x && hadap_kanan) Flip();
-
         while(animator.GetCurrentAnimatorStateInfo(0).normalizedTime < .75f)
         {
             yield return null;
         }
+        Audio.PlayOneShot(SoundWindSlash);
         Vector3 SlashDirection = new Vector3(transform.localScale.x, 0, 0).normalized;
         GameObject clone = Instantiate(Slash, SlashPoint.position, Slash.transform.rotation);
         clone.transform.localScale *= SlashDirection.x;
@@ -202,7 +237,6 @@ public class EnemyController_Ninja : MonoBehaviour
 
         yield return new WaitForSeconds(15f);
         CanSpecial = true;
-        
     }
     IEnumerator Attacking()
     {
@@ -221,6 +255,7 @@ public class EnemyController_Ninja : MonoBehaviour
             }
             yield return null;
         }
+        Audio.PlayOneShot(SoundAttack);
         Invulnerable = true;
         Vector3 SlashDirection = new Vector3(transform.localScale.x, 0, 0).normalized;
         GameObject clone = Instantiate(Slash, SlashPoint.position, Slash.transform.rotation);
@@ -243,6 +278,7 @@ public class EnemyController_Ninja : MonoBehaviour
         {
             if (PriestPartner.AskForHeal())
             {
+                Audio.PlayOneShot(SoundHeal);
                 target = PriestPartner.transform.Find("HealPoint").transform;
                 if (PartnerDistance > 0.75f)
                 {
@@ -266,12 +302,16 @@ public class EnemyController_Ninja : MonoBehaviour
     }
     IEnumerator Stunned()
     {
+        Audio.PlayOneShot(SoundHurt);
         animator.SetTrigger("isHurt");
         animator.SetBool("stunned", true);
         StunCheck = true;
         StartCoroutine(Hurt());
         if (health <= 0)
         {
+            Audio.PlayOneShot(SoundDie);
+            DropHerb();
+            DropHerb();
             DropHerb();
             DropHerb();
             animator.SetTrigger("isDying");
@@ -304,7 +344,6 @@ public class EnemyController_Ninja : MonoBehaviour
             animator.SetBool("stunned", false);
         }
     }
-
     IEnumerator Healing()
     {
         AttackCheck = true;
@@ -333,12 +372,12 @@ public class EnemyController_Ninja : MonoBehaviour
         AttackCheck = true;
         Invulnerable = true;
         animator.SetTrigger("teleport");
-        Debug.Log("TELEPORTING");
         while (!animator.GetCurrentAnimatorStateInfo(0).IsName("Teleport"))
         {
             AttackCheck = true;
             yield return null;
         }
+        Audio.PlayOneShot(SoundVanish);
         while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.5)
         {
             AttackCheck = true;
@@ -362,8 +401,6 @@ public class EnemyController_Ninja : MonoBehaviour
     {
         if (PartnerDistance > 1f && !StunCheck && !AttackCheck && !Immobile)
         {
-            Debug.Log("SWAPING");
-
             Instantiate(Smoke, PriestPartner.transform.position, PriestPartner.transform.rotation);
             Instantiate(Smoke, transform.position, transform.rotation);
 
@@ -374,7 +411,6 @@ public class EnemyController_Ninja : MonoBehaviour
     }
     public void Heal()
     {
-        Debug.Log("RECIEVED HEALING");
         StartCoroutine(Healing());
     }
     private void OnTriggerEnter2D(Collider2D collision)

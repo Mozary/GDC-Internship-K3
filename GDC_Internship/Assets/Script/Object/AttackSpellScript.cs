@@ -18,6 +18,10 @@ public class AttackSpellScript : MonoBehaviour
     [SerializeField] private float Lifetime = 5f;
     [SerializeField] private float MaxSpeed = 200;
     [SerializeField] private Spell SpellType = Spell.Fireball;
+    [SerializeField] private AudioSource Audio;
+    [SerializeField] private AudioClip Charge;
+    [SerializeField] private AudioClip Launch;
+    [SerializeField] private AudioClip Blast;
 
     private Transform Target;
     private Rigidbody2D rb2d;
@@ -35,6 +39,8 @@ public class AttackSpellScript : MonoBehaviour
         collitor = GetComponent<Collider2D>();
         OriginScale = transform.localScale;
         Target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+        Audio.PlayOneShot(Charge);
+
     }
     void Awake()
     {
@@ -44,7 +50,7 @@ public class AttackSpellScript : MonoBehaviour
         }
         StartCoroutine(Charging());
     }
-    private void Update()
+    private void FixedUpdate()
     {
         countdown += Time.deltaTime;
         if (Target && countdown < Lifetime)
@@ -56,7 +62,7 @@ public class AttackSpellScript : MonoBehaviour
         }
         else
         {
-            if(Explosion == null)
+            if (Explosion == null)
             {
                 Explosion = StartCoroutine(Explode());
             }
@@ -79,10 +85,14 @@ public class AttackSpellScript : MonoBehaviour
             Speed = 0;
             yield return null;
         }
+        Audio.loop = true;
+        Audio.Play();
         Speed = MaxSpeed;
     }
     IEnumerator Explode()
     {
+        Audio.Stop();
+        Audio.loop = false;
         Speed = 0;
         animator.SetTrigger("contact");
         while (!animator.GetCurrentAnimatorStateInfo(0).IsName("Explode"))
@@ -92,11 +102,13 @@ public class AttackSpellScript : MonoBehaviour
         collitor.enabled = false;
         rb2d.isKinematic = true;
         Emitor.Play();
-
-        while (animator.GetCurrentAnimatorStateInfo(0).IsName("Explode"))
+        Audio.PlayOneShot(Blast);
+        while (animator.GetCurrentAnimatorStateInfo(0).IsName("Explode") && Audio.isPlaying)
         {
             yield return null;
         }
+        gameObject.SetActive(false);
+        yield return new WaitForSeconds(0.3f);
         Destroy(gameObject);
     }
     private void OnTriggerEnter2D(Collider2D collision)

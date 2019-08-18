@@ -35,6 +35,15 @@ public class EnemyController_Sorcerer : MonoBehaviour
     [SerializeField] private GameObject Deathplode;
     [SerializeField] private GameObject Summonplode;
 
+    [SerializeField] private AudioSource Audio;
+    [SerializeField] private AudioSource StepSound;
+    [SerializeField] private AudioClip SoundHurt;
+    [SerializeField] private AudioClip SoundArgo;
+    [SerializeField] private AudioClip SoundDie;
+    [SerializeField] private AudioClip SoundAttack;
+    [SerializeField] private AudioClip SoundToMud;
+    [SerializeField] private AudioClip SoundToBody;
+
     private Coroutine StunTimer = null;
     private Transform HealthBar;
     private Transform dummyTarget;
@@ -51,17 +60,16 @@ public class EnemyController_Sorcerer : MonoBehaviour
     private float targetDistance;
     private float maxHealth;
     private float rageChance = 100;
+    private bool isMoving = false;
     
 
     // Start is called before the first frame update
     void Start()
     {
-
         dummyTarget = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         HealthBar = transform.Find("HealthBar");
         maxHealth = health;
     }
-
     // Update is called once per frame
     void Update()
     {
@@ -72,6 +80,7 @@ public class EnemyController_Sorcerer : MonoBehaviour
             float dummyDistance = Vector2.Distance(transform.position, dummyTarget.position);
             if (dummyDistance <= argoRange)
             {
+                Audio.PlayOneShot(SoundArgo);
                 target = dummyTarget;
                 dummyTarget = null;
             }
@@ -85,6 +94,19 @@ public class EnemyController_Sorcerer : MonoBehaviour
                 StartCoroutine("Attacking");
             }
         }
+        if (!isMoving && animator.GetFloat("speed")>0)
+        {
+            isMoving = true;
+            StepSound.Play();
+            Audio.PlayOneShot(SoundToMud);
+        }
+        else if (isMoving && animator.GetFloat("speed") < 0.01)
+        {
+            isMoving = false;
+            StepSound.Stop();
+            Audio.PlayOneShot(SoundToBody);
+        }
+
     }
     void FixedUpdate()
     {
@@ -171,6 +193,7 @@ public class EnemyController_Sorcerer : MonoBehaviour
     IEnumerator Attacking()
     {
         AttackCheck = true;
+        Audio.PlayOneShot(SoundAttack);
         //---Charging---//
         while (!animator.GetCurrentAnimatorStateInfo(0).IsName("SpellCharge"))
         {
@@ -211,7 +234,7 @@ public class EnemyController_Sorcerer : MonoBehaviour
             GameObject beast = null;
             float rand = Random.Range(0, 100);
             Instantiate(Summonplode, SpellPoint.position, SpellPoint.transform.rotation);
-            if (rand < 85 && Summon_Skeleton)
+            if (rand < 70 && Summon_Skeleton)
             {
                 beast = Instantiate(Summon_Skeleton, SpellPoint.position, SpellPoint.transform.rotation);
             }
@@ -292,16 +315,18 @@ public class EnemyController_Sorcerer : MonoBehaviour
     }
     IEnumerator Stunned()
     {
+        Audio.PlayOneShot(SoundHurt);
         StartCoroutine(Hurt());
         StunCheck = true;
         if (health <= 0)
         {
-            DropHerb();
+            DropHerb(); DropHerb(); DropHerb(); DropHerb(); DropHerb(); DropHerb(); DropHerb();
+            Audio.PlayOneShot(SoundDie);
             rb2d.isKinematic = true;
             Mainbody.enabled= false;
             Slimebody.enabled = false;
             transform.Find("Trail").gameObject.SetActive(false);
-
+            GameObject.Find("PlayerHUDCanvas").GetComponent<BoardManager>().BossIsDefeated();
             GameObject Explosion = Instantiate(Deathplode, transform.position, transform.rotation);
             yield return null;
             while (Explosion)

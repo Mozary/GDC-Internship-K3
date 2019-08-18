@@ -12,6 +12,9 @@ public class EnemyController_Scorpion : MonoBehaviour
     private Transform targetPlayer;
     public BoxCollider2D patrolArea;
 
+    [SerializeField] private AudioSource Audio;
+    [SerializeField] private AudioClip SoundDeath;
+
     [SerializeField] private float maxSpeed;
     [SerializeField] private float health;
     [SerializeField] private float hitRange;
@@ -125,6 +128,7 @@ public class EnemyController_Scorpion : MonoBehaviour
     }
     IEnumerator Death()
     {
+        
         maxSpeed = 0;
         constSpeed = 0;
         this.GetComponent<Collider2D>().enabled = false;
@@ -158,6 +162,7 @@ public class EnemyController_Scorpion : MonoBehaviour
     }
     IEnumerator Hurt()
     {
+        Audio.PlayOneShot(SoundDeath);
         float flashTime = 0.05f;
         Color mycolour = GetComponent<SpriteRenderer>().color;
         mycolour.g = 0f;

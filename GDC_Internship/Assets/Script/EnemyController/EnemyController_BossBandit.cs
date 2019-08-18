@@ -5,6 +5,7 @@ public class EnemyController_BossBandit : MonoBehaviour
 {
     public Animator animator;
     private Rigidbody2D rb2d;
+    private Transform dummyTarget;
     private Transform target;
     private Transform selfTransform;
     private Vector3 m_Velocity = Vector3.zero;
@@ -13,6 +14,13 @@ public class EnemyController_BossBandit : MonoBehaviour
     [SerializeField] private ParticleSystem Particle;
     [SerializeField] private TrailRenderer Trail;
 
+    [SerializeField] private AudioSource Audio;
+    [SerializeField] private AudioClip SoundDeath;
+    [SerializeField] private AudioClip SoundHurt;
+    [SerializeField] private AudioClip SoundDodge;
+    [SerializeField] private AudioClip SoundAttack;
+    [SerializeField] private AudioClip SoundArgo;
+
     public float maxSpeed;
     public float hitRange;
     public float health;
@@ -20,6 +28,7 @@ public class EnemyController_BossBandit : MonoBehaviour
     [SerializeField] private Transform SlashPoint;
     [SerializeField] private GameObject Slash;
     [SerializeField] private GameObject Herb;
+    [SerializeField] private float argoRange = 2f;
 
     private float SmoothMovement = 0.05f;
     private bool hadap_kanan = true;
@@ -39,7 +48,7 @@ public class EnemyController_BossBandit : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+        dummyTarget = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         rb2d = this.GetComponent<Rigidbody2D>();
         selfTransform = this.GetComponent<Transform>();
         ParticleSetting = Particle.main;
@@ -52,7 +61,17 @@ public class EnemyController_BossBandit : MonoBehaviour
     void Update()
     {
         HealthBar.localScale = new Vector3(Mathf.Clamp(health / maxHealth, 0, maxHealth), HealthBar.localScale.y, HealthBar.localScale.z);
-        
+
+        if (target == null && dummyTarget)
+        {
+            float dummyDistance = Vector2.Distance(selfTransform.position, dummyTarget.position);
+            if (dummyDistance <= argoRange)
+            {
+                Audio.PlayOneShot(SoundArgo);
+                target = dummyTarget;
+                dummyTarget = null;
+            }
+        }
         if (target != null)
         {
             targetDistance = Vector2.Distance(selfTransform.position, target.position);
@@ -142,6 +161,7 @@ public class EnemyController_BossBandit : MonoBehaviour
         Trail.emitting = true;
         float direction = Mathf.Abs(transform.localScale.x) / transform.localScale.x;
         rb2d.AddForce(new Vector2(direction * -70, -5f));
+        Audio.PlayOneShot(SoundDodge);
         while (animator.GetCurrentAnimatorStateInfo(0).IsName("BossBandit_Dodge"))
         {
             yield return null;
@@ -215,6 +235,7 @@ public class EnemyController_BossBandit : MonoBehaviour
             }
             yield return null;
         }
+        Audio.PlayOneShot(SoundAttack);
         Vector3 SlashDirection = new Vector3(transform.localScale.x, 0, 0).normalized;
         GameObject clone = Instantiate(Slash, SlashPoint.position, Slash.transform.rotation);
         clone.transform.localScale *= SlashDirection.x;
@@ -233,6 +254,7 @@ public class EnemyController_BossBandit : MonoBehaviour
     }
     IEnumerator Hurt()
     {
+        Audio.PlayOneShot(SoundHurt);
         if (Random.Range(1, 100) >= 75)
         {
             animator.SetBool("onGuard", true);
@@ -262,9 +284,11 @@ public class EnemyController_BossBandit : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         if (health <= 0)
         {
+            Audio.PlayOneShot(SoundDeath);
             DropHerb();
             DropHerb();
             DropHerb();
+            GameObject.Find("PlayerHUDCanvas").GetComponent<BoardManager>().BossIsDefeated();
             animator.SetTrigger("isDying");
             rb2d.isKinematic = true;
             this.GetComponent<Collider2D>().enabled = false;

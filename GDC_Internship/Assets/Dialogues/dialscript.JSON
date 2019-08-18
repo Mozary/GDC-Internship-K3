@@ -1,0 +1,262 @@
+{
+    "Prelogue": [
+        {
+            "name": "Father",
+            "line": "Alright Son, listen. Your Mother is sick, if I dont do something, she might die. You understand me?"
+        },
+		{
+            "name": "Son",
+            "line": "Yes, Father"
+        },
+		{
+            "name": "Father",
+            "line": "Good. Now, I need to search for her cure, and so, I need to leave you with your Mother and Sister."
+        },
+		{
+            "name": "Father",
+            "line": "You're no longer a boy now, Son. You're a man now, a family man, and a family man need to protect his family."
+        },
+		{
+            "name": "Son",
+            "line": "I understand, Father"
+        },
+		{
+            "name": "Father",
+            "line": "Now, before I go, I will teach you the means to defend yourself, as well as your family"
+        },
+		{
+            "name": "Son",
+            "line": "What? Just to look after the family while you're gone? I've done that many times while you're gone, isn't that a bit too much Father?"
+        },
+		{
+            "name": "Father",
+            "line": "Don't be too relaxed Son, this village maybe safe from outside because of the village wall but this is not the peace time we know."
+        },
+		{
+            "name": "Father",
+            "line": "The Kingdom is in chaos because of The Plague. Bandits roam the country and while things are fine now, our village will soon be affected. Hunger can make men goes mad, Son. I know this."
+        },
+		{
+            "name": "Son",
+            "line": "Alright, Father. So, what do we do now?"
+        },
+		{
+            "name": "Father",
+            "line": "Now, Im going to teach you swordmanship and archery, as well as making some medicinal potions. Pay attention and listen well."
+        },
+		{
+            "name": "Son",
+            "line": "Yes, Father "
+        }
+    ],
+	"Chapter1": [
+		{
+            "name": "Son",
+            "line": "...."
+        },
+		{
+            "name": "Son",
+            "line": "Five full year has passed since Father's gone, and now Sister has fallen ill... if I dont do something..."
+        },
+        {
+            "name": "Villager1",
+            "line": "Hey, did you hear?"
+        },
+		{
+            "name": "Villager2",
+            "line": "What is it?"
+        },
+		{
+            "name": "Villager1",
+            "line": "... it's about the plague you see... The cure for it"
+        },
+		{
+            "name": "Villager1",
+            "line": "Apparently, there is a rumour that bandit has one..."
+        },
+		{
+            "name": "Villager2",
+            "line": "Huh, a bandit? Then it's a lie! How could a mere bandit have something like that?"
+        },
+		{
+            "name": "Villager1",
+            "line": "Shut your mouth a moment and let me finish, besides this guy is no ordinary bandit!"
+        },
+		{
+            "name": "Villager1",
+            "line": "They call him, The Bandit King. They say he's so fearsome, he could create a thunder from a stick!"
+        },
+		{
+            "name": "Villager2",
+            "line": "Thunder? From a Stick? Hah! more lies! besides if the whole medicine thing is true, it's no use if there is only one!"
+        },
+		{
+            "name": "Villager2",
+            "line": "The damn medicine would attract the worst, everyone would kill for something like that nowadays..."
+        },
+		{
+            "name": "Villager1",
+            "line": "True that, but something has to be done with the Bandit King nonetheless. He's been harasing traveler near the mountain path"
+        },
+		{
+            "name": "Villager2",
+            "line": "Now, that's a real problem..."
+        },
+		{
+            "name": "Son",
+            "line": ".......Bandit King,on the mountain path... As I recall when I was traveling with father, there is an abandonet fortress near there..."
+        },
+		{
+            "name": "Son",
+            "line": "...It's worth investigating..."
+        }
+    ],
+	"Chapter2": [
+        {
+            "name": "BanditKing",
+            "line": "Gah!!!..."
+        },
+		{
+            "name": "Son",
+            "line": "You have been defeated, tell me what you know about The Medicine"
+        },
+		{
+            "name": "BanditKing",
+            "line": "..."
+        },
+		{
+            "name": "Son",
+            "line": "...Wait, you... , Father?!"
+        },
+		{
+            "name": "Father",
+            "line": "...Ah, my Son... Wha-h, Grkk!!..."
+        },
+		{
+            "name": "Son",
+            "line": "Wait! dont speak! What are you doing here? This... how can this happen?!"
+        },
+		{
+            "name": "Father",
+            "line": "Rggh!! Leave it be... its futile to fix that now. Listen, I have to tell you something...."
+        },
+		{
+            "name": "Son",
+            "line": "Stop that! Don't speak...please..."
+        },
+		{
+            "name": "Father",
+            "line": "I-It's about the medicine, a-as, as well as the Sorcerer..."
+        },
+		{
+            "name": "Son",
+            "line": "...The Sorcerer?"
+        },
+		{
+            "name": "Father",
+            "line": "The state I'm in, a Bandit King, he decieved me and hypnotize me. To do as his bidding, to gather various item for his vile experiment..."
+        },
+		{
+            "name": "Father",
+            "line": "He has residence in a cemetery, not far from here, bu- Rgghhh!!"
+        },
+		{
+            "name": "Son",
+            "line": "Father!"
+        },
+		{
+            "name": "Father",
+            "line": "S-son! Listen! This is the last wish of your father... accept what I've become, and fulfill my last wish..."
+        },
+		{
+            "name": "Son",
+            "line": "......"
+        },
+		{
+            "name": "Son",
+            "line": "What is it that you ask, Father..."
+        },
+		{
+            "name": "Father",
+            "line": "Defeat the Sorcerer, Avenge me... Do that for me... your sister... your mother... as well as the Kingdom..."
+        },
+		{
+            "name": "Son",
+            "line": "I swear it will be done, in your name"
+        },
+		{
+            "name": "Father",
+            "line": "Ah... Im proud of you S-son.. ... ..."
+        },
+		{
+            "name": "Son",
+            "line": "......."
+        }
+    ],
+	"Chapter3": [
+        {
+            "name": "Son",
+            "line": "Your end is near, Sorcerer..."
+        },
+		{
+            "name": "Sorcerer",
+            "line": "Grrhkkk!...Damn mongrel whelp! What do you want?!"
+        },
+		{
+            "name": "Son",
+            "line": "Where is the medicine..."
+        },
+		{
+            "name": "Sorcerer",
+            "line": "Hah! The cure for the Plague?! Like I'd tell you! Go die!"
+        },
+		{
+            "name": "Son",
+            "line": "I know your kind..., Cowards. You hide behind others, as you manipulate the to do your bidding, like you did to my Father"
+        },
+		{
+            "name": "Son",
+            "line": "I guess I'll have to this the hard way then... Alright, i will start with your-"
+        },
+		{
+            "name": "Sorcerer",
+            "line": "W-wait! Spare me! I'll talk! There is a hidden compartment in that shelf! There is the cure! Please spare me!"
+        },
+		{
+            "name": "Son",
+            "line": ".........."
+        },
+		{
+            "name": "Son",
+            "line": "Men like your ilk deserve no quarter nor mercy..."
+        },
+		{
+            "name": "Son",
+            "line": "Your vile experiment caused the Kingdom great suffering! Your abominations defile the lands, wreaking havoc on every corner of the country"
+        },
+		{
+            "name": "Son",
+            "line": "My Father.... my mother.... my sister... my village...., all this for what...?"
+        },
+		{
+            "name": "Sorcerer",
+            "line": "Spare me..."
+        },
+		{
+            "name": "Son",
+            "line": "...."
+        },
+		{
+            "name": "Son",
+            "line": "Die...!"
+        },
+		{
+            "name": "Sorcerer",
+            "line": "W-wait! You Promised! No! Wai-Grkkh!!!"
+        },
+		{
+            "name": "Son",
+            "line": "An oath fulfilled, I did it... Father, Mother, Sister, .......everyone"
+        }
+    ]
+}

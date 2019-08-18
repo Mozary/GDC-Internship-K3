@@ -12,6 +12,20 @@ public class PlayerController : MonoBehaviour
     public Animator animator;
     public CharacterController2D controller;
 
+    [SerializeField] private AudioSource Audio;
+    [SerializeField] private AudioSource SoundStep;
+    [SerializeField] private AudioClip SoundHurt;
+    [SerializeField] private AudioClip SoundDeath;
+    [SerializeField] private AudioClip SoundSlash;
+    [SerializeField] private AudioClip SoundDraw;
+    [SerializeField] private AudioClip SoundBow;
+    [SerializeField] private AudioClip SoundJump;
+    [SerializeField] private AudioClip SoundLand;
+    [SerializeField] private AudioClip SoundPower;
+    [SerializeField] private AudioClip SoundSwitch;
+    [SerializeField] private AudioClip SoundHeal;
+    [SerializeField] private AudioClip SoundDodge;
+
     [SerializeField] private Transform FirePoint;
     [SerializeField] private Transform SlashPoint;
     [SerializeField] private GameObject Arrow;
@@ -66,11 +80,25 @@ public class PlayerController : MonoBehaviour
         {
             movement = 0;
         }
+
         animator.SetFloat("Speed", Mathf.Abs(movement));
+        if (animator.GetFloat("Speed") > 0 && !SoundStep.isPlaying && !animator.GetBool("isJumping"))
+        {
+            SoundStep.Play();
+        } 
+        else if((animator.GetFloat("Speed") <= 0.01 || animator.GetBool("isJumping")) && SoundStep.isPlaying)
+        {
+            SoundStep.Stop();
+        }
+
         if (Input.GetButtonDown("Jump") && !Input.GetKey("down")) //// get key down diganti crounch)
         {
             if (!Immovable)
             {
+                if (!animator.GetBool("isJumping"))
+                {
+                    Audio.PlayOneShot(SoundJump);
+                }
                 jump = true;
                 animator.SetTrigger("jumping");
                 animator.SetBool("isJumping", true);
@@ -81,6 +109,7 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetButtonDown("Switch") && !CheckPendingAttack())
         {
+            Audio.PlayOneShot(SoundSwitch);
             RangedMode = !RangedMode;
             animator.SetBool("RangedMode", RangedMode);
         }
@@ -115,7 +144,6 @@ public class PlayerController : MonoBehaviour
                 StartCoroutine("Charge");
             }
         }
-
         //// input untuk turun dari sub tilemap
         ///  pilihan huruf hanya sementara
         if (Input.GetKey("down")/*Input.GetButtonDown("Crounch")*/)
@@ -139,6 +167,7 @@ public class PlayerController : MonoBehaviour
     {
         if (!onGround && animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerJump"))
         {
+            Audio.PlayOneShot(SoundLand);
             animator.SetBool("isJumping", false);
             onGround = true;
         }
@@ -194,6 +223,7 @@ public class PlayerController : MonoBehaviour
         canDodge = false;
         float direction =Mathf.Abs(transform.localScale.x)/transform.localScale.x;
         rb2d.AddForce(new Vector2(direction*-125, -5f));
+        Audio.PlayOneShot(SoundDodge);
         while (animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerDodge"))
         {
             yield return null;
@@ -210,6 +240,7 @@ public class PlayerController : MonoBehaviour
     IEnumerator Charge()
     {
         Immovable = true;
+        Audio.PlayOneShot(SoundPower);
         ParticleSystem.MainModule setting = Particle.main;
         ParticleSystem.MainModule temp = setting;
         setting.startColor = Color.red;
@@ -226,6 +257,7 @@ public class PlayerController : MonoBehaviour
 
             float direction = Mathf.Abs(transform.localScale.x) / transform.localScale.x;
             rb2d.AddForce(new Vector2(direction * 300, -2.5f));
+            Audio.PlayOneShot(SoundDodge);
             Immovable = false;
             Attack();
             Attack();
@@ -250,6 +282,7 @@ public class PlayerController : MonoBehaviour
     }
     IEnumerator Heal()
     {
+        Audio.PlayOneShot(SoundHeal);
         Immovable = true;
         ParticleSystem.MainModule setting = Particle.main;
         ParticleSystem.MainModule temp = setting;
@@ -276,6 +309,15 @@ public class PlayerController : MonoBehaviour
         Immovable = true;
         if (!animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerFireBow"))
         {
+            if (RangedMode)
+            {
+                Audio.PlayOneShot(SoundDraw);
+            }
+            else
+            {
+                Audio.PlayOneShot(SoundSlash);
+            }
+            
             Vector3 SlashDirection = new Vector3(transform.localScale.x, 0, 0).normalized;
             GameObject clone = Instantiate(Slash, SlashPoint.position, Slash.transform.rotation);
             clone.transform.localScale *= SlashDirection.x;
@@ -289,6 +331,7 @@ public class PlayerController : MonoBehaviour
         Immovable = false;
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerFireBow"))
         {
+            Audio.PlayOneShot(SoundBow);
             Vector3 FireDirection = new Vector3(transform.localScale.x, 0,0).normalized;
             GameObject clone =  Instantiate(Arrow, FirePoint.position, Arrow.transform.rotation);
             clone.transform.localScale *= FireDirection.x;
@@ -313,6 +356,7 @@ public class PlayerController : MonoBehaviour
     }
     IEnumerator Hurt()
     {
+        Audio.PlayOneShot(SoundHurt);
         float flashTime = 0.1f;
         Color mycolour = GetComponent<SpriteRenderer>().color;
         mycolour.g = 0f;
@@ -341,6 +385,7 @@ public class PlayerController : MonoBehaviour
         }
         if (health <= 0)
         {
+            Audio.PlayOneShot(SoundDeath);
             animator.SetTrigger("isDying");
             runSpeed = 0;
             constantSpeed = 0;
@@ -368,6 +413,7 @@ public class PlayerController : MonoBehaviour
                 GetComponent<SpriteRenderer>().color = mycolour;
                 yield return null;
             }
+            GameObject.Find("PlayerHUDCanvas").GetComponent<BoardManager>().PlayerIsDefeated();
             Destroy(this.gameObject);
             Debug.Log("GAME OVER");
         }
@@ -465,10 +511,24 @@ public class PlayerController : MonoBehaviour
     {
         CollectedHerb += 1;
     }
-
+    public void SetHerb(int value)
+    {
+        CollectedHerb = value;
+    }
     public bool IsIdle()
     {
         return (movement == 0);
+    }
+    public bool CanInteract()
+    {
+        if (!Immovable)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
     public void Freeze()
     {
@@ -480,4 +540,5 @@ public class PlayerController : MonoBehaviour
         Immovable = false;
         invulnerable = false;
     }
+
 }

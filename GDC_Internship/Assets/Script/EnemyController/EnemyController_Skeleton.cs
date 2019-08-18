@@ -17,7 +17,14 @@ public class EnemyController_Skeleton : MonoBehaviour
     [SerializeField] private GameObject Herb;
     [SerializeField] private Transform SlashPoint;
     [SerializeField] private GameObject Slash;
-    [SerializeField] private float argoRange = 2f; 
+    [SerializeField] private float argoRange = 2f;
+
+    [SerializeField] private AudioSource Audio;
+    [SerializeField] private AudioSource StepSound;
+    [SerializeField] private AudioClip SoundHurt;
+    [SerializeField] private AudioClip SoundArgo;
+    [SerializeField] private AudioClip SoundAttack;
+    [SerializeField] private AudioClip SoundDie;
 
     private float SmoothMovement = 0.05f;
     private bool hadap_kanan = true;
@@ -27,6 +34,7 @@ public class EnemyController_Skeleton : MonoBehaviour
     private bool StunCheck = false;
     private Coroutine StunTimer = null;
     private float targetDistance;
+    private bool IsMoving = false;
 
     private Transform HealthBar;
     private float maxHealth;
@@ -40,6 +48,7 @@ public class EnemyController_Skeleton : MonoBehaviour
 
         HealthBar = transform.Find("HealthBar");
         maxHealth = health;
+        StartCoroutine(Step());
     }
 
     // Update is called once per frame
@@ -54,6 +63,7 @@ public class EnemyController_Skeleton : MonoBehaviour
             {
                 target = dummyTarget;
                 dummyTarget = null;
+                Audio.PlayOneShot(SoundArgo);
             }
         }
         if (target != null)
@@ -64,6 +74,20 @@ public class EnemyController_Skeleton : MonoBehaviour
                 animator.SetBool("attack", true);
                 StartCoroutine("Attacking");
             }
+            else if (targetDistance >= argoRange * 1.5)
+            {
+                dummyTarget = target;
+                target = null;
+                animator.SetFloat("speed", 0f);
+            }
+        }
+        if (animator.GetFloat("speed") > 0 && !StepSound.isPlaying)
+        {
+            IsMoving = true;
+        }
+        else if (animator.GetFloat("speed") <= 0.01 && StepSound.isPlaying)
+        {
+            IsMoving = false;
         }
     }
     void FixedUpdate()
@@ -92,6 +116,21 @@ public class EnemyController_Skeleton : MonoBehaviour
         transform.localScale = theScale;
         direction *= -1;
     }
+    IEnumerator Step()
+    {
+        while (true)
+        {
+            if (IsMoving)
+            {
+                yield return new WaitForSeconds(0.3f);
+                StepSound.Play();
+            }
+            else
+            {
+                yield return null;
+            }
+        }
+    }
     IEnumerator Hurt()
     {
         rb2d.velocity = Vector2.zero;
@@ -116,6 +155,7 @@ public class EnemyController_Skeleton : MonoBehaviour
         {
             yield return null;
         }
+        Audio.PlayOneShot(SoundAttack);
         while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.5f)
         {
             yield return null;
@@ -143,6 +183,7 @@ public class EnemyController_Skeleton : MonoBehaviour
     }
     IEnumerator Stunned()
     {
+        Audio.PlayOneShot(SoundHurt);
         animator.SetTrigger("isHurt");
         animator.SetBool("stunned", true);
         StartCoroutine(Hurt());
@@ -155,6 +196,7 @@ public class EnemyController_Skeleton : MonoBehaviour
         }
         if (health <= 0)
         {
+            Audio.PlayOneShot(SoundDie);
             DropHerb();
             animator.SetTrigger("isDying");
             rb2d.isKinematic = true;

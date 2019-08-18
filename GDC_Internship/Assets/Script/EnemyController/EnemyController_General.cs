@@ -20,6 +20,16 @@ public class EnemyController_General : MonoBehaviour
     [SerializeField] private float argoRange = 2f;
     [SerializeField] private GameObject Herb;
 
+    [SerializeField] private AudioSource Audio;
+    [SerializeField] private AudioSource StepSound;
+    [SerializeField] private AudioClip SoundHurt;
+    [SerializeField] private AudioClip SoundArgo;
+    [SerializeField] private AudioClip SoundAttack;
+    [SerializeField] private AudioClip SoundSpecial;
+    [SerializeField] private AudioClip SoundDie;
+    [SerializeField] private AudioClip WindSlash;
+
+
     private float SmoothMovement = 0.05f;
     private bool hadap_kanan = true;
     private bool onGround = true;
@@ -57,6 +67,7 @@ public class EnemyController_General : MonoBehaviour
             float dummyDistance = Vector2.Distance(selfTransform.position, dummyTarget.position);
             if (dummyDistance <= argoRange)
             {
+                Audio.PlayOneShot(SoundArgo);
                 target = dummyTarget;
                 dummyTarget = null;
             }
@@ -81,6 +92,20 @@ public class EnemyController_General : MonoBehaviour
                 animator.SetBool("attack", true);
                 StartCoroutine("Attacking");
             }
+            else if (targetDistance >= argoRange * 1.5)
+            {
+                dummyTarget = target;
+                target = null;
+                animator.SetFloat("speed", 0f);
+            }
+        }
+        if (animator.GetFloat("speed") > 0 && !StepSound.isPlaying)
+        {
+            StepSound.Play();
+        }
+        else if (animator.GetFloat("speed") <= 0.01 && StepSound.isPlaying)
+        {
+            StepSound.Stop();
         }
     }
     void FixedUpdate()
@@ -123,7 +148,7 @@ public class EnemyController_General : MonoBehaviour
     {
         animator.SetTrigger("special");
         AttackCheck = true;
-
+        Audio.PlayOneShot(SoundSpecial);
         while (!animator.GetCurrentAnimatorStateInfo(0).IsName("GeneralPrepare") || animator.GetCurrentAnimatorStateInfo(0).normalizedTime <1)
         {
             if (StunCheck)
@@ -143,6 +168,7 @@ public class EnemyController_General : MonoBehaviour
         {
             yield return null;
         }
+        Audio.PlayOneShot(WindSlash);
         Vector3 UnleashPoint = SlashPoint.position;
         UnleashPoint.y += 0.2f;
         GameObject fx = Instantiate(SlashEffect, UnleashPoint, transform.rotation);
@@ -158,7 +184,6 @@ public class EnemyController_General : MonoBehaviour
     IEnumerator Attacking()
     {
         AttackCheck = true;
-
         while (!animator.GetCurrentAnimatorStateInfo(0).IsName("EnemyAttack") || animator.GetCurrentAnimatorStateInfo(0).normalizedTime < .35f)
         {
             if (StunCheck)
@@ -169,6 +194,7 @@ public class EnemyController_General : MonoBehaviour
             }
             yield return null;
         }
+        Audio.PlayOneShot(SoundAttack);
         Invulnerable = true;
         Vector3 SlashDirection = new Vector3(transform.localScale.x, 0, 0).normalized;
         GameObject clone = Instantiate(Slash, SlashPoint.position, Slash.transform.rotation);
@@ -185,11 +211,12 @@ public class EnemyController_General : MonoBehaviour
     }
     IEnumerator Stunned()
     {
+        Audio.PlayOneShot(SoundHurt);
         animator.SetTrigger("isHurt");
         StunCheck = true;
-        StartCoroutine(Hurt());
         if (health <= 0)
         {
+            Audio.PlayOneShot(SoundDie);
             DropHerb();
             DropHerb();
             animator.SetTrigger("isDying");
@@ -216,6 +243,7 @@ public class EnemyController_General : MonoBehaviour
         }
         else
         {
+            StartCoroutine(Hurt());
             yield return new WaitForSeconds(1f);
             StunCheck = false;
             animator.SetBool("stunned", false);

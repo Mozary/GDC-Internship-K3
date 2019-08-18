@@ -14,6 +14,9 @@ public class EnemyController_Lendir : MonoBehaviour
     private Transform selfTransform;
     public BoxCollider2D patrolArea;
 
+    [SerializeField] private AudioSource Audio;
+    [SerializeField] private AudioClip SoundDeath;
+
     [SerializeField] private float maxSpeed;
     [SerializeField] private float health;
     [SerializeField] private float hitRange;
@@ -193,6 +196,7 @@ public class EnemyController_Lendir : MonoBehaviour
     }
     IEnumerator Hurt()
     {
+        Audio.PlayOneShot(SoundDeath);
         float flashTime = 0.1f;
         Color mycolour = GetComponent<SpriteRenderer>().color;
         mycolour.g = 0f;

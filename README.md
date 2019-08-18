@@ -1,39 +1,45 @@
 # GDC-Internship-K3
-GDC Internship Project for Kelompok 3 <Insert Title Here>
+GDC Internship Project for Kelompok 3 : Kingdom Herb - Perseverance
 
-## Completion : ~50%
+Kingdom Herb - Perseverance, is a 2d platformer fantasy game made for internship program at RPL&GDC Lab of Telkom University. The player must undergo a journey to search for a cure for his sister, and to persevere along the arduous journey across a plague ridden fallen kingdom.
+
+Contributor:
+- Dede, Level Design & Events.
+- Alvin, Sound Designers.
+- Ending, Mechanic Programmer.
+
+## Completion : ~100%
 ## Features : 
 - Gameplay :
   - Story     : 100%
-  - Mechanics : 80%
-    - Dialogue: 50% (Not Implemented Yet)
-    - Event   : 75% (Not Implemented Yet)
-    - Sounds  :  0% (Not Implemented Yet)
+  - Mechanics : 100%
+    - Dialogue: 100%
+    - Event   : 100%
+    - Sounds  : 100%
 - Sounds
-  - BGM       : 0%
-  - SFX       : 75%
+  - BGM       : 100%
+  - SFX       : 100%
 - Main menu
-  - Title : -
+  - Title : Kingdom Herb - Perseverance
   - Chapters  : 100%
-- Tutorial
-  - Map       : 50%
-  - Dialogue  : 0%
+- Prelogue
+  - Dialogue  : 100%
 - Chapter 1
-  - Events    : 0%
-  - Dialogue  : 0%
+  - Events    : 100%
+  - Dialogue  : 100%
   - Map       : 100%
 - Chapter 2
-  - Events    : 0%
-  - Dialogue  : 0%
+  - Events    : 100%
+  - Dialogue  : 100%
   - Map       : 100%
 - Chapter 3
-  - Events    : 0%
-  - Dialogue  : 0%
-  - Map       : 50%
+  - Events    : 100%
+  - Dialogue  : 100%
+  - Map       : 100%
 - Ending
-  - Dialogue  : 0%
+  - Dialogue  : 100%
 - Enemy
-  - AI        : 75%
-  - Anim      : 75%
+  - AI        : 100%
+  - Anim      : 100%
 - Player
   -  Control : 100%

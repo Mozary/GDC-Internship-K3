@@ -11,6 +11,18 @@ public class EnemyController_BanditKing : MonoBehaviour
 
     [SerializeField] private Animator animator;
     [SerializeField] private ParticleSystem particle;
+    [SerializeField] private AudioSource Audio;
+    [SerializeField] private AudioSource SoundStep;
+
+    [SerializeField] private AudioClip SoundHurt;
+    [SerializeField] private AudioClip SoundDie;
+    [SerializeField] private AudioClip SoundShoot;
+    [SerializeField] private AudioClip SoundReload;
+    [SerializeField] private AudioClip SoundAttack;
+    [SerializeField] private AudioClip SoundSwitch;
+    [SerializeField] private AudioClip SoundRage;
+    [SerializeField] private AudioClip SoundArgo;
+
     [SerializeField] private Transform SlashPoint;
     [SerializeField] private GameObject Slash;
     [SerializeField] private Transform Firepoint;
@@ -64,10 +76,20 @@ public class EnemyController_BanditKing : MonoBehaviour
             float dummyDistance = Vector2.Distance(transform.position, dummyTarget.position);
             if (dummyDistance <= argoRange)
             {
+                Audio.PlayOneShot(SoundArgo);
                 target = dummyTarget;
                 dummyTarget = null;
             }
         }
+        if (animator.GetFloat("Speed") > 0 && !SoundStep.isPlaying)
+        {
+            SoundStep.Play();
+        }
+        else if (animator.GetFloat("Speed") <= 0.01 && SoundStep.isPlaying)
+        {
+            SoundStep.Stop();
+        }
+
         if (target != null)
         {
             targetDistance = Vector2.Distance(transform.position, target.position);
@@ -132,7 +154,7 @@ public class EnemyController_BanditKing : MonoBehaviour
 
             yield return null;
         }
-
+        Audio.PlayOneShot(SoundAttack);
         Vector3 SlashDirection = new Vector3(transform.localScale.x, 0, 0).normalized;
         GameObject clone = Instantiate(Slash, SlashPoint.position, Slash.transform.rotation);
         clone.transform.localScale *= SlashDirection.x;
@@ -166,6 +188,7 @@ public class EnemyController_BanditKing : MonoBehaviour
             {
                 yield return null;
             }
+            Audio.PlayOneShot(SoundReload);
             while (animator.GetCurrentAnimatorStateInfo(0).IsName("KingReload"))
             {
                 if (StunCheck && animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.5)
@@ -182,6 +205,7 @@ public class EnemyController_BanditKing : MonoBehaviour
         {
             yield return null;
         }
+        Audio.PlayOneShot(SoundShoot);
         Invulnerable = true;
         while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime<0.5)
         {
@@ -232,6 +256,7 @@ public class EnemyController_BanditKing : MonoBehaviour
             }
             yield return null;
         }
+        Audio.PlayOneShot(SoundSwitch);
         Invulnerable = true;
         if (Mode == Weapon.Melee)
         {
@@ -254,11 +279,13 @@ public class EnemyController_BanditKing : MonoBehaviour
 
     IEnumerator Hurt()
     {
+        Audio.PlayOneShot(SoundHurt);
         if (Random.Range(0, 100) < rageChance)
         {
             particle.Play();
             if(targetDistance<= meleeRange)
             {
+                Audio.PlayOneShot(SoundRage);
                 target.GetComponent<PlayerController>().TakeDamage(0.2f);
                 float knockforceX = 100;
                 if (target.transform.position.x < transform.position.x)
@@ -291,7 +318,9 @@ public class EnemyController_BanditKing : MonoBehaviour
         StartCoroutine(Hurt());
         if (health <= 0 && Immovable)
         {
+            Audio.PlayOneShot(SoundDie);
             Immovable = true;
+            GameObject.Find("PlayerHUDCanvas").GetComponent<BoardManager>().BossIsDefeated();
             DropHerb();DropHerb();DropHerb();DropHerb();DropHerb();
             animator.SetTrigger("isDying");
             rb2d.isKinematic = true;

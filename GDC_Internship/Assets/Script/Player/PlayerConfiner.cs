@@ -17,15 +17,7 @@ public class PlayerConfiner : MonoBehaviour
         {
             MaxBound.Set(WorldBound.center.x + WorldBound.extents.x, WorldBound.center.y + WorldBound.extents.y);
             MinBound.Set(WorldBound.center.x - WorldBound.extents.x, WorldBound.center.y - WorldBound.extents.y);
-            Debug.Log("Max X: " + MaxBound.x+", Min X: "+MinBound.x);
-            Debug.Log("Max X: " + MaxBound.y+", Min X: "+ MinBound.y);
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
     private void FixedUpdate()
     {

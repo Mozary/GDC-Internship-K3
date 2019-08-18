@@ -188,6 +188,7 @@ GameObject:
   - component: {fileID: 4566199176337788896}
   - component: {fileID: 8337634924379490761}
   - component: {fileID: 3984285020651647261}
+  - component: {fileID: 8542301165107782944}
   m_Layer: 12
   m_Name: BossBandit
   m_TagString: Enemy
@@ -331,12 +332,19 @@ MonoBehaviour:
   animator: {fileID: 8715965931469778992}
   Particle: {fileID: 4566199176337788896}
   Trail: {fileID: 3984285020651647261}
+  Audio: {fileID: 8542301165107782944}
+  SoundDeath: {fileID: 8300000, guid: 40c7e0324cab7e142b315412e788078c, type: 3}
+  SoundHurt: {fileID: 8300000, guid: 99dcbba0352af164ea2994adb7c1283d, type: 3}
+  SoundDodge: {fileID: 8300000, guid: c3b10fc7bcac970488db36895438cfb1, type: 3}
+  SoundAttack: {fileID: 8300000, guid: 9b7611806c43a024daabb8399c53e7de, type: 3}
+  SoundArgo: {fileID: 8300000, guid: ab4c1809637e98f46b3a9c525c25b45a, type: 3}
   maxSpeed: 80
   hitRange: 0.25
   health: 25
   SlashPoint: {fileID: 1990979380501251690}
   Slash: {fileID: 2838766830951665151, guid: 525d522bb2f32e446b81af128ff39cbb, type: 3}
   Herb: {fileID: 8863576755217939462, guid: 67b4e8efef4e10a4e8319e7e02bbcf46, type: 3}
+  argoRange: 3
 --- !u!198 &4566199176337788896
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -5107,3 +5115,99 @@ TrailRenderer:
   m_MinVertexDistance: 0.1
   m_Autodestruct: 0
   m_Emitting: 0
+--- !u!82 &8542301165107782944
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8715965931469778999}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 190
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
