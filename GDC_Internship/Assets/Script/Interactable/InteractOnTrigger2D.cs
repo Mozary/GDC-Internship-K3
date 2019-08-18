@@ -12,7 +12,7 @@ public class InteractOnTrigger2D : MonoBehaviour
     ////
     [Space]
     public LayerMask layers;                                        //biar gampang bedain layer?
-    public UnityEvent OnEnter, OnExit, OnStay;                              //bisa MANGGIL SESUATU dengan gampang!
+    public UnityEvent OnEnter, OnExit, OnStay;                      //bisa MANGGIL SESUATU dengan gampang!
 
     protected Collider2D m_Collider;
     void Reset()                                                    //gak ngerti kenapa reset, tapi tahu fungsinya
@@ -31,11 +31,11 @@ public class InteractOnTrigger2D : MonoBehaviour
         {
             if (other.gameObject.CompareTag("Player"))
             {
-                ExecuteOnEnter(other);                                   //other kayaknya input kita sendiri dari menu di unity
+                ExecuteOnEnter(other);                               //other kayaknya input kita sendiri dari menu di unity
             }
         }
     }
-    void OnTriggerExit2D(Collider2D other)                          //sama dengan diatas
+    void OnTriggerExit2D(Collider2D other)                           //sama dengan diatas
     {
         if (!enabled)
             return;
@@ -64,6 +64,7 @@ public class InteractOnTrigger2D : MonoBehaviour
 
     protected virtual void ExecuteOnEnter(Collider2D other)         //virtual itu buat anak class
     {
+        Debug.Log("masuk? ____siap aktif");
         readyActive = true;
         OnEnter.Invoke();
     }
@@ -76,12 +77,20 @@ public class InteractOnTrigger2D : MonoBehaviour
     {
         if(GetComponent<Interactable_Dialogue>() != null)
         {
-            if (readyActive && dialogueBox.activeSelf)
+            if (readyActive)
             {
-                if (Input.GetKeyDown("e"))
+                if (dialogueBox.activeSelf)
                 {
-                    OnStay.Invoke();
-                }   
+                    if (Input.GetKeyDown("e"))
+                    {
+                        OnStay.Invoke();
+                    }
+                }
+                else
+                {
+                    Debug.Log("masuk? ____bisa gerak");
+                    i_player.UnFreeze();
+                }
             }
         }
         else

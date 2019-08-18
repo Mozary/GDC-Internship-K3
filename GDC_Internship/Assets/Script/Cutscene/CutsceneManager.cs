@@ -3,7 +3,8 @@ using UnityEngine.Playables;
 
 public class CutsceneManager : MonoBehaviour
 {
-    private DialogueManager dialogueManager;
+    public DialogueManager dialogueManager;
+    public GameObject[] EnemytoDelete;
 
     private GameObject usedCutscene;
 
@@ -31,9 +32,15 @@ public class CutsceneManager : MonoBehaviour
             endMarker = endMarkerClip.moveMagic;
             if (!endMarker)
             {
+                if (EnemytoDelete[0].transform.name == usedCutscene.transform.name)
+                {
+                    Destroy(EnemytoDelete[0]);
+                }
+
                 endMarker = false;
                 dialogueManager.dialogueEnded = false;
                 Destroy(usedCutscene);
+
             }
         }
     }
