@@ -58,48 +58,5 @@ public static class SaveSystem
         SaveGame(NewState);
     }
 }
-[System.Serializable]
-public class SaveState
-{
-    public ChapterData[] ChapterStates;
-    public int ActiveChapter;
-    public void init()
-    {
-        ChapterStates = new ChapterData[5];
-        for(int i=0; i < ChapterStates.Length; i++)
-        {
-            float time = 0;
-            int herb = 0;
-            bool unlocked = false;
-            if(i == 0)
-            {
-                herb = 3;
-                time = Constants.Max_Time/2;
-                unlocked = true;
-            }
-            if(i == 1)
-            {
-                unlocked = true;
-            }
-            ChapterStates[i] = new ChapterData(i, herb, time, unlocked);
-        }
-        Debug.Log("SAVE INITIALIZED");
-    }
-}
-[System.Serializable]
-public struct ChapterData
-{
-    public int Id;
-    public int Herb;
-    public float Time;
-    public bool Unlocked;
-    public ChapterData(int id,int herb, float time, bool unlocked)
-    {
-        Id = id;
-        Herb = herb;
-        Time = time;
-        Unlocked = unlocked;
-    }
-}
 
 
