@@ -701,6 +701,7 @@ MonoBehaviour:
   SoundHurt: {fileID: 8300000, guid: b5d04e54b608f784292f0255f23a2df2, type: 3}
   SoundDeath: {fileID: 8300000, guid: f44084741b2580f418bcdee4c10ebb8f, type: 3}
   SoundSlash: {fileID: 8300000, guid: 22491aa719189cb41bc86ee652617846, type: 3}
+  SoundDraw: {fileID: 8300000, guid: af12537a5e7ae734facc58a47298f99a, type: 3}
   SoundBow: {fileID: 8300000, guid: 43134325bc0528f47bb60eb7d9de55c5, type: 3}
   SoundJump: {fileID: 8300000, guid: 59d98fc53e3c9ee48aa0df08127cb69c, type: 3}
   SoundLand: {fileID: 8300000, guid: 176457d9f91da8c488630bfb04a10890, type: 3}
@@ -5500,13 +5501,13 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.6
   m_Pitch: 1
   Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 90
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500
@@ -5544,7 +5545,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -5596,13 +5597,13 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: bcc5f484fcf644d4cbeb93e6903a1bf0, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.7
   m_Pitch: 1
   Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 0
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500
@@ -5640,7 +5641,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0

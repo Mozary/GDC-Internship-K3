@@ -22,7 +22,15 @@ public class EnemyController_Knight : MonoBehaviour
     [SerializeField] private float health;
     [SerializeField] private float argoRange;
 
-    
+    [SerializeField] private AudioSource Audio;
+    [SerializeField] private AudioSource StepSound;
+    [SerializeField] private AudioClip SoundHurt;
+    [SerializeField] private AudioClip SoundArgo;
+    [SerializeField] private AudioClip SoundAttack;
+    [SerializeField] private AudioClip SoundSpecial;
+    [SerializeField] private AudioClip SoundDodge;
+    [SerializeField] private AudioClip SoundDie;
+
     private float SmoothMovement = 0.05f;
     private bool hadap_kanan = true;
     private bool onGround = true;
@@ -31,6 +39,7 @@ public class EnemyController_Knight : MonoBehaviour
     private bool StunCheck = false;
     private bool counterCheck = false;
     private bool Invulnerable = false;
+    private bool IsMoving = false;
 
     private Coroutine StunTimer = null;
     private float targetDistance;
@@ -48,6 +57,7 @@ public class EnemyController_Knight : MonoBehaviour
 
         HealthBar = transform.Find("HealthBar");
         maxHealth = health;
+        StartCoroutine(Step());
     }
 
     // Update is called once per frame
@@ -60,11 +70,11 @@ public class EnemyController_Knight : MonoBehaviour
             float dummyDistance = Vector2.Distance(transform.position, dummyTarget.position);
             if (dummyDistance <= argoRange)
             {
+                Audio.PlayOneShot(SoundArgo);
                 target = dummyTarget;
                 dummyTarget = null;
             }
         }
-
         if (target != null)
         {
             targetDistance = Vector2.Distance(selfTransform.position, target.position);
@@ -80,9 +90,21 @@ public class EnemyController_Knight : MonoBehaviour
                     StartCoroutine("Attacking");
                 }
             }
-
+            else if (targetDistance >= argoRange * 1.5)
+            {
+                dummyTarget = target;
+                target = null;
+                animator.SetFloat("speed", 0f);
+            }
         }
-
+        if (animator.GetFloat("speed") > 0 && !StepSound.isPlaying)
+        {
+            IsMoving = true;
+        }
+        else if (animator.GetFloat("speed") <= 0.01 && StepSound.isPlaying)
+        {
+            IsMoving = false;
+        }
     }
     void FixedUpdate()
     {   
@@ -133,11 +155,16 @@ public class EnemyController_Knight : MonoBehaviour
     }
     IEnumerator EnGarde()
     {
-        Debug.Log("ENGARDE!");
         Invulnerable = true;
         AttackCheck = true;
         while (!animator.GetCurrentAnimatorStateInfo(0).IsName("Knight_Dodge"))
         {
+            if (StunCheck)
+            {
+                animator.SetBool("onGuard", false);
+                counterCheck = false;
+                yield break;
+            }
             yield return null;
         }
         if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Knight_Dodge") && !animator.GetCurrentAnimatorStateInfo(0).IsName("Knight_Guard"))
@@ -146,7 +173,7 @@ public class EnemyController_Knight : MonoBehaviour
             counterCheck = false;
             yield break;
         }
-
+        Audio.PlayOneShot(SoundDodge);
         rb2d.mass = 0.2f;
         rb2d.gravityScale = 4;
 
@@ -157,7 +184,7 @@ public class EnemyController_Knight : MonoBehaviour
         {
             yield return null;
         }
-
+        Audio.PlayOneShot(SoundSpecial);
         transform.Find("Special").gameObject.SetActive(true);
         Trail.emitting = false;
         Particle.Play();
@@ -211,7 +238,7 @@ public class EnemyController_Knight : MonoBehaviour
     IEnumerator Attacking()
     {
         AttackCheck = true;
-
+        Audio.PlayOneShot(SoundAttack);
         while (!animator.GetCurrentAnimatorStateInfo(0).IsName("EnemyAttack"))
         {
             yield return null;
@@ -243,6 +270,21 @@ public class EnemyController_Knight : MonoBehaviour
         Trail.emitting = false;
         transform.Find("Special").gameObject.SetActive(false);
     }
+    IEnumerator Step()
+    {
+        while (true)
+        {
+            if (IsMoving)
+            {
+                yield return new WaitForSeconds(0.3f);
+                StepSound.Play();
+            }
+            else
+            {
+                yield return null;
+            }
+        }
+    }
     IEnumerator Hurt()
     {
         if (Random.Range(1, 100) >= 75)
@@ -271,8 +313,10 @@ public class EnemyController_Knight : MonoBehaviour
         animator.SetBool("stunned", true);
         StunCheck = true;
         StartCoroutine(Hurt());
+        Audio.PlayOneShot(SoundHurt);
         if (health <= 0)
         {
+            Audio.PlayOneShot(SoundDie);
             DropHerb();
             DropHerb();
             animator.SetTrigger("isDying");
@@ -299,6 +343,7 @@ public class EnemyController_Knight : MonoBehaviour
         }
         else
         {
+            
             yield return new WaitForSeconds(0.25f);
             StunCheck = false;
             animator.SetBool("stunned", false);

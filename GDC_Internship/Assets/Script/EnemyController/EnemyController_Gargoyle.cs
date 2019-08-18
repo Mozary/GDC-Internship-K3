@@ -20,6 +20,12 @@ public class EnemyController_Gargoyle : MonoBehaviour
     [SerializeField] private GameObject Deathplode;
     [SerializeField] private float argoRange = 2f;
 
+    [SerializeField] private AudioSource Audio;
+    [SerializeField] private AudioSource FlapSound;
+    [SerializeField] private AudioClip SoundHurt;
+    [SerializeField] private AudioClip SoundArgo;
+    [SerializeField] private AudioClip SoundAttack;
+
     private float SmoothMovement = 0.05f;
     private bool hadap_kanan = true;
     private bool Invulnerable = false;
@@ -28,6 +34,7 @@ public class EnemyController_Gargoyle : MonoBehaviour
     private bool StunCheck = false;
     private bool Summoned = false;
     private float targetDistance;
+    private bool flapping = false;
 
     private Coroutine StunTimer = null;
     private Transform HealthBar;
@@ -42,6 +49,7 @@ public class EnemyController_Gargoyle : MonoBehaviour
 
         HealthBar = transform.Find("HealthBar");
         maxHealth = health;
+        StartCoroutine(FlapDelay());
     }
 
     // Update is called once per frame
@@ -59,6 +67,7 @@ public class EnemyController_Gargoyle : MonoBehaviour
             float dummyDistance = Vector2.Distance(transform.position, dummyTarget.position);
             if (dummyDistance <= argoRange)
             {
+                Audio.PlayOneShot(SoundArgo);
                 target = dummyTarget;
                 dummyTarget = null;
             }
@@ -72,7 +81,6 @@ public class EnemyController_Gargoyle : MonoBehaviour
                 StartCoroutine("Attacking");
             }
         }
-        
     }
     void FixedUpdate()
     {   
@@ -87,7 +95,6 @@ public class EnemyController_Gargoyle : MonoBehaviour
             else if (target.position.x < transform.position.x && hadap_kanan) Flip();
         }
         Lifetime += Time.deltaTime;
-        
     }
     void CloseDistance()
     {
@@ -109,7 +116,10 @@ public class EnemyController_Gargoyle : MonoBehaviour
     }
     IEnumerator Attacking()
     {
+        flapping = false;
+
         AttackCheck = true;
+        Audio.PlayOneShot(SoundAttack);
         //---Charging---//
         while (!animator.GetCurrentAnimatorStateInfo(0).IsName("SpellCharge"))
         {
@@ -139,6 +149,7 @@ public class EnemyController_Gargoyle : MonoBehaviour
             AttackCheck = false;
             yield break;
         }
+        
         Vector3 SlashDirection = new Vector3(transform.localScale.x, 0, 0).normalized;
         GameObject clone =null;
         if (Random.Range(1, 100) <= 50)
@@ -156,7 +167,7 @@ public class EnemyController_Gargoyle : MonoBehaviour
             clone.transform.rotation = rotation;
         }
         //clone.transform.localScale *= SlashDirection.x;
-
+        flapping = true;
         while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
         {
             yield return null;
@@ -166,8 +177,27 @@ public class EnemyController_Gargoyle : MonoBehaviour
         yield return new WaitForSeconds(0.75f);
         AttackCheck = false;
     }
+    IEnumerator FlapDelay()
+    {
+        while (true)
+        {
+            if (!flapping)
+            {
+                yield return null;
+            }
+            else
+            {
+                yield return new WaitForSeconds(0.6f);
+                FlapSound.Play();
+            }
+            
+        }
+    }
     IEnumerator Stunned()
     {
+        Audio.PlayOneShot(SoundHurt);
+        flapping = true;
+
         StunCheck = true;
         if (health <= 0)
         {

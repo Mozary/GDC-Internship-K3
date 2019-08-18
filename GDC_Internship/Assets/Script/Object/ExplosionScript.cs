@@ -5,6 +5,8 @@ using UnityEngine;
 public class ExplosionScript : MonoBehaviour
 {
     Animator animator;
+    [SerializeField] private AudioSource Audio;
+    private bool DestroyFlag = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -12,9 +14,12 @@ public class ExplosionScript : MonoBehaviour
     }
     void Update()
     {
-        if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
+        if(animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f && !DestroyFlag)
         {
-            Destroy(gameObject);
+            DestroyFlag = true;
+            Audio.Play();
+            gameObject.SetActive(false);
+            Destroy(gameObject,0.4f);
         }
     }
 }

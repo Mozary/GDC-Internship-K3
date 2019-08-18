@@ -258,7 +258,6 @@ MonoBehaviour:
   Audio: {fileID: 6107256787898917618}
   SoundHurt: {fileID: 8300000, guid: fc910213799533f43ab24e2d1eb655ac, type: 3}
   SoundDie: {fileID: 8300000, guid: 4405256a9b09e324898715b383458dfb, type: 3}
-  SoundAttack: {fileID: 8300000, guid: 942cbc2ec4df3a04c9107f8fded7a8ea, type: 3}
   SoundArgo: {fileID: 8300000, guid: a01d63fa105099447a48422028607629, type: 3}
 --- !u!95 &8565169995029485808
 Animator:
@@ -297,7 +296,7 @@ AudioSource:
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 213
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500
@@ -335,7 +334,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0

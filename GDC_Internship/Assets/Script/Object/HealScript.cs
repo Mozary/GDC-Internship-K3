@@ -27,7 +27,6 @@ public class HealScript : MonoBehaviour
     }
     public void Disperse()
     {
-        Debug.Log("HEAL DISPERSING");
         Emitor.Play();
     }
     private void OnTriggerEnter2D(Collider2D collision)

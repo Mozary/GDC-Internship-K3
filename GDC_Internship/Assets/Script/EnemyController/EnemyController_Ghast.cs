@@ -13,6 +13,11 @@ public class EnemyController_Ghast : MonoBehaviour
     [SerializeField] private float ArgoRange = 3f;
     [SerializeField] private GameObject Herb;
 
+    [SerializeField] private AudioSource Audio;
+    [SerializeField] private AudioSource StepSound;
+    [SerializeField] private AudioClip SoundAppear;
+    [SerializeField] private AudioClip SoundExplode;
+
     private Transform Target = null;
     private Transform Dummy;
     private Rigidbody2D rb2d;
@@ -44,6 +49,8 @@ public class EnemyController_Ghast : MonoBehaviour
             float dummyDistance = Vector2.Distance(transform.position, Dummy.position);
             if (dummyDistance <= ArgoRange)
             {
+                Audio.PlayOneShot(SoundAppear);
+                StepSound.PlayDelayed(0.5f);
                 animator.SetTrigger("inRange");
                 Target = Dummy;
                 Dummy = null;
@@ -103,11 +110,13 @@ public class EnemyController_Ghast : MonoBehaviour
     IEnumerator Explode()
     {
         Speed = 0;
+        StepSound.Stop();
         animator.SetTrigger("contact");
         while (!animator.GetCurrentAnimatorStateInfo(0).IsName("Vanish"))
         {
             yield return null;
         }
+        Audio.PlayOneShot(SoundExplode);
         collitor.enabled = false;
         rb2d.isKinematic = true;
         Emitor.Play();
@@ -116,6 +125,7 @@ public class EnemyController_Ghast : MonoBehaviour
         {
             yield return null;
         }
+        yield return new WaitForSeconds(0.5f);
         Destroy(gameObject);
     }
     private void OnTriggerEnter2D(Collider2D collision)

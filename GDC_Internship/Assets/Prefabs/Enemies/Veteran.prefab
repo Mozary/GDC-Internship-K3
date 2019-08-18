@@ -188,7 +188,7 @@ MonoBehaviour:
   health: 30
   SlashPoint: {fileID: 5460698733213058949}
   Slash: {fileID: 2838766830951665151, guid: ce5c15ca4f610d94fb83087b96917df8, type: 3}
-  argoRange: 2
+  argoRange: 3.5
   Herb: {fileID: 8863576755217939462, guid: 67b4e8efef4e10a4e8319e7e02bbcf46, type: 3}
   Audio: {fileID: 5441682449130274544}
   SoundStep: {fileID: 1969424011051205331}
@@ -252,7 +252,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -310,7 +310,7 @@ AudioSource:
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 217
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500
@@ -348,7 +348,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0

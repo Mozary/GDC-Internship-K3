@@ -83,6 +83,12 @@ public class EnemyController_Veteran : MonoBehaviour
                 animator.SetBool("attack", true);
                 StartCoroutine("Attacking");
             }
+            else if (targetDistance >= argoRange * 1.5)
+            {
+                dummyTarget = target;
+                target = null;
+                animator.SetFloat("speed", 0f);
+            }
         }
     }
     void FixedUpdate()

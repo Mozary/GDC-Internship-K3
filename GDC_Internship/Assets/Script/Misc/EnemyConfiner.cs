@@ -6,6 +6,7 @@ public class EnemyConfiner : MonoBehaviour
 {
     [SerializeField] private bool IsABossArea = false;
     [SerializeField] private GameObject BossCamera;
+    private GameObject MainCamera;
     private List<Transform> Enemies;
     private Transform player;
     private Vector2 MaxBound;
@@ -15,6 +16,7 @@ public class EnemyConfiner : MonoBehaviour
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
+        MainCamera = GameObject.FindGameObjectWithTag("MainCamera");
         Enemies = new List<Transform>();
         Bounds WorldBound = GetComponent<Collider2D>().bounds;
         if (WorldBound != null && Enemies !=null)
@@ -39,14 +41,14 @@ public class EnemyConfiner : MonoBehaviour
                 player.transform.position.y < MaxBound.y && player.transform.position.y > MinBound.y)
             {
                 PlayerIsEngaged = true;
-                GameObject.FindGameObjectWithTag("MainCamera").SetActive(false);
+                MainCamera.SetActive(false);
                 BossCamera.SetActive(true);
             }
             else if (PlayerIsEngaged && CheckIfVictorious())
             {
                 PlayerIsEngaged = false;
-                GameObject.FindGameObjectWithTag("MainCamera").SetActive(true);
                 BossCamera.SetActive(false);
+                MainCamera.SetActive(true);
             }
 
             if(PlayerIsEngaged && !Cleared)

@@ -204,7 +204,7 @@ MonoBehaviour:
   Herb: {fileID: 8863576755217939462, guid: 67b4e8efef4e10a4e8319e7e02bbcf46, type: 3}
   maxSpeed: 50
   health: 40
-  argoRange: 3
+  argoRange: 4
   meleeRange: 0.55
   rangedRange: 2.8
 --- !u!198 &613908919018004507
@@ -4949,7 +4949,7 @@ AudioSource:
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 244
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500
@@ -4987,7 +4987,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -5045,7 +5045,7 @@ AudioSource:
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 111
+  Priority: 206
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500
@@ -5083,7 +5083,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0

@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private AudioClip SoundHurt;
     [SerializeField] private AudioClip SoundDeath;
     [SerializeField] private AudioClip SoundSlash;
+    [SerializeField] private AudioClip SoundDraw;
     [SerializeField] private AudioClip SoundBow;
     [SerializeField] private AudioClip SoundJump;
     [SerializeField] private AudioClip SoundLand;
@@ -308,7 +309,15 @@ public class PlayerController : MonoBehaviour
         Immovable = true;
         if (!animator.GetCurrentAnimatorStateInfo(0).IsName("PlayerFireBow"))
         {
-            Audio.PlayOneShot(SoundSlash);
+            if (RangedMode)
+            {
+                Audio.PlayOneShot(SoundDraw);
+            }
+            else
+            {
+                Audio.PlayOneShot(SoundSlash);
+            }
+            
             Vector3 SlashDirection = new Vector3(transform.localScale.x, 0, 0).normalized;
             GameObject clone = Instantiate(Slash, SlashPoint.position, Slash.transform.rotation);
             clone.transform.localScale *= SlashDirection.x;

@@ -24,7 +24,6 @@ public class EnemyController_Mage : MonoBehaviour
 
     [SerializeField] private AudioClip SoundHurt;
     [SerializeField] private AudioClip SoundDie;
-    [SerializeField] private AudioClip SoundAttack;
     [SerializeField] private AudioClip SoundArgo;
 
     private float SmoothMovement = 0.05f;
@@ -114,7 +113,6 @@ public class EnemyController_Mage : MonoBehaviour
             }
             yield return null;
         }
-        Audio.PlayOneShot(SoundAttack);
         while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
         {
             if (StunCheck)

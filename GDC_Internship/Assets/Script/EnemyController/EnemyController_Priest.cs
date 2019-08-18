@@ -22,6 +22,13 @@ public class EnemyController_Priest : MonoBehaviour
     [SerializeField] private GameObject Deathplode;
     [SerializeField] private float argoRange = 2f;
 
+    [SerializeField] private AudioSource Audio;
+    [SerializeField] private AudioClip SoundHurt;
+    [SerializeField] private AudioClip SoundArgo;
+    [SerializeField] private AudioClip SoundDie;
+    [SerializeField] private AudioClip SoundConfirm;
+    [SerializeField] private AudioClip SoundHeal;
+
     private float SmoothMovement = 0.05f;
     private bool hadap_kanan = true;
     private bool Invulnerable = false;
@@ -56,6 +63,7 @@ public class EnemyController_Priest : MonoBehaviour
             float dummyDistance = Vector2.Distance(transform.position, dummyTarget.position);
             if (dummyDistance <= argoRange)
             {
+                Audio.PlayOneShot(SoundArgo);
                 target = dummyTarget;
                 dummyTarget = null;
             }
@@ -123,6 +131,7 @@ public class EnemyController_Priest : MonoBehaviour
         }
         GameObject HealCharge = Instantiate(Heal, SpellPoint.position, SpellPoint.transform.rotation);
         float PrepareTime = 3f;
+        Audio.PlayOneShot(SoundConfirm);
         while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f || PartnerDistance>=0.5f)
         {
             if (StunCheck || !NinjaPartner || HealCharge == false)
@@ -157,7 +166,7 @@ public class EnemyController_Priest : MonoBehaviour
             yield return null;
         }
         animator.SetBool("attack", false);
-        
+        Audio.PlayOneShot(SoundHeal);
         NinjaPartner.Heal();
         HealCharge.GetComponent<HealScript>().Disperse();
 
@@ -249,11 +258,13 @@ public class EnemyController_Priest : MonoBehaviour
     }
     IEnumerator Stunned()
     {
+        Audio.PlayOneShot(SoundHurt);
         animator.SetTrigger("isHurt");
         StartCoroutine(Hurt());
         StunCheck = true;
         if (health <= 0)
         {
+            Audio.PlayOneShot(SoundDie);
             animator.SetTrigger("isDying");
             DropHerb();
             rb2d.isKinematic = true;
