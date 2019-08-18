@@ -4,17 +4,25 @@ using UnityEngine;
 
 public class InteractToCollect : MonoBehaviour
 {
-/*
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public DialogueManager dialogueManager;
+    public PlayerController i_player;
+    public int herbAmount;
 
-    // Update is called once per frame
-    void Update()
+    public void CollectHerb()
     {
-        
+        if (dialogueManager.dialogueEnded)
+        {
+            for (int i = 0; i <= herbAmount; i++)
+            {
+                i_player.AddCollectedHerb();
+            }
+        }
     }
-*/
+    public void DroppedHerb()
+    {
+        for (int i = 0; i <= herbAmount; i++)
+        {
+            i_player.AddCollectedHerb();
+        }
+    }
 }
