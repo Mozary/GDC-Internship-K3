@@ -8,8 +8,8 @@
         },
         {
             "Id": 1,
-            "Herb": 2,
-            "Time": 388.170166015625,
+            "Herb": 1,
+            "Time": 390.1665344238281,
             "Unlocked": true
         },
         {
@@ -31,5 +31,5 @@
             "Unlocked": false
         }
     ],
-    "ActiveChapter": 0
+    "ActiveChapter": 1
 }

@@ -50,6 +50,14 @@
         }
     ],
 	"Chapter1": [
+		{
+            "name": "Son",
+            "line": "...."
+        },
+		{
+            "name": "Son",
+            "line": "Five full year has passed since Father's gone, and now Sister has fallen ill... if I dont do something..."
+        },
         {
             "name": "Villager1",
             "line": "Hey, did you hear?"
@@ -60,7 +68,7 @@
         },
 		{
             "name": "Villager1",
-            "line": "... it's about the plague you see..."
+            "line": "... it's about the plague you see... The cure for it"
         },
 		{
             "name": "Villager1",

@@ -768,8 +768,8 @@ MonoBehaviour:
   TextClick: {fileID: 8300000, guid: e0c69595ce505ad4290ce70129301d41, type: 3}
   DialogueAsset: {fileID: 4900000, guid: 7b8155daabafbf540925617b9db0e480, type: 3}
   ChapLoader: {fileID: 1103240936}
-  NextChapter: Trans_Pre-1
-  DesignatedDialogue: Prelogue
+  NextChapter: Chapter 1
+  DesignatedDialogue: Chapter 1
   TypingSpeed: 0.05
 --- !u!1 &1103240931
 GameObject:
@@ -1279,7 +1279,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: de748ffe4780c5c40a6cd0ccae044a1a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: caadbed7cca22bb428a25bd17488114d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

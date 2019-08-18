@@ -63,20 +63,22 @@ public class InterludeTypeSetter : MonoBehaviour
     }
     IEnumerator TypeDialogue(string Description)
     {
+        IsTyping = true;
         foreach (char letter in Description.ToCharArray())
         {
             TextDialogue.text += letter;
             Audio.PlayOneShot(TextClick);
             yield return new WaitForSeconds(TypingSpeed);
         }
+        IsTyping = false;
     }
-    IEnumerator ChangeImage(int id)
+    IEnumerator ChangeImage(string name) //Unused
     {
-        Transform Prev = transform.Find("Mask").Find(CurrentLineNum.ToString());
-        Transform Current = transform.Find("Mask").Find(id.ToString());
+        Transform Prev = transform.Find("Mask").Find(CurrentName);
+        Transform Current = transform.Find("Mask").Find(name);
 
+        CurrentName = name;
         Current.SetAsLastSibling();
-        CurrentLineNum = id;
 
         Color CurColour = Color.white;
         Color PrevColour = Color.white;
@@ -95,23 +97,24 @@ public class InterludeTypeSetter : MonoBehaviour
             Current.GetComponent<Image>().color = CurColour;
             yield return null;
         }
-
         yield return null;
     }
     public void LoadNextLine()
     {
-        if(CurrentLineNum<= LoadedDialogueLine.Length)
+        if (IsTyping)
+        {
+            StopAllCoroutines();
+            TextName.text = CurrentName;
+            TextDialogue.text = CurrentLine;
+            IsTyping = false;
+        }
+        else if (!IsTyping && CurrentLineNum <= LoadedDialogueLine.Length - 1)
         {
             CurrentLine = LoadedDialogueLine[CurrentLineNum].line;
             CurrentName = LoadedDialogueLine[CurrentLineNum].name;
-            if (IsTyping)
-            {
-                StopAllCoroutines();
-            }
-            else if (!IsTyping)
-            {
-                DisplayText(CurrentLine, CurrentName, CurrentLineNum);
-            }
+
+            CurrentLineNum++;
+            DisplayText(CurrentLine, CurrentName, CurrentLineNum);
         }
         else
         {
@@ -124,8 +127,8 @@ public class InterludeTypeSetter : MonoBehaviour
         TextName.text = "";
         TextDialogue.text = "";
 
-        //StartCoroutine(ChangeImage(id));
         StartCoroutine(TypeDialogue(Dialogue));
+        transform.Find("Mask").Find(Name).SetAsLastSibling();
         TextName.text = Name;
     }
 }
