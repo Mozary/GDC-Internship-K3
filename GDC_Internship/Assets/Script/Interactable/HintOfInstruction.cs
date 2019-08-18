@@ -12,6 +12,7 @@ public class HintOfInstruction : MonoBehaviour
     private bool haveActive = false;
     private bool readyActive;
     private float holdActive;
+    float tryActive = 0.0f;
     void Start()
     {
         HintofInstruction.text = instruction;
@@ -23,10 +24,10 @@ public class HintOfInstruction : MonoBehaviour
             if (!haveActive)
             {
                 readyActive = dialogueManager.dialogueEnded;
+                Debug.Log("masuk?  ___dialogue ended terupdate");
 
                 if (readyActive)
                 {
-                    float tryActive = 0.0f;
                     tryActive += Time.deltaTime;
 
                     if (tryActive > 3.0f)

@@ -27,12 +27,21 @@ public class InteractOnButton2D : InteractOnTrigger2D
     }
     protected override void ExecuteOnStay(Collider2D other)         
     {
-        if (!m_CanExecuteButtons && dialogueBox.activeSelf)
+        if (!m_CanExecuteButtons)
         {
-            if (Input.GetKeyDown("e"))
+            if (dialogueBox.activeSelf)
             {
-                OnStay.Invoke();
+                if (Input.GetKeyDown("e"))
+                {
+                    OnStay.Invoke();
+                }
             }
+            else
+            {
+                Debug.Log("masuk? ____bisa gerak");
+                i_player.UnFreeze();
+            }
+            
         }
 
         if (gameObject.GetComponent<Interactable_Dialogue>() == null)
