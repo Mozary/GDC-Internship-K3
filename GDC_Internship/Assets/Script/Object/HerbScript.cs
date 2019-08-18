@@ -3,9 +3,10 @@
 public class HerbScript : MonoBehaviour
 {
     private new Collider2D collider;
+    private InteractToCollect itC;
     void Awake()
     {
-
+        itC = FindObjectOfType<InteractToCollect>();
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -19,7 +20,7 @@ public class HerbScript : MonoBehaviour
         if (collision.gameObject.tag == "Player" && gameObject.layer != LayerMask.NameToLayer("UI"))
         {
             gameObject.layer = LayerMask.NameToLayer("UI");
-            collision.gameObject.GetComponent<PlayerController>().AddCollectedHerb();
+            itC.DroppedHerb();
             GetComponent<Rigidbody2D>().gravityScale = 0;
         }
     }

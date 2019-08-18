@@ -32,15 +32,17 @@ public class CutsceneManager : MonoBehaviour
             endMarker = endMarkerClip.moveMagic;
             if (!endMarker)
             {
-                if (EnemytoDelete[0].transform.name == usedCutscene.transform.name)
+                for (int i = 0; i < gameObject.transform.childCount; i++)
                 {
-                    Destroy(EnemytoDelete[0]);
+                    if (EnemytoDelete[i].transform.name == usedCutscene.transform.name)
+                    {
+                        Destroy(EnemytoDelete[0]);
+                    }
+
+                    endMarker = false;
+                    dialogueManager.dialogueEnded = false;
+                    Destroy(usedCutscene);
                 }
-
-                endMarker = false;
-                dialogueManager.dialogueEnded = false;
-                Destroy(usedCutscene);
-
             }
         }
     }
