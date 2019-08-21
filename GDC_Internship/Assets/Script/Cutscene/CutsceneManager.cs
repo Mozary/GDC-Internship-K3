@@ -20,29 +20,36 @@ public class CutsceneManager : MonoBehaviour
     {
         if (usedCutscene == null)
         {
-            usedCutscene = gameObject.transform.GetChild(0).gameObject;
-            endMarkerClip = usedCutscene.transform.GetChild(0).GetComponent<Cutscene_PlayerAnimator>();
+            if(gameObject.transform.GetChild(0) != null)
+            {
+                usedCutscene = gameObject.transform.GetChild(0).gameObject;
+                endMarkerClip = usedCutscene.transform.GetChild(0).GetComponent<Cutscene_PlayerAnimator>();
+                Debug.Log(usedCutscene);
+                Debug.Log(endMarkerClip);
 
-            //// Set_Dialogue Terakhir, harus berada di posisi paling bawah
-            activeDialogueClip = usedCutscene.transform.GetChild(usedCutscene.transform.childCount - 1).gameObject;
+                //// Set_Dialogue Terakhir, harus berada di posisi paling bawah
+                activeDialogueClip = usedCutscene.transform.GetChild(usedCutscene.transform.childCount - 1).gameObject;
+            }
         }
 
         if (activeDialogueClip.activeSelf)
         {
             endMarker = endMarkerClip.moveMagic;
+
             if (!endMarker)
             {
-                for (int i = 0; i < gameObject.transform.childCount; i++)
+                for (int i = 0; i < EnemytoDelete.Length; i++)
                 {
+                    Debug.Log(i);
                     if (EnemytoDelete[i].transform.name == usedCutscene.transform.name)
                     {
-                        Destroy(EnemytoDelete[0]);
+                        Destroy(EnemytoDelete[i]);
                     }
-
-                    endMarker = false;
-                    dialogueManager.dialogueEnded = false;
-                    Destroy(usedCutscene);
                 }
+
+                endMarker = false;
+                dialogueManager.dialogueEnded = false;
+                Destroy(usedCutscene);
             }
         }
     }

@@ -43,7 +43,6 @@ public class DialogueManager : MonoBehaviour
 
         string sentence = ListDialogues.Dequeue();
         dialogueUI.text = sentence;
-        Debug.Log(sentence + "       ____dari nextsentence");
     }
     public void EndDialogue()
     {
@@ -52,7 +51,6 @@ public class DialogueManager : MonoBehaviour
 
         //bool for Interactable_Dialogue and SceneLoader
         dialogueEnded = true;
-        Debug.Log("dialogueEnded dari end dialogue ___" + dialogueEnded);
     }
 }
 

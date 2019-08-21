@@ -60,6 +60,18 @@ public class InteractOnTrigger2D : MonoBehaviour
                 ExecuteOnStay(other);                                   
             }
         }
+
+        if (GetComponent<Interactable_Dialogue>() != null)
+        {
+            if (readyActive)
+            {
+                if (!dialogueBox.activeSelf)
+                {
+                    Debug.Log("masuk? ____bisa gerak");
+                    i_player.UnFreeze();
+                }
+            }
+        }
     }
 
     protected virtual void ExecuteOnEnter(Collider2D other)         //virtual itu buat anak class
