@@ -174,7 +174,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   backgroundSize: 1600
   ParallaxSpeed: 1.4
-  ScrollToRight: 0
+  ScrollToRight: 1
 --- !u!1 &59152410
 GameObject:
   m_ObjectHideFlags: 0
@@ -237,7 +237,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   backgroundSize: 1600
   ParallaxSpeed: 0.6
-  ScrollToRight: 0
+  ScrollToRight: 1
 --- !u!1 &73668837
 GameObject:
   m_ObjectHideFlags: 0
@@ -448,7 +448,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   backgroundSize: 1600
   ParallaxSpeed: 0.4
-  ScrollToRight: 0
+  ScrollToRight: 1
 --- !u!1 &290327663
 GameObject:
   m_ObjectHideFlags: 0
@@ -709,14 +709,14 @@ RectTransform:
   m_GameObject: {fileID: 439048658}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 1}
   m_Children: []
   m_Father: {fileID: 646029257}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -800, y: 0}
+  m_AnchoredPosition: {x: -1600, y: 0}
   m_SizeDelta: {x: 800, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &439048660
@@ -973,7 +973,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   backgroundSize: 1600
   ParallaxSpeed: 1
-  ScrollToRight: 0
+  ScrollToRight: 1
 --- !u!1 &602259874
 GameObject:
   m_ObjectHideFlags: 0
@@ -1403,7 +1403,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   backgroundSize: 1600
   ParallaxSpeed: 2.2
-  ScrollToRight: 0
+  ScrollToRight: 1
 --- !u!1 &753663175
 GameObject:
   m_ObjectHideFlags: 0
@@ -1836,7 +1836,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   backgroundSize: 1600
   ParallaxSpeed: 0.8
-  ScrollToRight: 0
+  ScrollToRight: 1
 --- !u!1 &1113275381
 GameObject:
   m_ObjectHideFlags: 0
@@ -2209,7 +2209,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   backgroundSize: 1600
   ParallaxSpeed: 1.2
-  ScrollToRight: 0
+  ScrollToRight: 1
 --- !u!1 &1249198213
 GameObject:
   m_ObjectHideFlags: 0
@@ -2525,7 +2525,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   backgroundSize: 1600
   ParallaxSpeed: 1.8
-  ScrollToRight: 0
+  ScrollToRight: 1
 --- !u!1 &1321460047
 GameObject:
   m_ObjectHideFlags: 0
@@ -3824,14 +3824,14 @@ RectTransform:
   m_GameObject: {fileID: 1877131328}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 1}
   m_Children: []
   m_Father: {fileID: 646029257}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 800, y: 0}
+  m_AnchoredPosition: {x: 1600, y: 0}
   m_SizeDelta: {x: 800, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1877131330
@@ -3898,7 +3898,7 @@ RectTransform:
   m_GameObject: {fileID: 1915100873}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 1}
   m_Children: []
   m_Father: {fileID: 646029257}
   m_RootOrder: 1
@@ -4007,7 +4007,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   backgroundSize: 1600
   ParallaxSpeed: 1.6
-  ScrollToRight: 0
+  ScrollToRight: 1
 --- !u!1 &1968338430
 GameObject:
   m_ObjectHideFlags: 0
@@ -4371,7 +4371,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   backgroundSize: 1600
   ParallaxSpeed: 2
-  ScrollToRight: 0
+  ScrollToRight: 1
 --- !u!1 &2097898279
 GameObject:
   m_ObjectHideFlags: 0

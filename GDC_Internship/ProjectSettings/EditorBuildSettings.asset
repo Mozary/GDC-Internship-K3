@@ -35,4 +35,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Trans_Pre-1.unity
     guid: c177a7e5e282f1547bf1c08bcc4be856
+  - enabled: 1
+    path: Assets/Scenes/Prelude.unity
+    guid: 911c61f5df3c18044b004012e04323d5
   m_configObjects: {}

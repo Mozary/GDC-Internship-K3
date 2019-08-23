@@ -47,7 +47,7 @@ public class ParallaxScrolling : MonoBehaviour
                 image.position = NewPos;
             }
             MovedDistance++;
-            if(MovedDistance >= backgroundSize/2)
+            if(Layers[RightIndex].localPosition.x >= 1600)
             {
                 MovedDistance = 0;
                 ScrollLeft();
@@ -61,17 +61,14 @@ public class ParallaxScrolling : MonoBehaviour
                 float NewX = image.position.x - (ParallaxSpeed * Time.deltaTime);
                 Vector3 NewPos = new Vector3(NewX, image.position.y);
                 image.position = NewPos;
-                
             }
             MovedDistance--;
-            if (MovedDistance <= -backgroundSize/2)
+            if (Layers[LeftIndex].localPosition.x <= -1600)
             {
                 MovedDistance = 0;
                 ScrollRight();
             }
         }
-        
-        
     }
     private void ScrollLeft()
     {
